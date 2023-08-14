@@ -2,10 +2,10 @@
 
 
 #如何使用?  
-# 执行以下命令 以 安装clang wrap_dest
-# bash -x /pubx/pytorch/doc/clang-15.wrap_dest-install.sh install
-# 执行以下命令 以 还原clang wrap_dest
-# bash -x /pubx/pytorch/doc/clang-15.wrap_dest-install.sh uninstall
+# 执行以下命令 以 安装clang包装器
+# bash -x clang-15.wrap-install.sh install
+# 执行以下命令 以 删除clang包装器 即还原clang
+# bash -x clang-15.wrap-install.sh uninstall
 
 ##以下为安装clang-15.wrap过程:
 Args=$@
@@ -40,5 +40,8 @@ elif [[ $act == "uninstall" ]]; then
     exit 0
 else
     echo "无法理解输入参数:【$Args】,退出码99"
+    echo """本命令用法如下：
+bash -x clang-15.wrap-install.sh install|uninstall
+"""
     exit 99
 fi
