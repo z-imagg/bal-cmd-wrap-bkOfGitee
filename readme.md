@@ -30,3 +30,6 @@ cmake \
 -DCMAKE_CXX_COMPILER=$LLVM_HOME/bin/clang++.wrap.py  \
 ...
 ```
+
+# clang-15包装器 详细说明
+> clang-15包装器 详细说明 : [clang-15使用命令行程序名区分做C或做C++](https://gitcode.net/pubx/analyze_code/clang-wrap/-/blob/master/clang-15-cmdName-as-C-or-CPP.md)
