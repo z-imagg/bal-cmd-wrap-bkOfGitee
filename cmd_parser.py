@@ -11,9 +11,9 @@ def parser():
 
 
 
-cmd = 'gcc -c User.c -o User.o'
+cmd = 'gcc -c "My User.c" -o "User.o"'
 cmd_parser=parser()
 result = cmd_parser.parseString(cmd)
 
 print(f"{result.asList()}")
-# ['gcc', '-c', 'User.c', '-o', 'User.o']
+#['gcc', '-c', '"My User.c"', '-o', '"User.o"']
