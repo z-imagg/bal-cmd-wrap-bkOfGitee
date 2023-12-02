@@ -1,7 +1,7 @@
 from pyparsing import Word, alphas, alphanums, quotedString, Optional, Group, delimitedList,OneOrMore
 
 def create_singleCmdParser():
-    T=alphanums + '_' + '-' + '.' + '/'
+    T=alphanums + '_-./'
     prog=Word(alphas,alphanums+'_ +')
     argName1=Word('-',T)
     argVal1=quotedString  | Word(T)
