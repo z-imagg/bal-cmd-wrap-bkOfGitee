@@ -2,9 +2,13 @@ from pyparsing import Word, alphas, alphanums, QuotedString, Optional, Group, de
 
 def parse_command(command):
     # 定义语法规则
-    param_name = Optional('-' + Word(alphas + '_', alphanums + '_'))
-    param_value = QuotedString(quoteChar='"') | QuotedString(quoteChar="'") | Word(alphanums + '_')
-    param = Group(param_name + Optional("=") + param_value)
+    T=alphanums + '_' + '-'
+    ID=Word(alphas,T)
+    param_name_1=Word('-',T)
+    param_name_2=Word('--',T)
+    param_name = ID | param_name_1 | param_name_2
+    param_value = QuotedString(quoteChar='"') | QuotedString(quoteChar="'") | Word(T)
+    param = Group(param_name + Optional("=") + Optional(param_value) ) | param_value
     command_parser = delimitedList(param)
 
     # 解析命令
@@ -17,7 +21,8 @@ def parse_command(command):
         print(f"参数名: {param_name}, 值: {param_value}")
 
 # 示例命令
-example_command = 'command -param1 value1 -param2 "value2 with spaces" --param3 \'value3 with single quotes\' param4 "value4 with \\"escaped\\" quotes" param5'
+# example_command = 'command -param1 value1 --p2 "Val2"  param5'
+example_command = 'command --p2 "Val2"  param5'
 
 # 调用函数解析命令
 parse_command(example_command)
