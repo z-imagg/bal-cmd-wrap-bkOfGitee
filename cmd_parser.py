@@ -5,8 +5,8 @@ def create_singleCmdParser():
     prog=Word(alphas,alphanums+'_+')
     argName1=Word('-',T)
     argName2=Word('--',T)
-    argVal1=quotedString  | Word(T)
-    singleCmd = prog +  OneOrMore( (argName1|argName2) + Optional(argVal1)  ) + Optional(';')
+    argVal1=Optional(quotedString)  | Optional(Word(T))
+    singleCmd = prog +  OneOrMore( (argName1|argName2) + argVal1  ) + Optional(';')
     return singleCmd
 
 
@@ -19,10 +19,8 @@ cmdLs = [
 'g++ --g --c ./common/Util.cpp -o ../build/Util.obj'
 ]
 for cmdK in cmdLs:
-    cmdKResult = singleCmdParser.parse_string(cmdK)
-    # print(cmdKResult.dump())
+    cmdKResult = singleCmdParser.parseString(cmdK)
     print(f"{cmdKResult.asList()}")
-    break
 
-# ['gcc', '--fXXX', 'yes', '-c', '"My User.c"', '-o', '"User.o"']
-# ['g++', '-c', './common/Util.cpp', '-o', '../build/Util.obj']
+# ['gcc', '--fXXX', '-c', '"My User.c"', '-o', '"User.o"'] #命令1解析正确
+# ['g++', '--g', '--c'] #错误: 命令2只解析了半截
