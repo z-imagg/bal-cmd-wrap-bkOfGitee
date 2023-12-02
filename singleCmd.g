@@ -18,14 +18,14 @@ gcc -Wp,-MD,arch/x86/mm/.pgtable.o.d  -nostdinc -isystem /usr/lib/gcc/i686-linux
  
  */
 
-grammar cookie;
+grammar singleCmd;
 
-cookie
-    : av_pairs* EOF
+singleCmd
+    : program (' ')+ av_pairs* (';')? EOF
     ;
 
-name
-    : attr
+program
+    : TOKEN
     ;
 
 av_pairs
@@ -33,12 +33,12 @@ av_pairs
     ;
 
 av_pair
-    : attr ('=' value)?
-    |attr quoted_string
+    : arg ('=' value)?
+    | arg QUOTED_STRING
     ;
 
-attr
-    : token
+arg
+    : TOKEN
     ;
 
 value
@@ -46,19 +46,12 @@ value
     ;
 
 word
-    : token
-    | quoted_string
-    ;
-
-token
     : TOKEN
+    | QUOTED_STRING
     ;
 
-quoted_string
-    : STRING
-    ;
-
-STRING
+//QUOTED_STRING 终结符不能用小写
+QUOTED_STRING
     : '"' (~ ('"' | '\n'))* '"'
     | '\'' (~ ('\'' | '\n'))* '\''
     ;
