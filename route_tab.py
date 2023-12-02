@@ -17,8 +17,8 @@ progTab=[
 ]
 progMap=dict(progTab)
 
-def calcProgRealPath(progIn:str)->str:
-    if progIn.endswith(SfxWrpPy):
-        return progIn.replace(SfxWrpPy,"")
-    if progMap.__contains__(progIn):
-        return progMap.__getitem__(progIn)
+def calcTrueProg(progFake:str)->str:
+    if progFake.endswith(SfxWrpPy):
+        return progFake.replace(SfxWrpPy,"")
+    if progMap.__contains__(progFake):
+        return progMap.__getitem__(progFake)
