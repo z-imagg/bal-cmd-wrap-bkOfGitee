@@ -7,6 +7,8 @@ import time
 import subprocess
 from typing import List
 
+from ProgramNameMap import calcProgRealPath
+
 #参数数组复制一份，不要直接修改sys.argv
 Argv=list(sys.argv)
 
@@ -35,8 +37,7 @@ CLANG_HOME_BIN:str="/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8
 # 其中 "clang-15.wrap.py【py脚本包装器】" 通过 当前命令行程序名 来判断 应该调用 "clang++【软链接】" 、"clang【软链接】" 中的哪一个.
 # ProgramNameInCmd=sys.argv[0]
 ProgramNameInCmd=Argv[0]
-WRAP_PY_SUFFIX=".wrap.py"
-orginCmd:str=ProgramNameInCmd.replace(WRAP_PY_SUFFIX,"")
+orginCmd:str=calcProgRealPath(ProgramNameInCmd)
 #此时 orginCmd 为   "clang【软链接】: {CLANG_HOME_BIN}/clang"  或 "clang++【软链接】 : {CLANG_HOME_BIN}/clang++"  ,
 
 #替换可执行文件路径为原始clang-15路径
