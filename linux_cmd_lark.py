@@ -21,4 +21,5 @@ parser = Lark.open( 'linux_cmd.lark', rel_to=__file__, parser="earley")
 for k,lnk in enumerate(lns) :
     treeK = parser.parse(lnk)
     # print(tree)
-    print(f"lark文法 解析 文件{inFilePath}的第{k}行  ", f"【{lnk}】 \n", treeK.pretty())
+    msg:str=f"lark文法 解析 文件【{inFilePath}】的第{k}行  【{lnk}】 ,解析结果为: 【{treeK.pretty()}】"
+    print()
