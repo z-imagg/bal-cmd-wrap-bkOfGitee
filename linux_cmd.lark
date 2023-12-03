@@ -1,9 +1,9 @@
-// grammar singlcmd
+// grammar single_cmd
 
-start: singlcmd
+start: single_cmd
 
 ///////////非终结符
-singlcmd: program av_pairs*
+single_cmd: program av_pairs*
 
 program: FILE_NAME
 
@@ -13,7 +13,7 @@ av_pair: arg argv?
 
 
 arg: "-" ("-")? (L|D) ("_"|L|D)*
-argv: TK |   ESCAPED_STR
+argv: TK |   _STR
 
 
 ///////////////终结符
@@ -24,12 +24,11 @@ LL: "a".."z"
 UL: "A".."Z"
 L: LL | UL
 W: L+
-//CN: ("_"|L) ("_"|L|D)*
 
+_STR : _STR_DQ | _STR_SQ
 _STR_INNER: /.*?/
-_STR_ESC_INNER: _STR_INNER /(?<!\\)(\\\\)*?/
-ESCAPED_STR : "\"" _STR_ESC_INNER "\""
-
+_STR_DQ : "\"" _STR_INNER "\""
+_STR_SQ : "\'" _STR_INNER "\'"
 
 FILE_NAME: (FILE_NAME_LEAD | D | L) (FILE_NAME_MID | D | L)+
 FILE_NAME_LEAD: "." | "_" | "," | "+"
