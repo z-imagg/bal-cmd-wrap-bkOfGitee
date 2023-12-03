@@ -24,7 +24,7 @@ kv1: key sep_spc val_normal
 //kv1 : k v 之间的分割符 是  空格
 kv4: key sep_eq val_normal
 //kv4 : k v 之间的分割符 是  等号
-kv5: key _STR
+kv5: key STR
 //kv5: 当v用引号包裹时, k v之间 不需要 分割符
 kv2: key sep_comma val_any
 // kv2: 当k v之间的分割符 为 逗号 时, v的形式是任意的
@@ -33,8 +33,8 @@ kv3: arg_inc val_normal
 
 arg_inc: ARG_INC
 key: KEY
-val_normal: TK_NORMAL |   _STR
-val_any: TK_ANY |   _STR
+val_normal: TK_NORMAL |   STR
+val_any: TK_ANY |   STR
 //kv_sep: KV_SEP
 
 sep_eq: "="
@@ -42,6 +42,7 @@ sep_spc: " "+
 sep_comma: ","
 
 ///////////////终结符
+STR: _STR | _STR_ESC
 ARG_INC: "-I"
 KEY: "-" ("-")? (L|D) ("_"|L|D)*
 TK_NORMAL: /[^-](\w|[-_\/\.])*/
@@ -56,8 +57,22 @@ L: LL | UL
 
 _STR : _STR_DQ | _STR_SQ
 _STR_INNER: /.*?/
-_STR_DQ : "\"" _STR_INNER "\""
-_STR_SQ : "\'" _STR_INNER "\'"
+_STR_DQ : DQ _STR_INNER DQ
+_STR_SQ : SQ _STR_INNER SQ
+DQ :   "\""
+//双引号 DOUBLE_QUOTATION 即 "
+SQ :   "\'"
+//单引号 SINGLE_QUOTATION 即 '
+
+
+_STR_ESC : _STR_DQ_ESC | _STR_SQ_ESC
+_STR_DQ_ESC : DQ_ESC _STR_INNER DQ_ESC
+_STR_SQ_ESC : SQ_ESC _STR_INNER SQ_ESC
+
+DQ_ESC :   "\\\""
+//双引号转义符  DOUBLE_QUOTATION_ESCAPE 即 \"
+SQ_ESC :   "\\\'"
+//单引号转义符 SINGLE_QUOTATION_ESCAPE 即 \"
 
 FILE_NAME: (FILE_NAME_LEAD | D | L) (FILE_NAME_MID | D | L)+
 FILE_NAME_LEAD: "." | "_" | "," | "+" | "/"

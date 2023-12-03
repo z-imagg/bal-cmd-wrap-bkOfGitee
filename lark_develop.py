@@ -16,8 +16,9 @@ parser = Lark.open( 'linux_cmd.lark', rel_to=__file__, parser="earley")
 # parser取 cyk 时， Lark.open运行报错 ;
 
 treeK:Tree = parser.parse(gcc_cmd_line)
+print(treeK.pretty())
 
-
+################获取 结果树 中的 src_file 非终结符 节点 的 值
 src_file_ls=[]
 ### 用lark的Transformer访问 解析结果树 中 的 非终结符 src_file
 class MyTransformer(Transformer):
