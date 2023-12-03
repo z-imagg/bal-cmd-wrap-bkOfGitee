@@ -3,19 +3,21 @@
 start: single_cmd
 
 ///////////非终结符
-single_cmd: program kv_ls*
+single_cmd: program kv_ls* src_file
 
 program: FILE_NAME
+src_file: FILE_NAME
 
 kv_ls: kv+
 
-kv: key | kv1 | kv2
-kv1: key kv_sep1 val_1
+kv: kv3 | key | kv1 | kv2
+kv1: key kv_sep1 val_normal
 kv2: key kv_sep2 val_2
+kv3: arg_inc val_normal
 
-
+arg_inc: ARG_INC
 key: KEY
-val_1: TK1 |   _STR
+val_normal: TK_NORMAL |   _STR
 val_2: TK2 |   _STR
 //kv_sep: KV_SEP
 
@@ -23,8 +25,9 @@ kv_sep1: " "+
 kv_sep2: ","
 
 ///////////////终结符
+ARG_INC: "-I"
 KEY: "-" ("-")? (L|D) ("_"|L|D)*
-TK1: /[^-](\w|[-_\/\.])*/
+TK_NORMAL: /[^-](\w|[-_\/\.])*/
 TK2: (","|"-"|SL|L|D)+
 //TK: /[^-]\w*|[-_/]/
 

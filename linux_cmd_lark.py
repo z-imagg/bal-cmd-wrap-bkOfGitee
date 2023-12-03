@@ -2,7 +2,7 @@ from lark import Lark
 from lark import common
 # from lark.common import ESCAPED_STRING
 
-input_string = 'gcc   -nostdinc -isystem /usr/lib/gcc/i686-linux-gnu/4.4.7/include -D__KERNEL__ -Iinclude pgtable.c'
+input_string = 'gcc   -nostdinc -isystem /usr/lib/gcc/i686-linux-gnu/4.4.7/include -D__KERNEL__ -Iinclude -I/crk/bochs/linux2.6-run_at_bochs/linux-2.6.27.15/arch/x86/include pgtable.c'
 # input_string = 'gcc -Wp,-MD,arch/x86/mm/.pgtable.o.d -nostdinc -isystem'
 # input_string = 'gcc   -nostdinc  -isystem '
 # input_string = 'gcc   -c -o xxx'
@@ -26,12 +26,17 @@ start
         kv1
           key	-isystem
           kv_sep1
-          val_1	/usr/lib/gcc/i686-linux-gnu/4.4.7/include
+          val_normal	/usr/lib/gcc/i686-linux-gnu/4.4.7/include
       kv
         key	-D__KERNEL__
       kv
-        kv1
-          key	-Iinclude
-          kv_sep1
-          val_1	pgtable.c
+        kv3
+          arg_inc	-I
+          val_normal	include
+      kv
+        kv3
+          arg_inc	-I
+          val_normal	/crk/bochs/linux2.6-run_at_bochs/linux-2.6.27.15/arch/x86/include
+    src_file	pgtable.c
+
 """
