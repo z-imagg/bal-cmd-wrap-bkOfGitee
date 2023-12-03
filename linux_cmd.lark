@@ -10,9 +10,10 @@ src_file: FILE_NAME
 
 kv_ls: kv+
 
-kv: kv3 | kv4 | key | kv1 | kv2
+kv: kv3 | kv4 | kv5 | key | kv1 | kv2
 kv1: key sep_spc val_normal
 kv4: key sep_eq val_normal
+kv5: key _STR
 kv2: key sep_comma val_2
 kv3: arg_inc val_normal
 
