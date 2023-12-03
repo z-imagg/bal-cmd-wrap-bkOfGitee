@@ -28,5 +28,5 @@ for k,lnk in enumerate(lns) :
     transformer.transform(treeK)
     src_file_val: str = transformer.__get_src_file_val__("")
 
-    msg:str=f"lark文法 解析 文件【{inFilePath}】的第{k}行  【{lnk}】 ,解析结果为: 【{treeK.pretty()}】，啰嗦一下 现在是 第{k}行, 命令中的源文件为:【{src_file_val}】"
+    msg:str=f"lark文法 解析 文件【{inFilePath}】的第{k}行  【{lnk}】 ,解析结果为: 【{treeK.pretty()}】，啰嗦一下 现在是 第{k+1}行, 命令中的源文件为:【{src_file_val}】"
     print(msg)
