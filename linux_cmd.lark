@@ -9,16 +9,19 @@ program: FILE_NAME
 
 kv_ls: kv+
 
-kv: key val?
+kv: key | key " "+ val
 
 
-key: "-" ("-")? (L|D) ("_"|L|D)*
+key: KEY
 val: TK |   _STR
 
 
 ///////////////终结符
-TK: ("_"|L|D)+
 
+KEY: "-" ("-")? (L|D) ("_"|L|D)*
+TK: (SL|L|D) | ("-"|SL|L|D)+
+
+SL: "_"|"/"|"."
 D: "0".."9"
 LL: "a".."z"
 UL: "A".."Z"
