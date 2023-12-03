@@ -4,3 +4,5 @@
 linux-2.6.27.15__make_clean_then_make_V=1.txt
 
 linux-2.6.27.15__make_clean_then_make_V=__grep_gcc1.txt
+
+__pycache__/

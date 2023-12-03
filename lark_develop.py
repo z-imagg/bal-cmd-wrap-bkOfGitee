@@ -4,6 +4,7 @@ from lark import Lark,Transformer,Visitor
 from lark.tree import Tree
 from lark.visitors import Interpreter
 from lark.lexer import Token
+from lark_my_transformer import MyTransformer
 
 
 
@@ -18,31 +19,12 @@ parser = Lark.open( 'linux_cmd.lark', rel_to=__file__, parser="earley")
 treeK:Tree = parser.parse(gcc_cmd_line)
 print(treeK.pretty())
 
-################获取 结果树 中的 src_file 非终结符 节点 的 值
-src_file_ls=[]
-### 用lark的Transformer访问 解析结果树 中 的 非终结符 src_file
-class MyTransformer(Transformer):
-    def src_file(self, tokens:List[Token]):
-        #这里items确实是节点内容
-        """tokens值为:
-        [Token('FILE_NAME', 'arch/x86/kernel/i8259.c')]
-        """
-        src_file_ls.append(tokens)
-        return tokens
 
 transformer = MyTransformer()
 transformer_ret = transformer.transform(treeK)
 #但  transformer_ret 是 整棵结果树 ，并不是 单独该非终结符  内容
+src_file_val:str=transformer.__get_src_file_val__()
+print(f"命令中的源文件为:{src_file_val}")
 
-
-assert len(src_file_ls) <= 1
-#一条gcc命令中不会有多个 源文件
-
-if len(src_file_ls) == 1:
-    src_file_tokens:List[Token]=src_file_ls[0]
-    src_file:Token=src_file_tokens[0]
-    assert src_file.type=='FILE_NAME'
-    src_file_val:str=src_file.value
-    print(f"命令中的源文件为:{src_file_val}")
 
 end=True
