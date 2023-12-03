@@ -18,85 +18,21 @@ g++   -D'xxfDDDDfx=SSSSs' -D"KBUILD_BASENAME=KBUILD_STR(pgtable)" -D"KBUILD_MODN
  
  */
 
-grammar SingleCmd;
+grammar zz;
+//grammar GCCOptions;
 
-singleCmd
-    : program   av_pairs  EOF
-    ;
+options {
+  language = Python3;
+}
 
+options: option+;
 
-program: WORD ;
+option: '-' OPTIONNAME optionValue?;
 
-WORD
-    : [a-zA-Z]+
-    ;
+OPTIONNAME: [a-zA-Z]+;
 
-av_pairs  : (kv4  | kv5 | kv1 | kv2 |arg )+
-    ;
+optionValue: OPTIONVALUEITEM+;
 
-kv1 : arg ' ' value
-;
+OPTIONVALUEITEM: ~[-\\s]+ | '"' ~["]* '"';
 
-kv2 : arg ',' value
-;
-
-kv5: arg QUOTED_STRING
-;
-
-kv4: arg '=' value
-;
-
-arg : WS+ '-' ARG  ;
-ARG : [\-0-9a-zA-Z./_:,]+  ;
-
-
-
-value:VAL;
-VAL
-    : ~[-] (TOKEN |QUOTED_STRING )
-    ;
-
-word
-    : TOKEN
-    | QUOTED_STRING
-    ;
-
-///////////////////////
-
-//QUOTED_STRING 终结符不能用小写
-QUOTED_STRING
-    : '"' (~ ('"' | '\n'))* '"'
-    | '\'' (~ ('\'' | '\n'))* '\''
-    ;
-
-
-TOKEN
-    : ( DIGIT | LETTER | '.' | '-'  | '/' | '_' | ':' | ',')+
-    ;
-
-FILE_NAME
-    : (FILE_NAME_LEAD |DIGIT | LETTER) ( FILE_NAME_MID |DIGIT | LETTER)+
-    ;
-
-FILE_NAME_LEAD
-    : '.' | '_'| ','| '+'
-    ;
-
-FILE_NAME_MID
-    : FILE_NAME_LEAD | '-'
-    ;
-//////////////////
-
-DIGIT
-    : '0' .. '9'
-    ;
-
-LETTER
-    : 'a' .. 'z' | 'A' .. 'Z'
-    ;
-
-//////////////////////
-
-WS
-    : [ \t\r\n] -> channel(HIDDEN)
-    ;
+WS: [ \t\r\n]+ -> skip;
