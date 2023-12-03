@@ -12,7 +12,7 @@ class MyTransformer(Transformer):
     def __init__(self):
         self.src_file_ls:List[ List[Token] ] = []
 
-    def __get_src_file_val__(self)->str:
+    def __get_src_file_val__(self,NULL_STR:str=None)->str:
         assert len(self.src_file_ls) <= 1
         # 一条gcc命令中不会有多个 源文件
 
@@ -22,7 +22,7 @@ class MyTransformer(Transformer):
             assert src_file.type == 'FILE_NAME'
             src_file_val: str = src_file.value
             return src_file_val
-        return None
+        return NULL_STR
 
     def src_file(self, tokens:List[Token]):
         #这里items确实是节点内容
