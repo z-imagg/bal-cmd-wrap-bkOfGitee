@@ -2,12 +2,13 @@ from antlr4 import CommonTokenStream, ParseTreeWalker, InputStream
 
 from antlr4_gcc_cmd.parser_generated.SingleCmdParser import SingleCmdParser
 from antlr4_gcc_cmd.parser_generated.SingleCmdLexer import  SingleCmdLexer
-from antlr4_gcc_cmd.parser_generated.SingleCmdParserListener import SingleCmdParserListener
+from antlr4_gcc_cmd.parser_generated.SingleCmdListener import SingleCmdListener
 
-class HelloPrintListener(SingleCmdParserListener):
-    def enterSrc_file(self, ctx:SingleCmdParser.Src_fileContext):
+class HelloPrintListener(SingleCmdListener):
+    def enterProgram(self, ctx:SingleCmdParser.ProgramContext):
         # 函数名enterR的R指的是非终结符r
-        print("src_file: %s" % ctx.ID())
+        print("program: %s" % ctx.getText())
+        #输出为:  program: cxx
 
 
 cmdLn='cxx   -c -o arch/x86/kernel/.tmp_i8259.o arch/x86/kernel/i8259.c'

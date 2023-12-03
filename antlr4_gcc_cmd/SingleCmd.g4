@@ -18,7 +18,7 @@ g++   -D'xxfDDDDfx=SSSSs' -D"KBUILD_BASENAME=KBUILD_STR(pgtable)" -D"KBUILD_MODN
  
  */
 
-grammar singleCmd;
+grammar SingleCmd;
 
 singleCmd
     : program (' ')+ av_pairs* (';')? EOF

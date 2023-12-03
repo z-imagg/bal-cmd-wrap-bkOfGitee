@@ -11,9 +11,5 @@
 pip install antlr4-python3-runtime
 pip install antlr4-tools
 
-#antlr 生成 词法分析器
-#antlr4 -Dlanguage=Python3 -o parser_generated -package parser_generated  SingleCmdLexer.g4
-
-#antlr 生成词法分析器
-antlr4 -Dlanguage=Python3 -o parser_generated -package parser_generated  SingleCmdParser.g4
-
+#antlr 词法分析器  和  生成词法分析器
+antlr4 -Dlanguage=Python3 -o parser_generated -package parser_generated  SingleCmd.g4
