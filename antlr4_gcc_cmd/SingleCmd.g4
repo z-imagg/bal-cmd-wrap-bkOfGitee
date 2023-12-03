@@ -1,6 +1,6 @@
-grammar singleCmd;
+grammar SingleCmd;
 
-singleCmd: gcc_cmd;
+SingleCmd: gcc_cmd;
 
 gcc_cmd: gcc_cmd_1 | gcc_cmd_3;
 
