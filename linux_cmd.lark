@@ -1,0 +1,35 @@
+// grammar singlcmd
+
+start: singlcmd
+
+singlcmd: program av_pairs*
+
+program: FILE_NAME
+
+av_pairs: av_pair+
+
+av_pair: "-"? TOKEN   (  TOKEN |   QUOTED_STRING)
+
+arg: "-" TOKEN
+
+word: TOKEN | QUOTED_STRING
+
+QUOTED_STRING: /"([^"\n])*"/ | /'([^'\n])*'/
+
+TOKEN: /[0-9a-zA-Z.\-\/_:,]+/
+
+FILE_NAME: (FILE_NAME_LEAD | DIGIT | LETTER) (FILE_NAME_MID | DIGIT | LETTER)+
+
+FILE_NAME_LEAD: "." | "_" | "," | "+"
+
+FILE_NAME_MID: FILE_NAME_LEAD | "-"
+
+DIGIT: /[0-9]/
+
+LETTER: /[a-zA-Z]/
+
+%import common.WS_INLINE
+%import common.ESCAPED_STRING
+
+
+%ignore WS_INLINE
