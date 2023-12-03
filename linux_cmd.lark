@@ -2,34 +2,41 @@
 
 start: singlcmd
 
+///////////非终结符
 singlcmd: program av_pairs*
 
 program: FILE_NAME
 
 av_pairs: av_pair+
 
-av_pair: "-"? TOKEN   (  TOKEN |   QUOTED_STRING)
+av_pair: arg argv?
 
-arg: "-" TOKEN
 
-word: TOKEN | QUOTED_STRING
+arg: "-" ("-")? (L|D) ("_"|L|D)*
+argv: TK |   ESCAPED_STR
 
-QUOTED_STRING: /"([^"\n])*"/ | /'([^'\n])*'/
 
-TOKEN: /[0-9a-zA-Z.\-\/_:,]+/
+///////////////终结符
+TK: ("_"|L|D)+
 
-FILE_NAME: (FILE_NAME_LEAD | DIGIT | LETTER) (FILE_NAME_MID | DIGIT | LETTER)+
+D: "0".."9"
+LL: "a".."z"
+UL: "A".."Z"
+L: LL | UL
+W: L+
+//CN: ("_"|L) ("_"|L|D)*
 
+_STR_INNER: /.*?/
+_STR_ESC_INNER: _STR_INNER /(?<!\\)(\\\\)*?/
+ESCAPED_STR : "\"" _STR_ESC_INNER "\""
+
+
+FILE_NAME: (FILE_NAME_LEAD | D | L) (FILE_NAME_MID | D | L)+
 FILE_NAME_LEAD: "." | "_" | "," | "+"
-
 FILE_NAME_MID: FILE_NAME_LEAD | "-"
 
-DIGIT: /[0-9]/
-
-LETTER: /[a-zA-Z]/
-
-%import common.WS_INLINE
-%import common.ESCAPED_STRING
 
 
-%ignore WS_INLINE
+///////忽略空格等
+WS_INLN: (" "|/\t/)+
+%ignore WS_INLN
