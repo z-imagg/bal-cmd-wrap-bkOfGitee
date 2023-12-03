@@ -3,17 +3,17 @@
 start: single_cmd
 
 ///////////非终结符
-single_cmd: program av_pairs*
+single_cmd: program kv_ls*
 
 program: FILE_NAME
 
-av_pairs: av_pair+
+kv_ls: kv+
 
-av_pair: arg argv?
+kv: key val?
 
 
-arg: "-" ("-")? (L|D) ("_"|L|D)*
-argv: TK |   _STR
+key: "-" ("-")? (L|D) ("_"|L|D)*
+val: TK |   _STR
 
 
 ///////////////终结符
