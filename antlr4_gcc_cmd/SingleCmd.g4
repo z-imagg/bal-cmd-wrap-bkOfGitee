@@ -21,25 +21,36 @@ g++   -D'xxfDDDDfx=SSSSs' -D"KBUILD_BASENAME=KBUILD_STR(pgtable)" -D"KBUILD_MODN
 grammar SingleCmd;
 
 singleCmd
-    : program (' ')+ av_pairs* (';')? EOF
+    : program sep av_pairs (';')? EOF
     ;
 
-program
-    : FILE_NAME
+sep: WS+ ;
+
+program: WORD ;
+
+WORD
+    : [a-zA-Z]+
     ;
 
-av_pairs
-    : av_pair ((' ')+ av_pair)*
+av_pairs  : (kv4  | kv5 | kv1 | kv2 |arg )+
     ;
 
-av_pair
-    : arg ('=' value)?
-    | arg QUOTED_STRING
-    ;
+kv1 : arg ' ' value
+;
 
-arg
-    : TOKEN
-    ;
+kv2 : arg ',' value
+;
+
+kv5: arg QUOTED_STRING
+;
+
+kv4: arg '=' value
+;
+
+arg : ARG  ;
+ARG : ~[-][\-0-9a-zA-Z./_:,]+  ;
+
+
 
 value
     : word
@@ -87,5 +98,5 @@ LETTER
 //////////////////////
 
 WS
-    : [\t\r\n] -> skip
+    : [ \t\r\n] -> channel(HIDDEN)
     ;
