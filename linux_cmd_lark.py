@@ -2,7 +2,8 @@ from lark import Lark
 from lark import common
 # from lark.common import ESCAPED_STRING
 
-input_string = 'gcc -Wp,-MD,arch/x86/mm/.pgtable.o.d -nostdinc -isystem'
+input_string = 'gcc   -nostdinc -isystem /usr/lib/gcc/i686-linux-gnu/4.4.7/include -D__KERNEL__ -Iinclude pgtable.c'
+# input_string = 'gcc -Wp,-MD,arch/x86/mm/.pgtable.o.d -nostdinc -isystem'
 # input_string = 'gcc   -nostdinc  -isystem '
 # input_string = 'gcc   -c -o xxx'
 
@@ -20,12 +21,17 @@ start
     program	gcc
     kv_ls
       kv
-        kv2
-          key	-Wp
-          kv_sep2
-          val_2	-MD,arch/x86/mm/.pgtable.o.d
-      kv
         key	-nostdinc
       kv
-        key	-isystem
+        kv1
+          key	-isystem
+          kv_sep1
+          val_1	/usr/lib/gcc/i686-linux-gnu/4.4.7/include
+      kv
+        key	-D__KERNEL__
+      kv
+        kv1
+          key	-Iinclude
+          kv_sep1
+          val_1	pgtable.c
 """
