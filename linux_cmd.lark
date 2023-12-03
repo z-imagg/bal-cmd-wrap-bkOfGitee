@@ -11,16 +11,22 @@ src_file: FILE_NAME
 kv_ls: kv+
 
 kv: kv3 | kv4 | kv5 | key | kv1 | kv2
+//kv : kv3(即 -Ixxx) 必须 比 key 靠前, 否则 kv3(即 -Ixxx) 会被 key 淹没
 kv1: key sep_spc val_normal
+//kv1 : k v 之间的分割符 是  空格
 kv4: key sep_eq val_normal
+//kv4 : k v 之间的分割符 是  等号
 kv5: key _STR
-kv2: key sep_comma val_2
+//kv5: 当v用引号包裹时, k v之间 不需要 分割符
+kv2: key sep_comma val_any
+// kv2: 当k v之间的分割符 为 逗号 时, v的形式是任意的
 kv3: arg_inc val_normal
+// kv3: 当k 是 -I  时, k v之间 不需要 分割符
 
 arg_inc: ARG_INC
 key: KEY
 val_normal: TK_NORMAL |   _STR
-val_2: TK2 |   _STR
+val_any: TK_ANY |   _STR
 //kv_sep: KV_SEP
 
 sep_eq: "="
@@ -31,8 +37,8 @@ sep_comma: ","
 ARG_INC: "-I"
 KEY: "-" ("-")? (L|D) ("_"|L|D)*
 TK_NORMAL: /[^-](\w|[-_\/\.])*/
-TK2: (","|"-"|SL|L|D)+
-//TK: /[^-]\w*|[-_/]/
+//正常单词: (开头字符)非- (后跟) 字母 数字 - _ / .
+TK_ANY: (","|"-"|SL|L|D)+
 
 SL: "_"|"/"|"."
 D: "0".."9"
