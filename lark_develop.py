@@ -15,16 +15,44 @@ treeK = parser.parse(gcc_cmd_line)
 # print(tree)
 print(treeK.pretty())
 
-"""报错如下:
+"""运行输出:
 D:\miniconda3\python.exe F:/crk/clang-wrap/lark_develop.py
+start
+  gcc_cmd
+    gcc_cmd_3
+      program	gcc
+      kv_ls
+        kv
+          key	-nostdlib
+        kv
+          kv1
+            key	-o
+            sep_spc
+            val_normal	arch/x86/vdso/vdso32-int80.so.dbg
+        kv
+          key	-fPIC
+        kv
+          key	-shared
+        kv
+          kv2
+            key	-Wl
+            sep_comma
+            val_any	--hash-style=sysv
+        kv
+          key	-m32
+        kv
+          kv2
+            key	-Wl
+            sep_comma
+            val_any	-soname=linux-gate.so.1
+        kv
+          kv2
+            key	-Wl
+            sep_comma
+            val_any	-T,arch/x86/vdso/vdso32/vdso32.lds
+      file	arch/x86/vdso/vdso32/note.o
+      file	arch/x86/vdso/vdso32/int80.o
 
 
-lark.exceptions.UnexpectedCharacters: No terminal matches '=' in the current parser context, at line 1 col 85
 
-0.so.dbg -fPIC -shared  -Wl,--hash-style=sysv -m32 -Wl,-soname=linux-gate.so.1 -
-                                        ^
-Expected one of: 
-	* FILE_NAME
-	* KEY
-	* ARG_INC
 """
