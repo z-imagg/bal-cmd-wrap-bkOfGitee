@@ -13,3 +13,6 @@ pip install antlr4-tools
 
 #antlr 词法分析器  和  生成词法分析器
 antlr4 -Dlanguage=Python3 -o parser_generated -package parser_generated  SingleCmd.g4
+
+python demo.py
+#输出为:  program: cxx

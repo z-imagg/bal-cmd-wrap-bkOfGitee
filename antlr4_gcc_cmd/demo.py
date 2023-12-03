@@ -1,8 +1,8 @@
 from antlr4 import CommonTokenStream, ParseTreeWalker, InputStream
 
-from antlr4_gcc_cmd.parser_generated.SingleCmdParser import SingleCmdParser
-from antlr4_gcc_cmd.parser_generated.SingleCmdLexer import  SingleCmdLexer
-from antlr4_gcc_cmd.parser_generated.SingleCmdListener import SingleCmdListener
+from parser_generated.SingleCmdParser import SingleCmdParser
+from parser_generated.SingleCmdLexer import  SingleCmdLexer
+from parser_generated.SingleCmdListener import SingleCmdListener
 
 class HelloPrintListener(SingleCmdListener):
     def enterProgram(self, ctx:SingleCmdParser.ProgramContext):
