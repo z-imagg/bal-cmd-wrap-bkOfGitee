@@ -3,4 +3,4 @@
 source /app/miniconda3/bin/activate && \
 pip install lark && \
 cd /crk/clang-wrap/ && \
-lark_parse_gcc_cmd_ls_file.py 2>&1 | tee lark_parse_gcc_cmd_ls_file.log
+python lark_parse_gcc_cmd_ls_file.py 2>&1 | tee lark_parse_gcc_cmd_ls_file.log
