@@ -10,9 +10,10 @@ src_file: FILE_NAME
 
 kv_ls: kv+
 
-kv: kv3 | key | kv1 | kv2
-kv1: key kv_sep1 val_normal
-kv2: key kv_sep2 val_2
+kv: kv3 | kv4 | key | kv1 | kv2
+kv1: key sep_spc val_normal
+kv4: key sep_eq val_normal
+kv2: key sep_comma val_2
 kv3: arg_inc val_normal
 
 arg_inc: ARG_INC
@@ -21,8 +22,9 @@ val_normal: TK_NORMAL |   _STR
 val_2: TK2 |   _STR
 //kv_sep: KV_SEP
 
-kv_sep1: " "+
-kv_sep2: ","
+sep_eq: "="
+sep_spc: " "+
+sep_comma: ","
 
 ///////////////终结符
 ARG_INC: "-I"
@@ -43,7 +45,7 @@ _STR_DQ : "\"" _STR_INNER "\""
 _STR_SQ : "\'" _STR_INNER "\'"
 
 FILE_NAME: (FILE_NAME_LEAD | D | L) (FILE_NAME_MID | D | L)+
-FILE_NAME_LEAD: "." | "_" | "," | "+"
+FILE_NAME_LEAD: "." | "_" | "," | "+" | "/"
 FILE_NAME_MID: FILE_NAME_LEAD | "-"
 
 
