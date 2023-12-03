@@ -31,8 +31,10 @@ WORD
     : [a-zA-Z]+
     ;
 
-av_pairs  : (kv4  | kv5 | kv1 | kv2 |arg )+
+av_pairs  : (kv4  | kv5 | kv1 | kv2  |arg_no_ws)+
     ;
+
+arg_no_ws: '-' ARG;
 
 kv1 : arg ' ' value
 ;
@@ -46,14 +48,14 @@ kv5: arg QUOTED_STRING
 kv4: arg '=' value
 ;
 
-arg : WS+ '-' ARG  ;
-ARG : [\-0-9a-zA-Z./_:,]+  ;
+arg : WS* '-' ARG  ;
+ARG : [0-9a-zA-Z./_:,]+  ;
 
 
 
 value:VAL;
 VAL
-    : ~[-] (TOKEN |QUOTED_STRING )
+    :  TOKEN |QUOTED_STRING
     ;
 
 word
@@ -98,5 +100,5 @@ LETTER
 //////////////////////
 
 WS
-    : [ \t\r\n] -> channel(HIDDEN)
+    : [ \t\r\n]
     ;
