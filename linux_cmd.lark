@@ -9,17 +9,24 @@ program: FILE_NAME
 
 kv_ls: kv+
 
-kv: key | key " "+ val
+kv: key | kv1 | kv2
+kv1: key kv_sep1 val_1
+kv2: key kv_sep2 val_2
 
 
 key: KEY
-val: TK |   _STR
+val_1: TK1 |   _STR
+val_2: TK2 |   _STR
+//kv_sep: KV_SEP
 
+kv_sep1: " "+
+kv_sep2: ","
 
 ///////////////终结符
-
 KEY: "-" ("-")? (L|D) ("_"|L|D)*
-TK: (SL|L|D) | ("-"|SL|L|D)+
+TK1: /^-/ (","|"-"|SL|L|D)+
+TK2: (","|"-"|SL|L|D)+
+//TK: /[^-]\w*|[-_/]/
 
 SL: "_"|"/"|"."
 D: "0".."9"
