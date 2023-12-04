@@ -32,6 +32,15 @@ class MyTransformer(Transformer):
             return src_file_val
         return NULL_STR
 
+    def isystem_val(self, tokens:List[Token]):
+        pass
+    def inc_val(self, tokens:List[Token]):
+        pass
+    def sep_inc_val(self, tokens:List[Token]):
+        pass
+    def sep_include_val(self, tokens:List[Token]):
+        pass
+
     def src_file(self, tokens:List[Token]):
         #这里items确实是节点内容
         """tokens值为:
