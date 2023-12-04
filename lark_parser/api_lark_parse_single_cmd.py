@@ -5,9 +5,9 @@ from lark.tree import Tree
 from lark.visitors import Interpreter
 from lark.lexer import Token
 from lark_my_transformer import MyTransformer
+from file_at_cmd import FileAtCmd
 
-
-def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str)->Tuple[str,List[str]]:
+def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str)->FileAtCmd:
 
 
     # gcc_cmd_line="  gcc -nostdlib -o arch/x86/vdso/vdso32-int80.so.dbg -fPIC -shared  -Wl,--hash-style=sysv -m32 -Wl,-soname=linux-gate.so.1 -Wl,-T,arch/x86/vdso/vdso32/vdso32.lds arch/x86/vdso/vdso32/note.o arch/x86/vdso/vdso32/int80.o"
@@ -24,10 +24,8 @@ def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str)->Tuple[str,List[str]]:
     transformer = MyTransformer()
     transformer_ret = transformer.transform(treeK)
     #但  transformer_ret 是 整棵结果树 ，并不是 单独该非终结符  内容
-    src_file_val:str=transformer.__get_src_file_val__()
-    print(f"命令中的源文件为:{src_file_val}")
+    fileAtCmd:FileAtCmd=transformer.__getFileAtCmd__()
+    print(f"命令中的源文件相关字段为:{fileAtCmd.__str__()}")
 
-    include_path_ls:List[str]=transformer.__get_include_path_ls__()
-    print(f"命令中的头文件目录列表为:{include_path_ls}")
 
-    return src_file_val,include_path_ls
+    return fileAtCmd

@@ -7,6 +7,7 @@ import time
 import subprocess
 from typing import List,Tuple
 
+from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror
 from interceptor_util import getOutFilePathLs,execute_cmd,echo_msg
@@ -42,9 +43,9 @@ Argv[0]=calcTrueProg(Argv[0])
 #生成唯一文件路径（ 保存命令内容的文件 OF_cmd 、保存命令标准输出的文件 OF_stdout、保存命令错误输出的文件 OF_stderr）
 OF_cmd,OF_stdout,OF_stderr = getOutFilePathLs(progFake)
 #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-src_file_val,include_path_ls=larkGetSrcFileFromSingleGccCmd(_cmdReceived)
+fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived)
 #调用远端主机ubuntu22x64上的clang插件修改本地ubuntu14x32上的源文件
-clangAddFuncIdAsmWrap(src_file_val,include_path_ls)
+clangAddFuncIdAsmWrap(fileAtCmd)
 #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
 exitCode:int=execute_cmd(Argv,OF_cmd,OF_stdout,OF_stderr)
 #显示命令输出、退出代码（输出包括 标准输出、错误输出）
