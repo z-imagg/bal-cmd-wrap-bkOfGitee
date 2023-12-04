@@ -19,6 +19,7 @@ file: FILE_NAME
 kv_ls: kv*
 
 kv: kv_i_spc_incpth|kv_i__incpth | kv_k_eq_valnorm | kv_k__str |kv_isystem_spc_valnorm | kv_k_spc_valnorm | kv_k_comma_valany | key
+//kv_i_spc_incpth"-I xxx" 得比 kv_i__incpth"-Ixxx" 优先级高
 //kv : kv_I_incPth(即 -Ixxx) 必须 比 key 靠前, 否则 kv_I_incPth(即 -Ixxx) 会被 key 淹没
 kv_k_spc_valnorm: key sep_spc val_normal
 //kv_k_spc_valnorm : k v 之间的分割符 是  空格
