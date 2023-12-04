@@ -1,6 +1,6 @@
 from typing import List
 
-
+#如果参数中含有-Werror , 将其替换为 -Wno-error.
 def ArgvRemoveWerror(Argv:List)->List:
     #-Werror 警告视为错误
     #-Wno-error 禁止将警告视为错误
