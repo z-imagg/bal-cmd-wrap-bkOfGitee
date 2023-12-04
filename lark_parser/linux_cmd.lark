@@ -18,7 +18,7 @@ file: FILE_NAME
 
 kv_ls: kv*
 
-kv: kv_i__incpth | kv_k_eq_valnorm | kv_k__str |kv_isystem_spc_valnorm | kv_k_spc_valnorm | kv_k_comma_valany | key
+kv: kv_i_spc_incpth|kv_i__incpth | kv_k_eq_valnorm | kv_k__str |kv_isystem_spc_valnorm | kv_k_spc_valnorm | kv_k_comma_valany | key
 //kv : kv_I_incPth(即 -Ixxx) 必须 比 key 靠前, 否则 kv_I_incPth(即 -Ixxx) 会被 key 淹没
 kv_k_spc_valnorm: key sep_spc val_normal
 //kv_k_spc_valnorm : k v 之间的分割符 是  空格
@@ -30,10 +30,12 @@ kv_k__str: key STR
 kv_k_comma_valany: key sep_comma val_any
 // kv_k_comma_valany: 当k v之间的分割符 为 逗号 时, v的形式是任意的
 kv_i__incpth: ARG_INC include_val
+kv_i_spc_incpth: ARG_INC sep_spc sep_include_val
 // kv_i__incpth: 当k 是 -I  时, k v之间 不需要 分割符
 // kv_i__incpth: ARG_INC sep_spc include_val
 
 include_val: val_normal
+sep_include_val: val_normal
 isystem_val : val_normal
 
 key: KEY
