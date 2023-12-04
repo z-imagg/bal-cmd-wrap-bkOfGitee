@@ -5,20 +5,20 @@ start: gcc_cmd
 ///////////非终结符
 gcc_cmd: gcc_cmd_1  | gcc_cmd_3
 //gcc_cmd: gcc_cmd_1 | gcc_cmd_2 | gcc_cmd_3
-gcc_cmd_1: program kv_ls* src_file
+gcc_cmd_1: program kv_ls src_file
 //gcc_cmd_1: gcc编译源代码命令，比如 gcc -c -o User.o User.c, 其中 src_file 就是 User.c
-//gcc_cmd_2: program kv_ls*
+//gcc_cmd_2: program kv_ls
 //gcc_cmd_2: 末尾不跟文件, 不确定有没有这种形式
-gcc_cmd_3: program kv_ls* file+
+gcc_cmd_3: program kv_ls file+
 //gcc_cmd_3: gcc链接命令 ； 比如  多个.o文件 链接为 单个.so 文件 ，具体例子 比如  gcc -o xxx.so User.o Util.o Price.o，其中 file+ 就是 【Util.o Price.o】
 
 program: FILE_NAME
 src_file: FILE_NAME
 file: FILE_NAME
 
-kv_ls: kv+
+kv_ls: kv*
 
-kv: kv_i__incpth | kv_k_eq_valnorm | kv_k__str |kv_isystem_spc_valnorm | key | kv_k_spc_valnorm | kv_k_comma_valany
+kv: kv_i__incpth | kv_k_eq_valnorm | kv_k__str |kv_isystem_spc_valnorm | kv_k_spc_valnorm | kv_k_comma_valany | key
 //kv : kv_I_incPth(即 -Ixxx) 必须 比 key 靠前, 否则 kv_I_incPth(即 -Ixxx) 会被 key 淹没
 kv_k_spc_valnorm: key sep_spc val_normal
 //kv_k_spc_valnorm : k v 之间的分割符 是  空格
@@ -50,8 +50,9 @@ STR: _STR | _STR_ESC
 ARG_INC: "-I"
 ARG_ISYSTEM: "-isystem"
 KEY: "-" ("-")? (L|D) ("_"|L|D)*
-TK_NORMAL: /[^- ][-_\/\.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]*/
-//正常单词: (开头字符)非中划线 且 非空格, (后跟 0个或多个) 字母 数字 中划线 下划线 正斜线 点
+TK_NORMAL: /[_\/\.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][-_\/\.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]*/
+// TK_NORMAL: 开头字符 只 比 后面字符 少 中划线
+//正常单词: (开头字符)为 后字符 去掉 中划线 , (后跟 0个或多个) 字母 数字 中划线 下划线 正斜线 点
 TK_ANY: (","|"-"|SL|L|D)+
 
 SL: "_"|"/"|"."|"="
