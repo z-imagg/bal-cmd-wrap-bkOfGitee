@@ -18,74 +18,21 @@ g++   -D'xxfDDDDfx=SSSSs' -D"KBUILD_BASENAME=KBUILD_STR(pgtable)" -D"KBUILD_MODN
  
  */
 
-grammar singleCmd;
+grammar zz;
+//grammar GCCOptions;
 
-singleCmd
-    : program (' ')+ av_pairs* (';')? EOF
-    ;
+options {
+  language = Python3;
+}
 
-program
-    : FILE_NAME
-    ;
+options: option+;
 
-av_pairs
-    : av_pair ((' ')+ av_pair)*
-    ;
+option: '-' OPTIONNAME optionValue?;
 
-av_pair
-    : arg ('=' value)?
-    | arg QUOTED_STRING
-    ;
+OPTIONNAME: [a-zA-Z]+;
 
-arg
-    : TOKEN
-    ;
+optionValue: OPTIONVALUEITEM+;
 
-value
-    : word
-    ;
+OPTIONVALUEITEM: ~[-\\s]+ | '"' ~["]* '"';
 
-word
-    : TOKEN
-    | QUOTED_STRING
-    ;
-
-///////////////////////
-
-//QUOTED_STRING 终结符不能用小写
-QUOTED_STRING
-    : '"' (~ ('"' | '\n'))* '"'
-    | '\'' (~ ('\'' | '\n'))* '\''
-    ;
-
-
-TOKEN
-    : ( DIGIT | LETTER | '.' | '-'  | '/' | '_' | ':' | ',')+
-    ;
-
-FILE_NAME
-    : (FILE_NAME_LEAD |DIGIT | LETTER) ( FILE_NAME_MID |DIGIT | LETTER)+
-    ;
-
-FILE_NAME_LEAD
-    : '.' | '_'| ','| '+' 
-    ;
-
-FILE_NAME_MID
-    : FILE_NAME_LEAD | '-' 
-    ;
-//////////////////
-
-DIGIT
-    : '0' .. '9'
-    ;
-
-LETTER
-    : 'a' .. 'z' | 'A' .. 'Z' 
-    ;
-
-//////////////////////
-
-WS
-    : [\t\r\n] -> skip
-    ;
+WS: [ \t\r\n]+ -> skip;
