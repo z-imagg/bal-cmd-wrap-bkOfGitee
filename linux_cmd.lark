@@ -57,6 +57,7 @@ L: LL | UL
 
 _STR : _STR_DQ | _STR_SQ
 _STR_INNER: /.*?/
+//  .*?   匹配任意字符序列（除换行符外），但尽可能少地匹配（非贪婪模式）。
 _STR_DQ : DQ _STR_INNER DQ
 _STR_SQ : SQ _STR_INNER SQ
 DQ :   "\""
