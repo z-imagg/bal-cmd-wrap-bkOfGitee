@@ -21,10 +21,10 @@ kv_ls: kv*
 kv: kv_i_spc_incpth|kv_i_spc_includepth|kv_i__incpth | kv_k_eq_valnorm | kv_k__str |kv_isystem_spc_valnorm | kv_k_spc_valnorm | kv_k_comma_valany | key
 //kv_i_spc_incpth"-I xxx" 得比 kv_i__incpth"-Ixxx" 优先级高
 //kv : kv_I_incPth(即 -Ixxx) 必须 比 key 靠前, 否则 kv_I_incPth(即 -Ixxx) 会被 key 淹没
-kv_k_spc_valnorm: key sep_spc val_normal
+kv_k_spc_valnorm: key sep_spc VAL_NORMAL
 //kv_k_spc_valnorm : k v 之间的分割符 是  空格
 kv_isystem_spc_valnorm: ARG_ISYSTEM sep_spc isystem_val
-kv_k_eq_valnorm: key sep_eq val_normal
+kv_k_eq_valnorm: key sep_eq VAL_NORMAL
 //kv_k_eq_valnorm : k v 之间的分割符 是  等号
 kv_k__str: key STR
 //kv_k__str: 当v用引号包裹时, k v之间 不需要 分割符
@@ -35,13 +35,13 @@ kv_i_spc_incpth: ARG_INC sep_spc sep_inc_val
 // kv_i__incpth: 当k 是 -I  时, k v之间 不需要 分割符
 kv_i_spc_includepth: ARG_INCLUDE sep_spc sep_include_val
 
-inc_val: val_normal
-sep_inc_val: val_normal
-sep_include_val: val_normal
-isystem_val : val_normal
+inc_val: VAL_NORMAL
+sep_inc_val: VAL_NORMAL
+sep_include_val: VAL_NORMAL
+isystem_val : VAL_NORMAL
 
 key: KEY
-val_normal: TK_NORMAL |   STR
+VAL_NORMAL: TK_NORMAL |   STR
 val_any: TK_ANY |   STR
 //kv_sep: KV_SEP
 
