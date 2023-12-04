@@ -11,6 +11,14 @@ from lark.lexer import Token
 class MyTransformer(Transformer):
     def __init__(self):
         self.src_file_ls:List[ List[Token] ] = []
+        self.include_path_ls:List[ List[Token] ] = []
+
+
+    def __get_include_path_ls__(self):
+        return [  include_path_k[0].value  for include_path_k in self.include_path_ls]
+    #TODO 截获 非终结符 include_path 时 填充 到 self.include_path_ls
+    # def include_path(self, tokens:List[Token]):  #仿照 函数 src_file 编写
+
 
     def __get_src_file_val__(self,NULL_STR:str=None)->str:
         assert len(self.src_file_ls) <= 1
