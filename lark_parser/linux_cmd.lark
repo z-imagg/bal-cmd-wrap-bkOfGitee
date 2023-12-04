@@ -18,7 +18,7 @@ file: FILE_NAME
 
 kv_ls: kv*
 
-kv: kv_i_spc_incpth|kv_i__incpth | kv_k_eq_valnorm | kv_k__str |kv_isystem_spc_valnorm | kv_k_spc_valnorm | kv_k_comma_valany | key
+kv: kv_i_spc_incpth|kv_i_spc_includepth|kv_i__incpth | kv_k_eq_valnorm | kv_k__str |kv_isystem_spc_valnorm | kv_k_spc_valnorm | kv_k_comma_valany | key
 //kv_i_spc_incpth"-I xxx" 得比 kv_i__incpth"-Ixxx" 优先级高
 //kv : kv_I_incPth(即 -Ixxx) 必须 比 key 靠前, 否则 kv_I_incPth(即 -Ixxx) 会被 key 淹没
 kv_k_spc_valnorm: key sep_spc val_normal
@@ -33,10 +33,11 @@ kv_k_comma_valany: key sep_comma val_any
 kv_i__incpth: ARG_INC inc_val
 kv_i_spc_incpth: ARG_INC sep_spc sep_inc_val
 // kv_i__incpth: 当k 是 -I  时, k v之间 不需要 分割符
-// kv_i__incpth: ARG_INC sep_spc inc_val
+kv_i_spc_includepth: ARG_INCLUDE sep_spc sep_include_val
 
 inc_val: val_normal
 sep_inc_val: val_normal
+sep_include_val: val_normal
 isystem_val : val_normal
 
 key: KEY
@@ -51,6 +52,7 @@ sep_comma: ","
 ///////////////终结符
 STR: _STR | _STR_ESC
 ARG_INC: "-I"
+ARG_INCLUDE: "-include"
 ARG_ISYSTEM: "-isystem"
 KEY: "-" ("-")? (L|D) ("_"|L|D)*
 TK_NORMAL: /[_\/\.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][-_\/\.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]*/
