@@ -1,6 +1,7 @@
 from typing import List
 
-
+#在 ubuntu22上 将 ubuntu14的根目录 被 挂载 为 目录  /ubt14x86root
+u14rotOnU22: str = '/ubt14x86root/'
 class FileAtCmd:
     def __init__(self):
         self.src_file: str  = None
@@ -15,6 +16,5 @@ class FileAtCmd:
         return msg
 
     def __as_clang_cmd_part__(self)->str:
-        ubt14x86root:str='/ubt14x86root/'
-        as_clang_cmd_part= f" {'-isystem '.join(self.isystem_val_ls)} {'-I'.join(self.inc_val_ls)}  {'-I '.join(self.sep_inc_val_ls)}  { ('-include ').join(self.sep_include_val_ls)} -c {self.srcFile}"
+        as_clang_cmd_part= f" {('-isystem '+u14rotOnU22).join(self.isystem_val_ls)} {('-I'+u14rotOnU22).join(self.inc_val_ls)}  {('-I '+u14rotOnU22).join(self.sep_inc_val_ls)}  { ('-include '+u14rotOnU22).join(self.sep_include_val_ls)} -c {self.srcFile}"
         return as_clang_cmd_part

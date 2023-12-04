@@ -30,12 +30,21 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd):
 
     ubt22:SSHClient=__get_ubuntu22x64HostSshClient__()
 
+    """TODO
+    在 ubuntu22上 将 ubuntu14的根目录 挂载 为 目录  /ubt14x86root, 在u22上执行以下命令:
+    sudo apt-get update
+    sudo apt-get install sshfs
+    sudo sshfs -o allow_other,IdentityFile=/path/to/private_key z@ubuntu14x32:/ /ubt14x86root
+    (以上三条命令是 以问题 “linux主机ubuntu14x32的根文件系统 挂载 到 主机ubuntu22x64的 目录 /u14root下 如何实施？” 问 https://vip.easychat.work/#/  得到的答复）
+    """
     #  组装 clang 插件命令
     clang_plugin_so="/crk/clang-add-funcIdAsm/build/lib/libCTk.so"
+    # as_clang_cmd_part 中 的目录 已经增加了前缀 /ubt14x86root
     as_clang_cmd_part:str=fileAtGccCmd.__as_clang_cmd_part__()
     clang_plugin_cmd:str=f"/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang  -Xclang   -load -Xclang {clang_plugin_so}  -Xclang   -add-plugin -Xclang  CTk   {as_clang_cmd_part}"
     #  clang 插件命令
     stdin, stdout, stderr = ubt22.exec_command(clang_plugin_cmd)
+    #理论上，clang插件已经对 源文件做出了 修改
 
     # 获取命令输出
     output = stdout.read().decode('utf-8')
