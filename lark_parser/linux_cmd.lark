@@ -4,7 +4,7 @@ start: gcc_cmd
 
 ///////////非终结符
 gcc_cmd: gcc_cmd_1  | gcc_cmd_3
-//gcc_cmd: gcc_cmd_1 | gcc_cmd_2 | gcc_cmd_3
+//gcc_cmd: lark 将 先 gcc_cmd_1 后 gcc_cmd_3
 gcc_cmd_1: program kv_ls src_file
 //gcc_cmd_1: gcc编译源代码命令，比如 gcc -c -o User.o User.c, 其中 src_file 就是 User.c
 //gcc_cmd_2: program kv_ls
