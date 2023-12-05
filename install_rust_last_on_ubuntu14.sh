@@ -22,7 +22,7 @@ wget --output-document ~/rustup-init.sh https://sh.rustup.rs
 
 # 再执行
 chmod +x ~/rustup-init.sh
-    ~/rustup-init.sh
+~/rustup-init.sh
 # 调试执行 :
 #   sh -x    ~/rustup-init.sh
 
@@ -31,7 +31,7 @@ chmod +x ~/rustup-init.sh
 source ~/.cargo/env
 
 #3.安装最新的 Rust
-  rustup update stable
+rustup update stable
 
 
 
