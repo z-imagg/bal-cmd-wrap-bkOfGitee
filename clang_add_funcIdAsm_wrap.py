@@ -2,9 +2,20 @@ from typing import List
 
 #pip install paramiko
 
+from pathlib import Path
 import paramiko
 from paramiko import SSHClient
 from lark_parser.file_at_cmd import FileAtCmd
+def __readF__(filePath:str):
+    with open(filePath,"r") as rf:
+        text=rf.read()
+        return text
+    raise Exception(f"error __readF__ file:{filePath}")
+def __writeF__(filePath:str,text:str)->bool:
+    with open(filePath,"w") as wf:
+        wf.write(text)
+        return True
+    raise Exception(f"error __readF__ file:{filePath}")
 def __get_ubuntu22x64HostSshClient__()->SSHClient:
     # 创建 SSH 客户端
     ubt22:SSHClient = SSHClient()
@@ -20,7 +31,15 @@ def __get_ubuntu22x64HostSshClient__()->SSHClient:
 - ubuntu14x32: 192.168.1.4:3022; (TPLINK_*)
 - ubuntu22x64: 192.168.1.4:2122; (TPLINK_*)
     """
-    passwd_z = input("请输入主机ubuntu22x64的用户z的密码:")
+    passwd_z_f="/tmp/ubuntu22x64_z_pass.txt"
+    if Path.exists(passwd_z_f):
+        #下次使用已经保存的密码
+        passwd_z=__readF__(passwd_z_f)
+    else:
+        #输入密码
+        passwd_z = input("请输入主机ubuntu22x64的用户z的密码:")
+        #保存密码
+        __writeF__(passwd_z_f,passwd_z)
     ubt22.connect('ubuntu22x64', port=2122, username='z', password=passwd_z)
 
     return ubt22
