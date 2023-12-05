@@ -1,8 +1,10 @@
-#!/usr/bin/python3
+#!/app/miniconda3/bin/python
+# -*- coding: utf-8 -*-
 
 #apt install file uuid-runtime
 
 import sys
+assert sys.version_info >= (3,6), "错误：需要使用 Python 3.6 或更高版本. 因为 此脚本中大量使用的 字符串格式化语法 f'{变量名}' 是pytho3.6引入的"
 import time
 import subprocess
 from typing import List,Tuple
@@ -31,7 +33,7 @@ calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
 
 #{拦截过程 开始
 #参数数组复制一份 (不要直接修改sys.argv)
-Argv=list(sys.argv)
+Argv=list(sys.argv); print(f"Argv:{Argv}")
 #打印参数
 _cmdReceived:str=' '.join(Argv) ; print( f"收到命令及参数: {_cmdReceived}" )
 #参数中-Werror替换为-Wno-error
