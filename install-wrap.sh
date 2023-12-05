@@ -4,7 +4,8 @@
 
 # CLANG_HOME_BIN=/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin
 
-
+#在ubuntu14下python版本不会高于3.5, 因此需要使用链接到python3.6:
+#sudo ln -s /app/miniconda3/bin/python3.6 /usr/bin/python3
 
 interceptor=/crk/cmd-wrap/interceptor.py
 
