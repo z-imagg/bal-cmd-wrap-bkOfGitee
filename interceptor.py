@@ -1,4 +1,4 @@
-#!/app/miniconda3/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 #apt install file uuid-runtime
