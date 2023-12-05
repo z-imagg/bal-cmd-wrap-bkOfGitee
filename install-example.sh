@@ -4,8 +4,6 @@
 
 # CLANG_HOME_BIN=/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin
 
-#当前用户添加到sudo组，以免去使用sudo
-sudo usermod -aG sudo $(whoami)
 
 
 interceptor=/crk/cmd-wrap/interceptor.py
@@ -20,7 +18,7 @@ fake_bin=/crk/bin
 export PATH=$fake_bin:$PATH
 ' | tee -a $BashRcF ;}
 
-sudo mkdir -p $fake_bin
+sudo mkdir -p $fake_bin && sudo chown -R $(id -gn).$(whoami) $fake_bin
 
 fake_clang=$fake_bin/clang
 fake_clangPP=$fake_bin/clang++
