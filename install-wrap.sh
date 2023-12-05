@@ -2,9 +2,11 @@
 
 
 #安装拦截器 interceptor.py 用到的库
-sudo apt install -y rustc  #paramiko需要rust
+#在ubuntu14下'apt install -y rustc' 安装的rust版本过低， 改用 install_rust_last_on_ubuntu14.sh 安装rust
+#sudo apt install -y rustc
 /app/miniconda3/bin/pip install paramiko  #此步骤需要gcc，即 此时不能覆盖gc，否则安装paramiko会失败.
 #/app/miniconda3/bin/pip install paramiko==dummy_version  #这条pip命令会报错，但会显示出paramiko的所有可用版本(pip命令列出给定库所有可用版本)
+
 
 # CLANG_HOME_BIN=/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin
 
@@ -22,6 +24,7 @@ grep fake_bin $BashRcF || { echo '
 fake_bin=/crk/bin
 export PATH=$fake_bin:$PATH
 export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
+export RUSTUP_DIST_SERVER=http://mirrors.tuna.tsinghua.edu.cn/rustup
 ' | tee -a $BashRcF ;}
 
 sudo mkdir -p $fake_bin && sudo chown -R $(id -gn).$(whoami) $fake_bin
