@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+#安装拦截器 interceptor.py 用到的库
+pip install paramiko
 
 # CLANG_HOME_BIN=/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin
 
@@ -11,13 +13,15 @@ interceptor=/crk/cmd-wrap/interceptor.py
 
 fake_bin=/crk/bin
 export PATH=$fake_bin:$PATH
+export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 
-BashRcF=~/.bashrc
-grep fake_bin $BashRcF || \
-{ echo '
+stmt='
 fake_bin=/crk/bin
 export PATH=$fake_bin:$PATH
-' | tee -a $BashRcF ;}
+export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
+'
+BashRcF=~/.bashrc
+grep fake_bin $BashRcF || { echo $stmt | tee -a $BashRcF ;}
 
 sudo mkdir -p $fake_bin && sudo chown -R $(id -gn).$(whoami) $fake_bin
 
