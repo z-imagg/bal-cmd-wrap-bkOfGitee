@@ -2,8 +2,8 @@
 
 
 #安装拦截器 interceptor.py 用到的库
-sudo apt install rustc  #paramiko需要rust
-/app/miniconda3/bin/pip install paramiko
+sudo apt install -y rustc  #paramiko需要rust
+/app/miniconda3/bin/pip install paramiko  #此步骤需要gcc，即 此时不能覆盖gc，否则安装paramiko会失败.
 
 # CLANG_HOME_BIN=/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin
 
