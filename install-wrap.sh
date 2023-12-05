@@ -24,6 +24,7 @@ grep fake_bin $BashRcF || { echo '
 fake_bin=/crk/bin
 export PATH=$fake_bin:$PATH
 export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
+export RUSTUP_UPDATE_ROOT=http://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
 export RUSTUP_DIST_SERVER=http://mirrors.tuna.tsinghua.edu.cn/rustup
 ' | tee -a $BashRcF ;}
 

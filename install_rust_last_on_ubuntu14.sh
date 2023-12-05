@@ -1,6 +1,9 @@
 
 #-1. rustup清华镜像使用参考
 # https://mirrors.tuna.tsinghua.edu.cn/help/rustup/
+echo 'export RUSTUP_UPDATE_ROOT=http://mirrors.tuna.tsinghua.edu.cn/rustup/rustup' >> ~/.bashrc
+echo 'export RUSTUP_DIST_SERVER=http://mirrors.tuna.tsinghua.edu.cn/rustup' >> ~/.bashrc
+source ~/.bashrc
 
 #0.卸载旧版本 Rust（如果有）
 rustup self uninstall
@@ -19,16 +22,16 @@ wget --output-document ~/rustup-init.sh https://sh.rustup.rs
 
 # 再执行
 chmod +x ~/rustup-init.sh
-RUSTUP_DIST_SERVER=http://mirrors.tuna.tsinghua.edu.cn/rustup        ~/rustup-init.sh
+    ~/rustup-init.sh
 # 调试执行 :
-# RUSTUP_DIST_SERVER=http://mirrors.tuna.tsinghua.edu.cn/rustup    sh -x    ~/rustup-init.sh
+#   sh -x    ~/rustup-init.sh
 
 
 #2.设置环境变量
 source ~/.cargo/env
 
 #3.安装最新的 Rust
-RUSTUP_DIST_SERVER=http://mirrors.tuna.tsinghua.edu.cn/rustup  rustup update stable
+  rustup update stable
 
 
 
