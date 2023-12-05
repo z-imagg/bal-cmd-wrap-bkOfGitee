@@ -16,13 +16,12 @@ fake_bin=/crk/bin
 export PATH=$fake_bin:$PATH
 export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 
-stmt='
+BashRcF=~/.bashrc
+grep fake_bin $BashRcF || { echo '
 fake_bin=/crk/bin
 export PATH=$fake_bin:$PATH
 export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
-'
-BashRcF=~/.bashrc
-grep fake_bin $BashRcF || { echo $stmt | tee -a $BashRcF ;}
+' | tee -a $BashRcF ;}
 
 sudo mkdir -p $fake_bin && sudo chown -R $(id -gn).$(whoami) $fake_bin
 
