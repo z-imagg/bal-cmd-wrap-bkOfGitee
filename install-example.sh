@@ -9,6 +9,13 @@ interceptor=/crk/cmd-wrap/interceptor.py
 fake_bin=/crk/bin
 export PATH=$fake_bin:$PATH
 
+BashRcF=~/.bashrc
+grep fake_bin $BashRcF || \
+{ echo '
+fake_bin=/crk/bin
+export PATH=$fake_bin:$PATH
+' | tee -a $BashRcF ;}
+
 sudo mkdir -p $fake_bin
 
 fake_clang=$fake_bin/clang
