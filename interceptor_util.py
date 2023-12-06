@@ -47,11 +47,11 @@ def execute_cmd(Argv, OFPath_cmd, gLogF)->int:
         exitCode, std_out, err_out = real_cmd.run(retcode=None)
         # 写 真实命令的 标准输出、错误输出  (不能写到文件，因为调用者可能需要这些输出）
         if not __NoneOrLenEq0__(std_out):
-            print(std_out,file=sys.stdout)
-            print(std_out,file=gLogF)
+            print(std_out,file=sys.stdout,end="") #真实命令的输出，不要有多余的换行
+            print(f"真实命令标准输出【{std_out}】",file=gLogF)
         if not __NoneOrLenEq0__(err_out):
-            print(err_out, file=sys.stderr)
-            print(err_out,file=gLogF)
+            print(err_out, file=sys.stderr,end="") #真实命令的输出，不要有多余的换行
+            print(f"真实命令错误输出【{err_out}】",file=gLogF)
         #假如没有执行到此行 , 即 subprocess.run 没执行 ,即 变量 exitCode 为 None。 原因肯定是 上面的三个open发生的异常。
 
     # 断言 exitCode非空，即 断言 subprocess.run 必须执行了
