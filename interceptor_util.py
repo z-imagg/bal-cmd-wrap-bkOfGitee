@@ -5,13 +5,17 @@ import subprocess
 from typing import List,Tuple
 
 from datetime_util import getCurrNanoSeconds
+from pathlib import Path
 
 #输出文件根目录 (配置项).  OFRtD:Out_File_Root_Dir:输出文件根目录
 OFRtD: str = '/tmp'
 
-def getOutFilePathLs(progFake)->Tuple[str,str,str]:
+def getOutFilePathLs(_progFake)->Tuple[str,str,str]:
     # 合成当前的绝对时刻（以纳秒为单位）
     CurrNanoSeconds = getCurrNanoSeconds()  
+
+    #有可能_progFake是绝对路径， 因此只留下文件名即可
+    progFake:str=Path(_progFake).name
 
     #clang命令输出文件路径，文件名尽可能唯一
     OF_cmd:str=f"{OFRtD}/{progFake}-{CurrNanoSeconds}.cmd"
