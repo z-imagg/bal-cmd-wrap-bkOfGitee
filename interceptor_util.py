@@ -37,8 +37,8 @@ def execute_cmd(Argv, OFPath_cmd, of_stdout_cmd,of_stderr_cmd)->int:
         #    2. shell=True ，则 命令内容 样式为 '程序名 参数1 参数2 ... 参数k ...' : str, 本函数内无此变量
         #这里使用的是形式1
         print("执行真实命令:",Argv,file=of_stdout_cmd)
-        # 调用真实命令，并 写 标准输出、错误输出 到 对应文件
-        process_R=subprocess.run(Argv,  stdout=of_stdout_cmd, stderr=of_stderr_cmd,text=True)
+        # 调用真实命令，并 写 标准输出、错误输出  (不能写到文件，因为调用者可能需要这些输出）
+        process_R=subprocess.run(Argv,  stdout=sys.stdout, stderr=sys.stderr,text=True)
         exitCode=process_R.returncode
         #假如没有执行到此行 , 即 subprocess.run 没执行 ,即 变量 exitCode 为 None。 原因肯定是 上面的三个open发生的异常。
 
