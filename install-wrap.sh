@@ -3,6 +3,7 @@
 
 
 interceptor=/crk/cmd-wrap/interceptor.py
+chmod +x $interceptor
 
 fake_bin=/crk/bin
 mkdir -p $fake_bin
