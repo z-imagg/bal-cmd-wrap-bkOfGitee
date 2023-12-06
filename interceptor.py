@@ -46,7 +46,7 @@ Argv[0]=calcTrueProg(Argv[0])
 OF_cmd,OF_stdout,OF_stderr = getOutFilePathLs(progFake)
 #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
 fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived)
-#调用远端主机ubuntu22x64上的clang插件修改本地ubuntu14x32上的源文件
+#调用本主机ubuntu22x64上的clang插件修改本地源文件
 clangAddFuncIdAsmWrap(fileAtCmd)
 #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
 exitCode:int=execute_cmd(Argv,OF_cmd,OF_stdout,OF_stderr)
