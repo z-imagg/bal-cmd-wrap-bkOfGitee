@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import subprocess
+import subprocess,sys
 from typing import List,Tuple
 
 from datetime_util import getCurrNanoSeconds
@@ -27,8 +27,9 @@ def getOutFilePathLs(_progFake)->Tuple[str,str,str]:
 
 def execute_cmd(Argv,OF_cmd,OF_stdout,OF_stderr)->int:
     exitCode:int=None
+    print(f"【Argv@execute_cmd】:【{Argv}】", file=sys.stderr)
     with open(OF_cmd, "w") as ofCmd:
-        ArgvStr:str=' '.join(Argv)
+        ArgvStr:str=' '.join(Argv) ; #breakpoint() # ?断点不起作用? 可能是输入被怎么了？
         #命令内容写入文件，方便问题查找.
         ofCmd.write(f"真实命令:{ArgvStr}\n")
         with open(OF_stdout, "w") as of_stdout:
