@@ -44,27 +44,25 @@ Argv:List[str] = ArgvRemoveWerror(Argv)
 Argv[0]=calcTrueProg(Argv[0])
 #生成唯一文件路径（ 保存命令内容的文件 OF_cmd 、保存命令标准输出的文件 OF_stdout、保存命令错误输出的文件 OF_stderr）
 OFPath_cmd, OFPath_stdout, OFPath_stderr = getOutFilePathLs(progFake)
-of_stdout_cmd=open(OFPath_stdout, "w")
-of_stderr_cmd=open(OFPath_stderr, "w")
+gLogF=open("/crk/g.log", "w")
 #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
-print(f"Argv:{Argv}",file=of_stdout_cmd)
-print( f"收到命令及参数: {_cmdReceived}",file=of_stdout_cmd )
+print(f"Argv:{Argv}",file=gLogF)
+print( f"收到命令及参数: {_cmdReceived}",file=gLogF )
 #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived,of_stdout_cmd,of_stderr_cmd)
+fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived,gLogF)
 if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命令
     #调用本主机ubuntu22x64上的clang插件修改本地源文件
-    clangAddFuncIdAsmWrap(fileAtCmd,of_stdout_cmd,of_stderr_cmd)
+    clangAddFuncIdAsmWrap(fileAtCmd,gLogF)
 else:
-    print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令",file=of_stderr_cmd)
+    print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令",file=gLogF)
     
 #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
-exitCode:int=execute_cmd(Argv, OFPath_cmd, of_stdout_cmd, of_stderr_cmd)
+exitCode:int=execute_cmd(Argv, OFPath_cmd, gLogF)
 #显示命令输出、退出代码（输出包括 标准输出、错误输出）
-echo_msg(OFPath_stdout, OFPath_stderr, exitCode,of_stdout_cmd,of_stderr_cmd)
+echo_msg(OFPath_stdout, OFPath_stderr, exitCode,gLogF)
 
 #关闭日志文件
-of_stdout_cmd.close()
-of_stderr_cmd.close()
+gLogF.close()
 #以真实命令的退出码退出（假装自己是真实命令）
 exit(exitCode)
 #拦截过程 结束}
