@@ -26,26 +26,79 @@ class MyTransformer(Transformer):
         assert nodeNameInLarkGrammar is not None
         assert ls is not None and isinstance(ls,list) and len(ls) == 1
         token:Token= ls[0]
-        assert  token.type==nodeNameInLarkGrammar
+        assert  token.type==nodeNameInLarkGrammar    #'lark Transformer 回调方法' 符号名与.lark文法文件中的不一致
         return token
 
+    @staticmethod
+    def __Ls_get0_fieldValue__( ls:List[Token])->str:
+        if ls is not None and isinstance(ls,list) and len(ls) >= 1 :
+            token:Token= ls[0]
+            return token.value
+        return None
+
     def __init__(self):
-        self.src_file_ls:List[ Token ] = []
+        # -m32
+        self.m_dd_val_ls: List[ Token ]  = []
+        # -march=yyy
+        self.m_arch_val_ls: List[ Token ] = []
+
+        # -std=yy
+        self.std_val_ls: List[ Token ] = []
+
+        # -Dxxx
+        self.d_val_ls:List[ Token ] = []
+        # -Dxxx=yyy
+        self.d_eq_val_ls: List[ Token ] = []
+
+        # -Wxxx
+        self.w_val_ls:List[ Token ] = []
+        # -Wxxx=yyy
+        self.w_eq_val_ls: List[ Token ] = []
+
+        # -fxxx
+        self.f_val_ls:List[ Token ] = []
+        # -fxxx=yyy
+        self.f_eq_val_ls: List[ Token ] = []
+
+
         self.isystem_val_ls:List[ Token ] = []
         self.inc_val_ls:List[ Token ] = []
         self.sep_inc_val_ls:List[ Token ] = []
         self.sep_include_val_ls:List[ Token ] = []
 
+        self.src_file_ls:List[ Token ] = []
 
     def __getFileAtCmd__(self)->FileAtCmd:
         fileAtCmd: FileAtCmd = FileAtCmd()
 
+        # 取 -m32
+        fileAtCmd.m_dd_val: str  =  MyTransformer.__Ls_get0_fieldValue__(self.m_dd_val_ls)
+        # 取 -march=yyy
+        fileAtCmd.m_arch_val: str = MyTransformer.__Ls_get0_fieldValue__(self.m_arch_val_ls)
+
+        # 取 -std=yy
+        fileAtCmd.std_val: str = MyTransformer.__Ls_get0_fieldValue__(self.std_val_ls)
+
+        # 取 -Dxxx
+        fileAtCmd.d_val_ls:List[ str] = MyTransformer.__tokenLs2strLs__(self.d_val_ls)
+        # 取 -Dxxx=yyy
+        fileAtCmd.d_eq_val_ls: List[str] = MyTransformer.__tokenLs2strLs__(self.d_eq_val_ls)
+
+        # 取 -Wxxx
+        fileAtCmd.w_val_ls:List[ str] = MyTransformer.__tokenLs2strLs__(self.w_val_ls)
+        # 取 -Wxxx=yyy
+        fileAtCmd.w_eq_val_ls: List[str] = MyTransformer.__tokenLs2strLs__(self.w_eq_val_ls)
+
+        # 取 -fxxx
+        fileAtCmd.f_val_ls:List[ str ] = MyTransformer.__tokenLs2strLs__(self.f_val_ls)
+        # 取 -fxxx=yyy
+        fileAtCmd.f_eq_val_ls: List[str] = MyTransformer.__tokenLs2strLs__(self.f_eq_val_ls)
+
+
         #取源文件
         assert len(self.src_file_ls) <= 1
         # 一条gcc命令中不会有多个 源文件
-        tokenTextLs:List[str]=MyTransformer.__tokenLs2strLs__(self.src_file_ls)
-        if MyTransformer.__listNotEmpty__(tokenTextLs):
-            fileAtCmd.src_file =  tokenTextLs[0]
+        fileAtCmd.src_file =  MyTransformer.__Ls_get0_fieldValue__(self.src_file_ls)
 
         #取isystem_val_ls
         fileAtCmd.isystem_val_ls = MyTransformer.__tokenLs2strLs__(self.isystem_val_ls)
@@ -60,8 +113,54 @@ class MyTransformer(Transformer):
         fileAtCmd.sep_include_val_ls=MyTransformer.__tokenLs2strLs__(self.sep_include_val_ls)
 
         return fileAtCmd
+######
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def m_arch_val(self, tokens:List[Token]):
+        self.m_arch_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_NORMAL', tokens))
+        return tokens
+
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def m_dd_val(self, tokens:List[Token]):
+        self.m_dd_val_ls.append(MyTransformer.__assertLsSz1_get0__('DD', tokens))
+        return tokens
+
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def std_val(self, tokens:List[Token]):
+        self.std_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_NORMAL', tokens))
+        return tokens
+
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def d_val(self, tokens:List[Token]):
+        self.d_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_ANY', tokens))
+        return tokens
+
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def d_eq_val(self, tokens:List[Token]):
+        self.d_eq_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_ANY', tokens))
+        return tokens
+
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def w_val(self, tokens:List[Token]):
+        self.w_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_ANY', tokens))
+        return tokens
+
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def w_eq_val(self, tokens:List[Token]):
+        self.w_eq_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_ANY', tokens))
+        return tokens
+
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def f_val(self, tokens:List[Token]):
+        self.f_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_ANY', tokens))
+        return tokens
+
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def f_eq_val(self, tokens:List[Token]):
+        self.f_eq_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_ANY', tokens))
+        return tokens
 
 
+######
     #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
     def isystem_val(self, tokens:List[Token]):
         self.isystem_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_NORMAL', tokens))
