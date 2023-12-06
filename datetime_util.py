@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from datetime import time
+import time
 
 
 def getCurrNanoSeconds()->int:

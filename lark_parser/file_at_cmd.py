@@ -9,6 +9,14 @@ class FileAtCmd:
     def __NoneStr2Empty__(string:str):
         if string is None: return ''
         return string
+
+    @staticmethod
+    def __strAppendIfNotEmpty_elseGetEmptyStr__(_s1:str,_mainStr:str):
+        if _mainStr is None or len(_mainStr) == 0:
+            return ''
+        s1=FileAtCmd.__NoneStr2Empty__(_s1)
+        mainStr=FileAtCmd.__NoneStr2Empty__(_mainStr)
+        return f"{s1}{mainStr}"
     
     Kv1SepKv2=" "
     @staticmethod
@@ -62,12 +70,12 @@ class FileAtCmd:
     def __as_clang_cmd_part__(self)->str:
 
         # -m32
-        _m_dd_val: str  = FileAtCmd.__NoneStr2Empty__(self.m_dd_val)
+        kv_m_dd: str  = FileAtCmd.__strAppendIfNotEmpty_elseGetEmptyStr__('-m',self.m_dd_val)
         # -march=yyy
-        _m_arch_val: str= FileAtCmd.__NoneStr2Empty__(self.m_arch_val)
+        kv_m_arch: str= FileAtCmd.__strAppendIfNotEmpty_elseGetEmptyStr__('-march=',self.m_arch_val)
 
         # -std=yy
-        _std_val: str =  FileAtCmd.__NoneStr2Empty__(self.std_val)
+        kv_std: str =  FileAtCmd.__strAppendIfNotEmpty_elseGetEmptyStr__('-std=',self.std_val)
 
         # -Dxxx
         _d_val_ls:str  = FileAtCmd.__ls_join__(self.d_val_ls,'-D')
@@ -94,6 +102,6 @@ class FileAtCmd:
         _sep_include_val_ls:str=FileAtCmd.__ls_join__(self.sep_include_val_ls,'-include ')
         _srcFile:str=self.src_file
 
-        as_clang_cmd_part= f" -m{_m_dd_val} -march={_m_arch_val} -std={_std_val}  {_d_val_ls} {_d_eq_val_ls} {_w_val_ls} {_W_eq_val_ls} {_f_val_ls} {_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
+        as_clang_cmd_part= f" {kv_m_dd} {kv_m_arch} {kv_std}  {_d_val_ls} {_d_eq_val_ls} {_w_val_ls} {_W_eq_val_ls} {_f_val_ls} {_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
 
         return as_clang_cmd_part
