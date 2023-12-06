@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 #apt install file uuid-runtime
@@ -33,7 +33,7 @@ calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
 
 #{拦截过程 开始
 #参数数组复制一份 (不要直接修改sys.argv)
-Argv=list(sys.argv); print(f"Argv:{Argv}")
+Argv=list(sys.argv); print(f"Argv:{Argv}",file=sys.stderr)
 #打印参数
 _cmdReceived:str=' '.join(Argv) ; print( f"收到命令及参数: {_cmdReceived}" )
 #参数中-Werror替换为-Wno-error
@@ -46,8 +46,12 @@ Argv[0]=calcTrueProg(Argv[0])
 OF_cmd,OF_stdout,OF_stderr = getOutFilePathLs(progFake)
 #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
 fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived)
-#调用本主机ubuntu22x64上的clang插件修改本地源文件
-clangAddFuncIdAsmWrap(fileAtCmd)
+if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命令
+    #调用本主机ubuntu22x64上的clang插件修改本地源文件
+    clangAddFuncIdAsmWrap(fileAtCmd)
+else:
+    print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令",file=sys.stderr)
+    
 #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
 exitCode:int=execute_cmd(Argv,OF_cmd,OF_stdout,OF_stderr)
 #显示命令输出、退出代码（输出包括 标准输出、错误输出）
