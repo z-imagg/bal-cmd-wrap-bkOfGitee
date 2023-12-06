@@ -38,7 +38,7 @@ kv_i_spc_incpth: ARG_INC sep_spc sep_inc_val
 kv_i_spc_includepth: ARG_INCLUDE sep_spc sep_include_val
 kv_march_eq_valany: ARG_MARCH sep_eq m_arch_val
 kv_m_dd: ARG_M m_dd_val
-kv_std_eq_valany: ARG_STD sep_eq m_arch_val
+kv_std_eq_valany: ARG_STD sep_eq std_val
 kv_d__valany: ARG_D d_val
 kv_d_eq_valany: ARG_D sep_eq d_eq_val
 kv_w__valany: ARG_W w_val
@@ -54,7 +54,8 @@ inc_val: VAL_NORMAL
 sep_inc_val: VAL_NORMAL
 sep_include_val: VAL_NORMAL
 isystem_val : VAL_NORMAL
-m_arch_val : VAL_ANY
+m_arch_val : VAL_NORMAL
+std_val : VAL_NORMAL
 m_dd_val : DD
 d_val: VAL_ANY
 d_eq_val: VAL_ANY
