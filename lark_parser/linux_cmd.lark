@@ -81,7 +81,8 @@ ARG_MARCH: "-march"
 ARG_M: "-m"
 ARG_INCLUDE: "-include"
 ARG_ISYSTEM: "-isystem"
-KEY: "-" ("-")? (L|D) ("_"|L|D)*
+KEY: "-" ("-")? (L|D) ("-"|"_"|L|D)*
+// KEY的定义中 末尾部分 '("-"|"_"|L|D)*' 如果少了 中划线 会导致   lack文法 linux_cmd.lark  bug : -Wno-trigraphs  错误的 被按-拆开成两个选项 -Wno 和 -trigraphs
 
 ///选项的值
 VAL_NORMAL: TK_NORMAL |   STR

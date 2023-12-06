@@ -28,7 +28,7 @@ transformer_ret = transformer.transform(treeK)
 fileAtCmd:FileAtCmd=transformer.__getFileAtCmd__()
 print(f"命令中的源文件相关字段为:{fileAtCmd}")
 
-""" lack文法 linux_cmd.lark  bug : -Wno-trigraphs  错误的 被按-拆开成两个选项 -Wno 和 -trigraphs 
+""" 已修复 bug : lack文法 linux_cmd.lark  bug : -Wno-trigraphs  错误的 被按-拆开成两个选项 -Wno 和 -trigraphs 
   F:/crk/cmd-wrap/lark_parser/lark_develop.py
   gcc_cmd
     gcc_cmd_1
@@ -39,27 +39,21 @@ print(f"命令中的源文件相关字段为:{fileAtCmd}")
             -W
             w_val	strict-prototypes
         kv
-          key	-Wno
+          kv_w__valany
+            -W
+            w_val	no-trigraphs
         kv
-          key	-trigraphs
+          kv_f__valany
+            -f
+            f_val	no-strict-aliasing
         kv
-          key	-fno
+          kv_f__valany
+            -f
+            f_val	no-common
         kv
-          key	-strict
-        kv
-          key	-aliasing
-        kv
-          key	-fno
-        kv
-          key	-common
-        kv
-          key	-Werror
-        kv
-          key	-implicit
-        kv
-          key	-function
-        kv
-          key	-declaration
+          kv_w__valany
+            -W
+            w_val	error-implicit-function-declaration
         kv
           key	-c
         kv
