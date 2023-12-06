@@ -12,14 +12,14 @@ class FileAtCmd:
         self.std_val: str = None
 
         # -Dxxx
-        self.D_val_ls:List[ str ] = None
+        self.d_val_ls:List[ str] = None
         # -Dxxx=yyy
-        self.D_eq_val_ls: List[str] = None
+        self.d_eq_val_ls: List[str] = None
 
         # -Wxxx
-        self.W_val_ls:List[ str ] = None
+        self.w_val_ls:List[ str] = None
         # -Wxxx=yyy
-        self.W_eq_val_ls: List[str] = None
+        self.w_eq_val_ls: List[str] = None
 
         # -fxxx
         self.f_val_ls:List[ str ] = None
@@ -52,14 +52,14 @@ class FileAtCmd:
         _std_val: str = self.std_val
 
         # -Dxxx
-        _D_val_ls:str  = '-D'.join(self.D_val_ls)
+        _d_val_ls:str  = '-D'.join(self.d_val_ls)
         # -Dxxx=yyy
-        _D_eq_val_ls: str = '-D'.join(self.D_eq_val_ls)
+        _d_eq_val_ls: str = '-D'.join(self.d_eq_val_ls)
 
         # -Wxxx
-        _W_val_ls:str  = '-W'.join(self.W_val_ls)
+        _w_val_ls:str  = '-W'.join(self.w_val_ls)
         # -Wxxx=yyy
-        _W_eq_val_ls: str = '-W'.join(self.W_eq_val_ls)
+        _W_eq_val_ls: str = '-W'.join(self.w_eq_val_ls)
 
         # -fxxx
         _f_val_ls: str  = '-f'.join(self.f_val_ls)
@@ -76,6 +76,6 @@ class FileAtCmd:
         _sep_include_val_ls:str='-include '.join(self.sep_include_val_ls)
         _srcFile:str=self.srcFile
 
-        as_clang_cmd_part= f" {_m_dd_val} {_m_arch_val} {_std_val}  {_D_val_ls} {_D_eq_val_ls} {_W_val_ls} {_W_eq_val_ls} {_f_val_ls} {_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
+        as_clang_cmd_part= f" {_m_dd_val} {_m_arch_val} {_std_val}  {_d_val_ls} {_d_eq_val_ls} {_w_val_ls} {_W_eq_val_ls} {_f_val_ls} {_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
 
         return as_clang_cmd_part
