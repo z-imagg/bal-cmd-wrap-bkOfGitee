@@ -33,7 +33,7 @@ calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
 
 #{拦截过程 开始
 #参数数组复制一份 (不要直接修改sys.argv)
-Argv=list(sys.argv); print(f"Argv:{Argv}")
+Argv=list(sys.argv); print(f"Argv:{Argv}",file=sys.stderr)
 #打印参数
 _cmdReceived:str=' '.join(Argv) ; print( f"收到命令及参数: {_cmdReceived}" )
 #参数中-Werror替换为-Wno-error
@@ -50,7 +50,7 @@ if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命
     #调用本主机ubuntu22x64上的clang插件修改本地源文件
     clangAddFuncIdAsmWrap(fileAtCmd)
 else:
-    print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令")
+    print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令",file=sys.stderr)
     
 #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
 exitCode:int=execute_cmd(Argv,OF_cmd,OF_stdout,OF_stderr)
