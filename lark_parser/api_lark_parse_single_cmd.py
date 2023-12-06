@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import sys
 from typing import List,Tuple
 
 from lark import Lark,Transformer,Visitor
@@ -21,7 +21,7 @@ def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str)->FileAtCmd:
     # parser取 earley 或 lalr 时， Lark.open运行正常 ;
     # parser取 cyk 时， Lark.open运行报错 ;
 
-    print(f"lark即将解析文本singleGccCmd：【{singleGccCmd}】")
+    print(f"lark即将解析文本singleGccCmd：【{singleGccCmd}】",file=sys.stderr)
     treeK:Tree = parser.parse(singleGccCmd)
     # print(treeK.pretty())
 
