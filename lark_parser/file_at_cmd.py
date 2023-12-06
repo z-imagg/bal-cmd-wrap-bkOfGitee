@@ -53,7 +53,7 @@ class FileAtCmd:
     @staticmethod
     def __ls_addPrefix_removeSpecifyKvLs_join(v_ls:List[str], argName:str,kvLsToRemove:List[str])->str:
         kv_ls_keep=FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_(v_ls,argName,kvLsToRemove)
-        return ''.join(kv_ls_keep)
+        return ' '.join(kv_ls_keep)
 
     def __init__(self):
         # -m32
