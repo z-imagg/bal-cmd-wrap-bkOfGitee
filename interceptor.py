@@ -33,29 +33,38 @@ calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
 
 #{拦截过程 开始
 #参数数组复制一份 (不要直接修改sys.argv)
-Argv=list(sys.argv); print(f"Argv:{Argv}",file=sys.stderr)
-#打印参数
-_cmdReceived:str=' '.join(Argv) ; print( f"收到命令及参数: {_cmdReceived}" )
-#参数中-Werror替换为-Wno-error
-Argv:List[str] = ArgvRemoveWerror(Argv)
+Argv=list(sys.argv)
 #备份假程序名
 progFake:str=Argv[0]
+#打印参数
+_cmdReceived:str=' '.join(Argv) ;
+#参数中-Werror替换为-Wno-error
+Argv:List[str] = ArgvRemoveWerror(Argv)
 #换回真程序名（从假程序名算出真程序名，并以真填假）
 Argv[0]=calcTrueProg(Argv[0])
 #生成唯一文件路径（ 保存命令内容的文件 OF_cmd 、保存命令标准输出的文件 OF_stdout、保存命令错误输出的文件 OF_stderr）
-OF_cmd,OF_stdout,OF_stderr = getOutFilePathLs(progFake)
+OFPath_cmd, OFPath_stdout, OFPath_stderr = getOutFilePathLs(progFake)
+of_stdout_cmd=open(OFPath_stdout, "w")
+of_stderr_cmd=open(OFPath_stderr, "w")
+#日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
+print(f"Argv:{Argv}",file=of_stdout_cmd)
+print( f"收到命令及参数: {_cmdReceived}",file=of_stdout_cmd )
 #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived)
+fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived,of_stdout_cmd,of_stderr_cmd)
 if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命令
     #调用本主机ubuntu22x64上的clang插件修改本地源文件
-    clangAddFuncIdAsmWrap(fileAtCmd)
+    clangAddFuncIdAsmWrap(fileAtCmd,of_stdout_cmd,of_stderr_cmd)
 else:
-    print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令",file=sys.stderr)
+    print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令",file=of_stderr_cmd)
     
 #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
-exitCode:int=execute_cmd(Argv,OF_cmd,OF_stdout,OF_stderr)
+exitCode:int=execute_cmd(Argv, OFPath_cmd, of_stdout_cmd, of_stderr_cmd)
 #显示命令输出、退出代码（输出包括 标准输出、错误输出）
-echo_msg(OF_stdout,OF_stderr,exitCode)
+echo_msg(OFPath_stdout, OFPath_stderr, exitCode,of_stdout_cmd,of_stderr_cmd)
+
+#关闭日志文件
+of_stdout_cmd.close()
+of_stderr_cmd.close()
 #以真实命令的退出码退出（假装自己是真实命令）
 exit(exitCode)
 #拦截过程 结束}
