@@ -12,7 +12,7 @@ from typing import List,Tuple
 from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror
-from interceptor_util import getOutFilePathLs,execute_cmd,echo_msg
+from interceptor_util import getOutFilePathLs,execute_cmd
 from lark_parser.api_lark_parse_single_cmd import larkGetSrcFileFromSingleGccCmd
 from clang_add_funcIdAsm_wrap import clangAddFuncIdAsmWrap
 
@@ -59,7 +59,6 @@ else:
 #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
 exitCode:int=execute_cmd(Argv, OFPath_cmd, gLogF)
 #显示命令输出、退出代码（输出包括 标准输出、错误输出）
-echo_msg(OFPath_stdout, OFPath_stderr, exitCode,gLogF)
 
 #关闭日志文件
 gLogF.close()

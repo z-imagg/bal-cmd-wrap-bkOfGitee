@@ -57,12 +57,3 @@ def execute_cmd(Argv, OFPath_cmd, gLogF)->int:
     return exitCode
 
 
-def echo_msg(OF_stdout,OF_stderr,exitCode,gLogF)->None:
-    print(f"退出代码:{exitCode}",file=gLogF)
-    with open(OF_stdout, "r") as if_stdout:
-        stdout: str = if_stdout.read()
-        print(f"标准输出:{stdout}",file=gLogF)
-    with open(OF_stderr, "r") as if_stderr:
-        stderr: str = if_stderr.read()
-        if stderr is not None and len(stderr.strip()) > 0:
-            print(f"退出码:{exitCode}，标准错误输出:{stderr}",file=gLogF)
