@@ -5,6 +5,8 @@
 interceptor=/crk/cmd-wrap/interceptor.py
 
 fake_bin=/crk/bin
+mkdir -p $fake_bin
+
 export PATH=$fake_bin:$PATH
 export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 
