@@ -24,8 +24,8 @@ sudo mkdir -p $fake_bin && sudo chown -R $(id -gn).$(whoami) $fake_bin
 
 fake_clang=$fake_bin/clang
 fake_clangPP=$fake_bin/clang++
-fake_gcc=$fake_bin/gcc
-fake_gpp=$fake_bin/g++
+fake_gcc=$fake_bin/i686-linux-gnu-gcc
+#fake_gpp=$fake_bin/i686-linux-gnu-g++
 
 #安装被拦截clang举例:
 ln -v -s $interceptor $fake_clang
@@ -46,7 +46,7 @@ ln -v -s $interceptor $fake_gpp
 #/crk/bin/clang ---软连接---> interceptor.py -----由route_tab.py转发---->  $CLANG_HOME_BIN/clang
 
 #请求 假的 /crk/bin/gcc 时 ，发生转发:
-#/crk/bin/gcc ---软连接---> interceptor.py -----由route_tab.py转发---->  /usr/bin/gcc-4.4
+#/crk/bin/i686-linux-gnu-gcc ---软连接---> interceptor.py -----由route_tab.py转发---->  /usr/bin/i686-linux-gnu-gcc-11
 
 
 
