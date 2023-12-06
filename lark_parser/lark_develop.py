@@ -11,7 +11,7 @@ from lark_my_transformer import MyTransformer
 # gcc_cmd_line="  gcc -nostdlib -o arch/x86/vdso/vdso32-int80.so.dbg -fPIC -shared  -Wl,--hash-style=sysv -m32 -Wl,-soname=linux-gate.so.1 -Wl,-T,arch/x86/vdso/vdso32/vdso32.lds arch/x86/vdso/vdso32/note.o arch/x86/vdso/vdso32/int80.o"
 from file_at_cmd import FileAtCmd
 
-gcc_cmd_line='  gcc -Wp,-MD,arch/x86/kernel/.irqinit_32.o.d  -nostdinc -isystem /usr/lib/gcc/i686-linux-gnu/4.4.7/include -D__KERNEL__ -Iinclude  -I/crk/bochs/linux2.6-run_at_bochs/linux-2.6.27.15/arch/x86/include -I /usr/include -include include/linux/autoconf.h -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -ffreestanding -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -Iinclude/asm-x86/mach-default -Wframe-larger-than=1024 -fno-stack-protector -fno-omit-frame-pointer -fno-optimize-sibling-calls -g -pg -Wdeclaration-after-statement -Wno-pointer-sign  -D"KBUILD_STR(s)=#s" -D"KBUILD_BASENAME=KBUILD_STR(irqinit_32)"  -D"KBUILD_MODNAME=KBUILD_STR(irqinit_32)" -c -o arch/x86/kernel/.tmp_irqinit_32.o arch/x86/kernel/irqinit_32.c'
+gcc_cmd_line='  gcc  -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -c -o arch/x86/kernel/.tmp_irqinit_32.o arch/x86/kernel/irqinit_32.c'
 
 # lark.open的参数parser 取值范围 为 ('earley', 'lalr', 'cyk', None)
 parser = Lark.open( 'linux_cmd.lark', rel_to=__file__, parser="earley")
@@ -28,5 +28,49 @@ transformer_ret = transformer.transform(treeK)
 fileAtCmd:FileAtCmd=transformer.__getFileAtCmd__()
 print(f"命令中的源文件相关字段为:{fileAtCmd}")
 
+""" lack文法 linux_cmd.lark  bug : -Wno-trigraphs  错误的 被按-拆开成两个选项 -Wno 和 -trigraphs 
+  F:/crk/cmd-wrap/lark_parser/lark_develop.py
+  gcc_cmd
+    gcc_cmd_1
+      program	gcc
+      kv_ls
+        kv
+          kv_w__valany
+            -W
+            w_val	strict-prototypes
+        kv
+          key	-Wno
+        kv
+          key	-trigraphs
+        kv
+          key	-fno
+        kv
+          key	-strict
+        kv
+          key	-aliasing
+        kv
+          key	-fno
+        kv
+          key	-common
+        kv
+          key	-Werror
+        kv
+          key	-implicit
+        kv
+          key	-function
+        kv
+          key	-declaration
+        kv
+          key	-c
+        kv
+          kv_k_spc_valnorm
+            key	-o
+            sep_spc
+            arch/x86/kernel/.tmp_irqinit_32.o
+      src_file	arch/x86/kernel/irqinit_32.c
+
+
+
+"""
 
 end=True
