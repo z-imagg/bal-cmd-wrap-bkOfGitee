@@ -56,6 +56,9 @@ class FileAtCmd:
         return ' '.join(kv_ls_keep)
 
     def __init__(self):
+        # -
+        self.input_is_std_in: bool  = None
+
         # -m32
         self.m_dd_val: str  = None
         # -march=yyy

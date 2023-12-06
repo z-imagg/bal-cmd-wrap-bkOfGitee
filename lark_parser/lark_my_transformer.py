@@ -8,6 +8,7 @@ from lark.tree import Tree
 from lark.visitors import Interpreter
 from lark.lexer import Token
 from file_at_cmd import FileAtCmd
+from common import __NoneOrLenEq0__
 
 ################获取 结果树 中的 src_file 非终结符 节点 的 值
 ### 用lark的Transformer访问 解析结果树 中 的 非终结符 src_file
@@ -40,6 +41,7 @@ class MyTransformer(Transformer):
         return None
 
     def __init__(self):
+        self.input_is_std_in_val_ls: List[ Token ] = []
         # -m32
         self.m_dd_val_ls: List[ Token ]  = []
         # -march=yyy
@@ -73,6 +75,8 @@ class MyTransformer(Transformer):
 
     def __getFileAtCmd__(self)->FileAtCmd:
         fileAtCmd: FileAtCmd = FileAtCmd()
+
+        fileAtCmd.input_is_std_in : bool =  not __NoneOrLenEq0__(self.input_is_std_in_val_ls)
 
         # 取 -m32
         fileAtCmd.m_dd_val: str  =  MyTransformer.__Ls_get0_fieldValue__(self.m_dd_val_ls)
@@ -117,6 +121,11 @@ class MyTransformer(Transformer):
 
         return fileAtCmd
 ######
+    #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
+    def input_is_std_in(self, tokens:List[Token]):
+        self.input_is_std_in_val_ls.append(MyTransformer.__assertLsSz1_get0__('DASH', tokens))
+        return tokens
+
     #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
     def m_arch_val(self, tokens:List[Token]):
         self.m_arch_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_NORMAL', tokens))
