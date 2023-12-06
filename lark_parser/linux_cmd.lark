@@ -17,8 +17,8 @@ src_file: FILE_NAME
 file: FILE_NAME
 
 kv_ls: kv*
-
-kv: kv_i_spc_incpth|kv_i_spc_includepth|kv_i__incpth|kv_d__valany |kv_w__valany|kv_f__valany| kv_k_eq_valnorm | kv_march_eq_valany | kv_std_eq_valany |kv_w_eq_valany| kv_d_eq_valany|kv_f_eq_valany | kv_k__str |kv_isystem_spc_valnorm | kv_k_spc_valnorm | kv_k_comma_valany  | kv_m_dd | key
+//     空格spc                                                                             |        无间隔符__                                                                 |                                   非空格间隔符                                                                 |         有选项名但无选项值
+kv: kv_i_spc_incpth|kv_i_spc_includepth |kv_isystem_spc_valnorm | kv_k_spc_valnorm        | kv_i__incpth|kv_d__valany |kv_w__valany|kv_f__valany| kv_k_eq_valnorm |kv_k__str |    kv_march_eq_valany | kv_std_eq_valany |kv_w_eq_valany| kv_d_eq_valany|kv_f_eq_valany | kv_k_comma_valany  |         kv_m_dd | key
 //kv_i_spc_incpth"-I xxx" 得比 kv_i__incpth"-Ixxx" 优先级高
 //kv : kv_I_incPth(即 -Ixxx) 必须 比 key 靠前, 否则 kv_I_incPth(即 -Ixxx) 会被 key 淹没
 
