@@ -91,6 +91,6 @@ class FileAtCmd:
         _sep_include_val_ls:str=FileAtCmd.__ls_join__(self.sep_include_val_ls,'-include ')
         _srcFile:str=self.src_file
 
-        as_clang_cmd_part= f" -m{_m_dd_val} {_m_arch_val} {_std_val}  {_d_val_ls} {_d_eq_val_ls} {_w_val_ls} {_W_eq_val_ls} {_f_val_ls} {_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
+        as_clang_cmd_part= f" -m{_m_dd_val} -march={_m_arch_val} -std={_std_val}  {_d_val_ls} {_d_eq_val_ls} {_w_val_ls} {_W_eq_val_ls} {_f_val_ls} {_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
 
         return as_clang_cmd_part
