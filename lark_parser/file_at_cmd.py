@@ -3,6 +3,8 @@
 
 from typing import List
 
+from common import __NoneOrLenEq0__
+
 #在 ubuntu22上 将 ubuntu14的根目录 被 挂载 为 目录  /ubt14x86root
 class FileAtCmd:
     @staticmethod
@@ -27,6 +29,31 @@ class FileAtCmd:
         lsX=['',*ls]
         long_text:str=f"{FileAtCmd.Kv1SepKv2}{argNameSep}".join(lsX)
         return long_text
+
+    @staticmethod
+    def __ls_addPrefix__(v_ls:List[str], argName:str)->List[str]:
+        assert argName is not None
+        if v_ls is None or len(v_ls) == 0 : return ''
+        kv_ls:List[str]=[f'{argName}{vj}' for vj in v_ls]
+        return kv_ls
+
+
+    @staticmethod
+    def __ls_addPrefix_removeSpecifyKvLs_(v_ls:List[str], argName:str,kvLsToRemove:List[str])->List[str]:
+        assert argName is not None
+        if v_ls is None or len(v_ls) == 0 : return ''
+        kv_ls:List[str]=FileAtCmd.__ls_addPrefix__(v_ls,argName)
+        if __NoneOrLenEq0__(kvLsToRemove):
+            return kv_ls
+
+        #在kvLsToRemove中出现的，都丢弃
+        kv_ls_keep=list(filter(lambda kvJ: kvJ in kvLsToRemove, kv_ls))
+        return kv_ls_keep
+
+    @staticmethod
+    def __ls_addPrefix_removeSpecifyKvLs_join(v_ls:List[str], argName:str,kvLsToRemove:List[str])->str:
+        kv_ls_keep=FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_(v_ls,argName,kvLsToRemove)
+        return ''.join(kv_ls_keep)
 
     def __init__(self):
         # -m32
@@ -67,7 +94,7 @@ class FileAtCmd:
     def __str__(self):
         return self.__as_clang_cmd_part__()
 
-    def __as_clang_cmd_part__(self)->str:
+    def __as_clang_cmd_part__(self,kvLs_skip:List[str]=None)->str:
 
         # -m32
         kv_m_dd: str  = FileAtCmd.__strAppendIfNotEmpty_elseGetEmptyStr__('-m',self.m_dd_val)
@@ -78,19 +105,19 @@ class FileAtCmd:
         kv_std: str =  FileAtCmd.__strAppendIfNotEmpty_elseGetEmptyStr__('-std=',self.std_val)
 
         # -Dxxx
-        _d_val_ls:str  = FileAtCmd.__ls_join__(self.d_val_ls,'-D')
+        kv_d_val_ls:List[str]  = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.d_val_ls,'-D',kvLs_skip)
         # -Dxxx=yyy
-        _d_eq_val_ls: str = FileAtCmd.__ls_join__(self.d_eq_val_ls,'-D')
+        kv_d_eq_val_ls: str = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.d_eq_val_ls,'-D',kvLs_skip)
 
         # -Wxxx
-        _w_val_ls:str  = FileAtCmd.__ls_join__(self.w_val_ls,'-W')
+        kv_w_val_ls:str  = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.w_val_ls,'-W',kvLs_skip)
         # -Wxxx=yyy
-        _W_eq_val_ls: str = FileAtCmd.__ls_join__(self.w_eq_val_ls,'-W')
+        kv_W_eq_val_ls: str = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.w_eq_val_ls,'-W',kvLs_skip)
 
         # -fxxx
-        _f_val_ls: str  = FileAtCmd.__ls_join__(self.f_val_ls,'-f')
+        kv_f_val_ls: str  = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.f_val_ls,'-f',kvLs_skip)
         # -fxxx=yyy
-        _f_eq_val_ls: str = FileAtCmd.__ls_join__(self.f_eq_val_ls,'-f')
+        kv_f_eq_val_ls: str = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.f_eq_val_ls,'-f',kvLs_skip)
 
         # -isystem yyy
         _isystem_val_ls:str=FileAtCmd.__ls_join__(self.isystem_val_ls,'-isystem ')
@@ -102,6 +129,6 @@ class FileAtCmd:
         _sep_include_val_ls:str=FileAtCmd.__ls_join__(self.sep_include_val_ls,'-include ')
         _srcFile:str=self.src_file
 
-        as_clang_cmd_part= f" {kv_m_dd} {kv_m_arch} {kv_std}  {_d_val_ls} {_d_eq_val_ls} {_w_val_ls} {_W_eq_val_ls} {_f_val_ls} {_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
+        as_clang_cmd_part= f" {kv_m_dd} {kv_m_arch} {kv_std}  {kv_d_val_ls} {kv_d_eq_val_ls} {kv_w_val_ls} {kv_W_eq_val_ls} {kv_f_val_ls} {kv_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
 
         return as_clang_cmd_part
