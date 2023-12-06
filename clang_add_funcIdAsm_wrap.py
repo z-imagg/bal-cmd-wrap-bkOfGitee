@@ -39,13 +39,28 @@ clang-15: error: no input files
  '-fno-var-tracking-assignments',
  '-fconserve-stack']
     """
-    pattern = r"clang-\d+: error: unknown argument: '([^']*)'"
 
     if  __NoneOrLenEq0__(clang_err_out): return None
     if not __NoneOrLenEq0__(clang_err_out):
         matches = re.findall(clang_errOut__unknown_argument__re_pattern, clang_err_out)
         return matches
 
+
+clang__errOut__unsupported_argument_to_option__re_pattern:str = r"clang-\d+: error: unsupported argument '([^']*)' to option '([^']*)'"
+def __parse_clang__errOut__unsupported_argument_to_option__val__(clang_err_out:str)->List[str]:
+    """解析如下clang错误输出 中的 参数
+clang-15: error: unsupported argument '-mtune=generic32' to option '-Wa,'
+    :return:
+    以上输入，返回如下
+    ['-Wa,-mtune=generic32' ]
+    """
+
+    if  __NoneOrLenEq0__(clang_err_out): return None
+    if not __NoneOrLenEq0__(clang_err_out):
+        matches = re.findall(clang__errOut__unsupported_argument_to_option__re_pattern, clang_err_out)
+        # matches ==  [('-mtune=generic32', '-Wa,')]
+        kv_line_ls:List[str]= [f"{_[1]}{_[0]}" for _ in matches]
+        return kv_line_ls # kv_line_ls==['-Wa,-mtune=generic32' ]
 
 def __exec_clang_plugin_cmd__(fileAtGccCmd:FileAtCmd, kvLs_skip:List[str]=None)->Tuple[int, str, str,str]:
     import os
@@ -89,11 +104,13 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd):
 
     if retCode != OkRetCode:
         unknown_argument__val_ls:List[str]=__parse_clang__errOut__unknown_argument__val__(err_out)
+        unsupported_argument_to_option__val_ls:List[str]=__parse_clang__errOut__unsupported_argument_to_option__val__(err_out)
 
+        bad_kv_line_ls:List[str] = [*unknown_argument__val_ls, *unsupported_argument_to_option__val_ls]
         #如果 clang报错 中 没有unknown argument ，则打印 并返回即可
-        if __NoneOrLenEq0__(unknown_argument__val_ls):
+        if __NoneOrLenEq0__(bad_kv_line_ls):
             print(retCode,std_out,err_out)
             return retCode
         else:
-            retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(fileAtGccCmd,unknown_argument__val_ls)
-            print(f"尝试 从clang错误输出中 解析出 unknown argument 并对应的去掉cmd中这些选项 后再执行的新cmd:【{cmd} 】； 新命令结果： retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+            retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(fileAtGccCmd,bad_kv_line_ls)
+            print(f"尝试 从clang错误输出中 解析出 【unknown argument|unsupported argument v to option k】 并对应的去掉cmd中这些选项 后再执行的新cmd:【{cmd} 】； 新命令结果： retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
