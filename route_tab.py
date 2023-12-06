@@ -17,9 +17,12 @@ progTab=[
 # ("gcc","/usr/bin/gcc-4.4"),
 # ("g++","/usr/bin/g++-4.4"),
 
-#Ubuntu 22.04.3 LTS  的gcc、g++路由
-("gcc","/usr/bin/x86_64-linux-gnu-gcc-11"),  #readlink -f `which gcc`
-("g++","/usr/bin/x86_64-linux-gnu-g++-11"),  #readlink -f `which g++`
+#Ubuntu 22.04.3 LTS  的i686-linux-gnu-gcc路由
+("i686-linux-gnu-gcc","/usr/bin/i686-linux-gnu-gcc-11"),   # readlink -f `which i686-linux-gnu-gcc`
+
+
+
+
 
 ]
 progMap=dict(progTab)
