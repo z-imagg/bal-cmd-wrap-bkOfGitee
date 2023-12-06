@@ -113,4 +113,5 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
             return retCode
         else:
             retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd,bad_kv_line_ls)
-            print(f"尝试 从clang错误输出中 解析出 【unknown argument|unsupported argument v to option k】 并对应的去掉cmd中这些选项 后再执行的新cmd:【{cmd} 】； 新命令结果： retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】",file=gLogF)
+            msg=f"尝试 从clang错误输出中 解析出 【unknown argument|unsupported argument v to option k】 并对应的去掉cmd中这些选项 后再执行的新cmd:【{cmd} 】； 新命令结果： retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】"
+            print(msg,file=gLogF)
