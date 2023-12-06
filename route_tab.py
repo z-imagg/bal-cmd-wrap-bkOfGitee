@@ -13,9 +13,13 @@ progTab=[
  f"{LLVM15Home}/bin/clang++" #指向 {LLVM15Home}/bin/clang-15的软连接
  ),
 
-#ubuntu 14.04 的gcc路由
+#ubuntu 14.04 的gcc、g++路由
 # ("gcc","/usr/bin/gcc-4.4"),
 # ("g++","/usr/bin/g++-4.4"),
+
+#Ubuntu 22.04.3 LTS  的gcc、g++路由
+("gcc","/usr/bin/x86_64-linux-gnu-gcc-11"),  #readlink -f `which gcc`
+("g++","/usr/bin/x86_64-linux-gnu-g++-11"),  #readlink -f `which g++`
 
 ]
 progMap=dict(progTab)
