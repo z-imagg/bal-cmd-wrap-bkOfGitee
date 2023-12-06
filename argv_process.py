@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from typing import List
 
 #如果参数中含有-Werror , 将其替换为 -Wno-error.

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from typing import List
 
 from lark import Lark,Transformer,Visitor

@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from datetime import time
+
+
 def getCurrNanoSeconds()->int:
     current_sec = int(time.time())  # 获取当前的绝对秒数
     current_ns = time.perf_counter_ns()  # 获取当前的纳秒数

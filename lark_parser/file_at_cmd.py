@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from typing import List
 
 #在 ubuntu22上 将 ubuntu14的根目录 被 挂载 为 目录  /ubt14x86root
