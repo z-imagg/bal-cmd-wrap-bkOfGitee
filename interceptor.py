@@ -57,7 +57,7 @@ else:
     print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令",file=gLogF)
     
 #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
-exitCode:int=execute_cmd(Argv, OFPath_cmd, gLogF)
+exitCode:int=execute_cmd(Argv, OFPath_cmd, gLogF,fileAtCmd.input_is_std_in)
 #显示命令输出、退出代码（输出包括 标准输出、错误输出）
 
 #关闭日志文件

@@ -27,7 +27,7 @@ def getOutFilePathLs(_progFake)->Tuple[str,str,str]:
 from plumbum import local
 import plumbum
 from common import __NoneOrLenEq0__
-def execute_cmd(Argv, OFPath_cmd, gLogF)->int:
+def execute_cmd(Argv, OFPath_cmd, gLogF,input_is_std_in:bool)->int:
     exitCode:int=None
     print(f"【Argv@execute_cmd】:【{Argv}】", file=gLogF)
     with open(OFPath_cmd, "w") as ofCmd:
@@ -41,6 +41,9 @@ def execute_cmd(Argv, OFPath_cmd, gLogF)->int:
         print("执行真实命令:",Argv,file=gLogF)
         # 调用真实命令，
         real_prog:plumbum.machines.local.LocalCommand=local[Argv[0]]
+        if input_is_std_in:
+            #参考: https://plumbum.readthedocs.io/en/latest/local_commands.html#pipelining
+            real_prog=(real_prog < sys.stdin)
         argLs=Argv[1:] if len(Argv) > 1 else []
         real_cmd:plumbum.commands.base.BoundCommand=real_prog[argLs]
         retCode: int; std_out: str; err_out: str

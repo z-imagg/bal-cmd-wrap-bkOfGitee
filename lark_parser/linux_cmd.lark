@@ -9,11 +9,12 @@ gcc_cmd_1: program kv_ls src_file
 //gcc_cmd_1: gcc编译源代码命令，比如 gcc -c -o User.o User.c, 其中 src_file 就是 User.c
 gcc_cmd_2: program kv_ls
 //gcc_cmd_2: 末尾不跟文件, 不确定有没有这种形式
-gcc_cmd_4: program kv_ls DASH
+gcc_cmd_4: program kv_ls input_is_std_in
 //gcc_cmd_4: 末尾不跟文件, 跟 一个 单独的中划线 （表示从终端读取输入）
 gcc_cmd_3: program kv_ls file+
 //gcc_cmd_3: gcc链接命令 ； 比如  多个.o文件 链接为 单个.so 文件 ，具体例子 比如  gcc -o xxx.so User.o Util.o Price.o，其中 file+ 就是 【Util.o Price.o】
 
+input_is_std_in: DASH
 program: FILE_NAME
 src_file: FILE_NAME
 file: FILE_NAME
