@@ -14,7 +14,7 @@ from lark_my_transformer import MyTransformer
 # gcc_cmd_line="  gcc -nostdlib -o arch/x86/vdso/vdso32-int80.so.dbg -fPIC -shared  -Wl,--hash-style=sysv -m32 -Wl,-soname=linux-gate.so.1 -Wl,-T,arch/x86/vdso/vdso32/vdso32.lds arch/x86/vdso/vdso32/note.o arch/x86/vdso/vdso32/int80.o"
 from file_at_cmd import FileAtCmd
 
-gcc_cmd_line='/crk/bin/i686-linux-gnu-gcc -print-file-name=include'
+gcc_cmd_line='/crk/bin/i686-linux-gnu-gcc -E -x c -'
 #此命令输出是: /usr/lib/gcc-cross/i686-linux-gnu/11/include
 #此命令 应该是 make工具为了探测 给出的，并不是编译业务命令
 
