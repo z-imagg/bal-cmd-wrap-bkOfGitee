@@ -47,7 +47,7 @@ class FileAtCmd:
             return kv_ls
 
         #在kvLsToRemove中出现的，都丢弃
-        kv_ls_keep=list(filter(lambda kvJ: kvJ in kvLsToRemove, kv_ls))
+        kv_ls_keep=list(filter(lambda kvJ: kvJ not in kvLsToRemove, kv_ls))
         return kv_ls_keep
 
     @staticmethod
