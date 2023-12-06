@@ -1,6 +1,8 @@
 #!/bin/bash
 
+source /app/miniconda3/bin/activate
 
+pip install lark
 
 interceptor=/crk/cmd-wrap/interceptor.py
 chmod +x $interceptor
