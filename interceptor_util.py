@@ -35,7 +35,7 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
         stdin_str:str=sys.stdin.read()
         std_out, err_out=p.communicate(input=stdin_str)
         exitCode=p.returncode
-        print(f"标准输入为:【{stdin_str}】",file=gLogF)
+        print(f"标准输入为:【{stdin_str}】",file=gLogF,end="")
     else:
         real_prog:plumbum.machines.local.LocalCommand=local[Argv[0]]
         argLs=Argv[1:] if len(Argv) > 1 else []
