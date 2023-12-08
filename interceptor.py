@@ -65,8 +65,6 @@ for k in range(Max_Try_Lock_Times):
         sys.stdin.flush()
         #  标记锁定成功
         gLogF_LockOk=True
-        #  记录文件编号
-        gLogF_no = gLogF.fileno()
         #  退出循环
         break
 
@@ -102,17 +100,18 @@ try:#try业务块
     #显示命令输出、退出代码（输出包括 标准输出、错误输出）
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
-    #关闭日志文件
     try:
-        print(f"即将释放日志文件{logFK}锁",file=gLogF)
-        gLogF.close()
-    finally:
         # 临近释放文件锁前，立即 将 stdio缓存 写出
         sys.stdout.flush()
         sys.stderr.flush()
         sys.stdin.flush()
         #释放日志文件锁，否则其他进程无法使用本次被锁定的日志文件。
-        fcntl.flock(gLogF_no, fcntl.LOCK_UN)
+        fcntl.flock(gLogF.fileno(), fcntl.LOCK_UN)
+        print(f"已释放日志文件{logFK}锁",file=gLogF)
+    finally:
+        #关闭日志文件
+        gLogF.close()
+        gLogF=None
         #以真实命令的退出码退出（假装自己是真实命令）
         exit(exitCode)
 #拦截过程 结束}
