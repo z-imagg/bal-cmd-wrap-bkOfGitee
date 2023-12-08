@@ -83,6 +83,7 @@ for k in range(Max_Try_Lock_Times):
 assert gLogF is not None,f"断言错误，尝试锁定{k}次不同日志文件，依然锁定失败(此时已经有{k}个进程同时需要独立的日志文件？)。 最后尝试日志文件是【{logFK}】。请检查代码，应该是bug。"
 
 
+exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
     print(f"Argv:{Argv}",file=gLogF)
@@ -97,8 +98,6 @@ try:#try业务块
 
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
     exitCode:int=execute_cmd(Argv, OFPath_cmd, gLogF,fileAtCmd.input_is_std_in)
-    #以真实命令的退出码退出（假装自己是真实命令）
-    exit(exitCode)
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
     try:
@@ -113,4 +112,7 @@ finally:
         #关闭日志文件
         gLogF.close()
         gLogF=None
+        assert exitCode is not None
+        #以真实命令的退出码退出（假装自己是真实命令）
+        exit(exitCode)
 #拦截过程 结束}
