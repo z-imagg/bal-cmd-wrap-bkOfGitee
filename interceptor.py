@@ -104,9 +104,9 @@ finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
     #关闭日志文件
     try:
+        print(f"即将释放日志文件{logFK}锁",file=gLogF)
         gLogF.close()
     finally:
-        print(f"即将释放日志文件{logFK}锁",file=gLogF)
         # 临近释放文件锁前，立即 将 stdio缓存 写出
         sys.stdout.flush()
         sys.stderr.flush()
