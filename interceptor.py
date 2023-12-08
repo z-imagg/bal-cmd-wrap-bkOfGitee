@@ -97,7 +97,8 @@ try:#try业务块
 
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
     exitCode:int=execute_cmd(Argv, OFPath_cmd, gLogF,fileAtCmd.input_is_std_in)
-    #显示命令输出、退出代码（输出包括 标准输出、错误输出）
+    #以真实命令的退出码退出（假装自己是真实命令）
+    exit(exitCode)
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
     try:
@@ -112,6 +113,4 @@ finally:
         #关闭日志文件
         gLogF.close()
         gLogF=None
-        #以真实命令的退出码退出（假装自己是真实命令）
-        exit(exitCode)
 #拦截过程 结束}
