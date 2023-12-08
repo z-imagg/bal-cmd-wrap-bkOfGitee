@@ -105,7 +105,7 @@ finally:
         sys.stdin.flush()
         #释放日志文件锁，否则其他进程无法使用本次被锁定的日志文件。
         fcntl.flock(gLogF.fileno(), fcntl.LOCK_UN)
-        print(f"已释放日志文件{logFK}锁",file=gLogF)
+        print(f"已释放日志文件{logFK}锁\n",file=gLogF)
     finally:
         #关闭日志文件
         gLogF.close()
