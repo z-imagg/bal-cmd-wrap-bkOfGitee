@@ -57,16 +57,25 @@ for k in range(Max_Try_Lock_Times):
         # 锁定文件的一部分
         fcntl.flock(gLogF.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 
-        print(f"日志文件{logFK}锁定成功,立即退出循环")
-        #一旦成功锁定某个日志文件，即可退出循环
+        print(f"日志文件{logFK}锁定成功,立即退出循环",file=gLogF)
+        #一旦 成功 锁定 某个日志文件 后的操作
+        # 获得文件锁后，立即 将 stdio缓存 写出
+        sys.stdout.flush()
+        sys.stderr.flush()
+        sys.stdin.flush()
+        #  标记锁定成功
         gLogF_LockOk=True
+        #  记录文件编号
+        gLogF_no = gLogF.fileno()
+        #  退出循环
         break
 
     except IOError as e:
-        if e.errno == errno.EAGAIN or e.errno == errno.EACCES:
-            print(f"日志文件{logFK}锁定失败，异常【{e}】")
-        else:
-            print(f"日志文件{logFK}锁定失败，其他异常【{e}】")
+        pass
+        # if e.errno == errno.EAGAIN or e.errno == errno.EACCES:
+        #     print(f"日志文件{logFK}锁定失败，异常【{e}】")
+        # else:
+        #     print(f"日志文件{logFK}锁定失败，其他异常【{e}】")
     finally:
         if not gLogF_LockOk :#若没拿到锁，但文件已经打开，则要关闭文件
             if gLogF is not None:
@@ -74,6 +83,7 @@ for k in range(Max_Try_Lock_Times):
                 gLogF=None
 
 assert gLogF is not None,f"断言错误，尝试锁定{k}次不同日志文件，依然锁定失败(此时已经有{k}个进程同时需要独立的日志文件？)。 最后尝试日志文件是【{logFK}】。请检查代码，应该是bug。"
+
 
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
@@ -93,10 +103,16 @@ try:#try业务块
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
     #关闭日志文件
-    gLogF.close()
-    #释放日志文件锁，否则其他进程无法使用本次被锁定的日志文件。
-    fcntl.flock(gLogF.fileno(), fcntl.LOCK_UN)
-    print(f"已释放日志文件{logFK}锁")
-    #以真实命令的退出码退出（假装自己是真实命令）
-    exit(exitCode)
+    try:
+        gLogF.close()
+    finally:
+        print(f"即将释放日志文件{logFK}锁",file=gLogF)
+        # 临近释放文件锁前，立即 将 stdio缓存 写出
+        sys.stdout.flush()
+        sys.stderr.flush()
+        sys.stdin.flush()
+        #释放日志文件锁，否则其他进程无法使用本次被锁定的日志文件。
+        fcntl.flock(gLogF_no, fcntl.LOCK_UN)
+        #以真实命令的退出码退出（假装自己是真实命令）
+        exit(exitCode)
 #拦截过程 结束}
