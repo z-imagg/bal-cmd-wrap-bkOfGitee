@@ -44,8 +44,6 @@ _cmdReceived:str=' '.join(Argv) ;
 Argv:List[str] = ArgvRemoveWerror(Argv)
 #换回真程序名（从假程序名算出真程序名，并以真填假）
 Argv[0]=calcTrueProg(Argv[0])
-#生成唯一文件路径（ 保存命令内容的文件 OF_cmd 、保存命令标准输出的文件 OF_stdout、保存命令错误输出的文件 OF_stderr）
-OFPath_cmd, OFPath_stdout, OFPath_stderr = getOutFilePathLs(progFake)
 
 #尝试锁定日志文件，最多尝试N次
 gLogF_LockOk:bool=False
@@ -97,7 +95,7 @@ try:#try业务块
         print(f"此命令【{_cmdReceived}】中 无源文件名，不拦截此命令",file=gLogF)
 
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
-    exitCode:int=execute_cmd(Argv, OFPath_cmd, gLogF,fileAtCmd.input_is_std_in)
+    exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
     try:
