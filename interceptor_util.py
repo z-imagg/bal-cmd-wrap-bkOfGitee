@@ -54,7 +54,7 @@ def execute_cmd(Argv, OFPath_cmd, gLogF,input_is_std_in:bool)->int:
             #简陋排查办法 如下:
             #      echo " print( type(sys.stdin.buffer)) " |  /crk/bin/i686-linux-gnu-gcc -D__ASSEMBLY__ -m64 -c -x assembler -o xxx.o  -
             #           可知 type(sys.stdin.buffer) 为 <class '_io.BufferedReader'>
-            import ipdb; ipdb.set_trace() #输入接管道时 加断点 调试
+            print(f"标准输入为:【{sys.stdin.read()}】") #输入接管道时 加断点 调试
             #参考: https://plumbum.readthedocs.io/en/latest/local_commands.html#pipelining
             real_prog=(real_prog < sys.stdin)
         argLs=Argv[1:] if len(Argv) > 1 else []
