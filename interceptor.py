@@ -14,7 +14,7 @@ import fcntl
 from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror
-from interceptor_util import getOutFilePathLs,execute_cmd
+from interceptor_util import execute_cmd
 from lark_parser.api_lark_parse_single_cmd import larkGetSrcFileFromSingleGccCmd
 from clang_add_funcIdAsm_wrap import clangAddFuncIdAsmWrap
 
