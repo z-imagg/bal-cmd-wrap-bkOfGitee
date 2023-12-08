@@ -42,6 +42,7 @@ def execute_cmd(Argv, OFPath_cmd, gLogF,input_is_std_in:bool)->int:
         # 调用真实命令，
         real_prog:plumbum.machines.local.LocalCommand=local[Argv[0]]
         if input_is_std_in:
+            breakpoint() #输入接管道时 加断点 调试
             #参考: https://plumbum.readthedocs.io/en/latest/local_commands.html#pipelining
             real_prog=(real_prog < sys.stdin)
         argLs=Argv[1:] if len(Argv) > 1 else []
