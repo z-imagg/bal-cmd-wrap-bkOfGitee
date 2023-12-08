@@ -23,10 +23,17 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
     retCode: int; std_out: str; err_out: str
     if input_is_std_in:
         #本python进程的标准输入 给到 真实命令进程 的 标准输入
-        p:subprocess.Popen = subprocess.Popen(Argv, stdin=subprocess.PIPE)
+        p:subprocess.Popen = subprocess.Popen(Argv,
+          stdin=subprocess.PIPE,  #这里的stdin填写PIPE， 则进程p的标准输入 通过p.communicate的入参input传入
+          stdout=subprocess.PIPE, #若这里的stdout不填，  则进程p的标准输出 直接打印到 控制台
+                                  #若这里的stdout填PIPE，则进程p的标准输出 通过 p.communicate 返回
+          stderr=subprocess.PIPE, #这里的stderr 同上一行的 参数 stdout
+
+          text=True  #若这里的text为true,  则 p.communicate的【入参input、出参std_out、出参err_out】 类型为str;
+                     #若这里的text为false, 则 p.communicate的【入参input、出参std_out、出参err_out】 类型为bytes;
+          )
         stdin_str:str=sys.stdin.read()
-        stdin_bytes:bytes=stdin_str.encode()
-        std_out, err_out=p.communicate(input=stdin_bytes)
+        std_out, err_out=p.communicate(input=stdin_str)
         exitCode=p.returncode
         print(f"标准输入为:【{stdin_str}】",file=gLogF)
     else:
