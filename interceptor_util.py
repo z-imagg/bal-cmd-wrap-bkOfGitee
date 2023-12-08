@@ -42,7 +42,19 @@ def execute_cmd(Argv, OFPath_cmd, gLogF,input_is_std_in:bool)->int:
         # 调用真实命令，
         real_prog:plumbum.machines.local.LocalCommand=local[Argv[0]]
         if input_is_std_in:
-            import ipdb; ipdb.set_trace(quiet=True) #输入接管道时 加断点 调试
+            #问题描述, 在 g-0.log 有 报错命令:
+            """
+            收到命令及参数: /crk/bin/i686-linux-gnu-gcc -D__ASSEMBLY__ -m64 -c -x assembler -o .tmp_36077/tmp -
+            ...
+            真实命令错误输出【{standard input}: Assembler messages:
+{standard input}:2: Error: bad register expression
+            """
+            #模拟该报错命令情况如下：
+            #      echo " nop " |  /usr/bin/i686-linux-gnu-gcc -D__ASSEMBLY__ -m64 -c -x assembler -o xxx.o  -
+            #简陋排查办法 如下:
+            #      echo " print( type(sys.stdin.buffer)) " |  /crk/bin/i686-linux-gnu-gcc -D__ASSEMBLY__ -m64 -c -x assembler -o xxx.o  -
+            #           可知 type(sys.stdin.buffer) 为 <class '_io.BufferedReader'>
+            import ipdb; ipdb.set_trace() #输入接管道时 加断点 调试
             #参考: https://plumbum.readthedocs.io/en/latest/local_commands.html#pipelining
             real_prog=(real_prog < sys.stdin)
         argLs=Argv[1:] if len(Argv) > 1 else []
