@@ -25,7 +25,7 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
         #本python进程的标准输入 给到 真实命令进程 的 标准输入
         p:subprocess.Popen = subprocess.Popen(Argv, stdin=subprocess.PIPE)
         stdin_str:str=sys.stdin.read()
-        stdin_bytes:bytes=stdin_str.decode()
+        stdin_bytes:bytes=stdin_str.encode()
         std_out, err_out=p.communicate(input=stdin_bytes)
         exitCode=p.returncode
         print(f"标准输入为:【{stdin_str}】") #输入接管道时 加断点 调试
