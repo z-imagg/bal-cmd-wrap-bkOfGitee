@@ -28,7 +28,7 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
         stdin_bytes:bytes=stdin_str.encode()
         std_out, err_out=p.communicate(input=stdin_bytes)
         exitCode=p.returncode
-        print(f"标准输入为:【{stdin_str}】") #输入接管道时 加断点 调试
+        print(f"标准输入为:【{stdin_str}】",file=gLogF)
     else:
         real_prog:plumbum.machines.local.LocalCommand=local[Argv[0]]
         argLs=Argv[1:] if len(Argv) > 1 else []
