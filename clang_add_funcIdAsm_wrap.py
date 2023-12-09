@@ -15,13 +15,8 @@ from plumbum import local
 from pathlib import Path
 from lark_parser.file_at_cmd import FileAtCmd
 
-from common import __NoneOrLenEq0__,INFO_LOG,__NoneStr2Empty__
+from common import __NoneOrLenEq0__,INFO_LOG,__NoneStr2Empty__,__list_filter_NoneEle_emptyStrEle__
 
-def __list_filter_NoneEle_emptyStrEle__(ls:List[Any])->List[Any]:
-    if ls is None or len(ls) == 0 : return ls
-    filter_=filter(lambda elemK: not( elemK is None or (type(elemK) == str and len(elemK) == 0) ), ls)
-    result_ls=list(filter_)
-    return result_ls
 
 OkRetCode:int=0
 LineFeed_NF="\n"
