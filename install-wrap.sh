@@ -20,6 +20,11 @@ export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 #export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 #' | tee -a $BashRcF ;}
 
+#重命名上一次的日志文件
+InteceptorLogF=/crk/g-0.log
+UniqueId=$(date +"%Y%m%d%H%M%S_%s_%N")
+[ -f $InteceptorLogF ] && mv $InteceptorLogF "$InteceptorLogF_$UniqueId"
+
 sudo mkdir -p $fake_bin && sudo chown -R $(id -gn).$(whoami) $fake_bin
 
 #fake_clang=$fake_bin/clang
