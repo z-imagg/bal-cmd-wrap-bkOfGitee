@@ -34,7 +34,7 @@ fake_gcc=$fake_bin/i686-linux-gnu-gcc
 #ln -v -s $interceptor $fake_clangPP
 
 #安装被拦截gcc举例:
-ln -v -s $interceptor $fake_gcc
+unlink $fake_gcc && ln -v -s $interceptor $fake_gcc
 
 #安装被拦截g++举例:
 #ln -v -s $interceptor $fake_gpp
