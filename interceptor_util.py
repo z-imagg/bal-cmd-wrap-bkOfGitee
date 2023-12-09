@@ -17,7 +17,7 @@ from common import __NoneOrLenEq0__,INFO_LOG
 def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
     curFrm:types.FrameType=inspect.currentframe()
     exitCode:int=None
-    INFO_LOG(gLogF, curFrm, f"真实命令（数组Argv）:【{Argv}】")
+    # INFO_LOG(gLogF, curFrm, f"真实命令（数组Argv）:【{Argv}】")
     #命令内容写入文件，方便问题查找.
     _cmdReceived:str=' '.join(Argv)
     INFO_LOG(gLogF, curFrm, f"真实命令（字符串_cmdReceived）:【{_cmdReceived}】")

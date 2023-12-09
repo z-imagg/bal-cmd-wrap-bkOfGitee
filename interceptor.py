@@ -87,7 +87,7 @@ assert gLogF is not None,f"断言错误，尝试锁定{k}次不同日志文件�
 exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
-    INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
+    # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG(gLogF, curFrm, f"收到命令及参数（字符串_cmdReceived）:【{_cmdReceived}】")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived,gLogF)
