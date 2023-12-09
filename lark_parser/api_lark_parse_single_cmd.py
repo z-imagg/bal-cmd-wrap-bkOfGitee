@@ -5,6 +5,7 @@ from typing import List,Tuple
 
 from lark import Lark,Transformer,Visitor
 from lark.tree import Tree
+from lark.exceptions import UnexpectedCharacters
 from lark.visitors import Interpreter
 from lark.lexer import Token
 from lark_my_transformer import MyTransformer
@@ -22,8 +23,14 @@ def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str,gLogF)->FileAtCmd:
     # parser取 cyk 时， Lark.open运行报错 ;
 
     print(f"lark即将解析文本singleGccCmd：【{singleGccCmd}】",file=gLogF)
-    treeK:Tree = parser.parse(singleGccCmd)
-    # print(treeK.pretty())
+    try:
+        treeK:Tree = parser.parse(singleGccCmd)
+        # print(treeK.pretty())
+    except UnexpectedCharacters as uec:
+        import traceback
+        print(f"lark解析文本singleGccCmd异常：【{uec}】",file=gLogF)
+        traceback.print_exc(file=gLogF)
+        raise uec
 
     transformer = MyTransformer()
     transformer_ret = transformer.transform(treeK)
