@@ -3,21 +3,17 @@
 
 from typing import List
 
-from common import __NoneOrLenEq0__
+from common import __NoneOrLenEq0__,__NoneStr2Empty__
 
 #在 ubuntu22上 将 ubuntu14的根目录 被 挂载 为 目录  /ubt14x86root
 class FileAtCmd:
-    @staticmethod
-    def __NoneStr2Empty__(string:str):
-        if string is None: return ''
-        return string
 
     @staticmethod
     def __strAppendIfNotEmpty_elseGetEmptyStr__(_s1:str,_mainStr:str):
         if _mainStr is None or len(_mainStr) == 0:
             return ''
-        s1=FileAtCmd.__NoneStr2Empty__(_s1)
-        mainStr=FileAtCmd.__NoneStr2Empty__(_mainStr)
+        s1=__NoneStr2Empty__(_s1)
+        mainStr=__NoneStr2Empty__(_mainStr)
         return f"{s1}{mainStr}"
     
     Kv1SepKv2=" "

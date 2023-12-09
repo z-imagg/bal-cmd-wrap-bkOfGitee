@@ -15,7 +15,7 @@ from plumbum import local
 from pathlib import Path
 from lark_parser.file_at_cmd import FileAtCmd
 
-from common import __NoneOrLenEq0__,INFO_LOG
+from common import __NoneOrLenEq0__,INFO_LOG,__NoneStr2Empty__
 
 def __list_filter_NoneEle_emptyStrEle__(ls:List[Any])->List[Any]:
     if ls is None or len(ls) == 0 : return ls
@@ -96,6 +96,9 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
     curFrm:types.FrameType=inspect.currentframe()
     # 调用本地主机ubuntu22x64上的clang-add-funcIdAsm插件修改本地源文件 , 源文件路径 、 头文件目录列表 、 各种选项 在 入参对象 fileAtCmd 中
 
+    if fileAtGccCmd.src_file is None or fileAtGccCmd.src_file=='/dev/null':
+        INFO_LOG(gLogF, curFrm, f"非关注源文件，不执行clang插件。src_file==【{__NoneStr2Empty__(fileAtGccCmd.src_file)}】")
+        return
 
     #执行例子:
     # print( clang["--help"]() ,file=of_stdout_cmd)

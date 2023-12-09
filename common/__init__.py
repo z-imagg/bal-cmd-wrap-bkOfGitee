@@ -2,6 +2,11 @@ from typing import Any
 import types
 import inspect
 
+
+def __NoneStr2Empty__(string: str):
+    if string is None: return ''
+    return string
+
 def __NoneOrLenEq0__(x:Any):
     return x is None or len(x) == 0
 
