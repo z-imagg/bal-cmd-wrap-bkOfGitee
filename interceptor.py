@@ -96,6 +96,11 @@ try:#try业务块
 
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
     exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
+except BaseException  as bexp:
+    import traceback
+    print(f"interceptor.py的try业务块异常：【{bexp}】",file=gLogF)
+    traceback.print_exc(file=gLogF)
+    # raise bexp
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
     try:
