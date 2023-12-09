@@ -2,18 +2,20 @@
 # -*- coding: utf-8 -*-
 
 from typing import List, Any, Tuple
+import types
 
 #plumbum: python下优雅执行shell命令
 #pip install plumbum
 #https://github.com/tomerfiliba/plumbum
 
+import inspect
 import plumbum
 from plumbum import local
 # from plumbum.commands.processes import PIPE
 from pathlib import Path
 from lark_parser.file_at_cmd import FileAtCmd
 
-from common import __NoneOrLenEq0__
+from common import __NoneOrLenEq0__,LOG
 
 def __list_filter_NoneEle_emptyStrEle__(ls:List[Any])->List[Any]:
     if ls is None or len(ls) == 0 : return ls
@@ -64,7 +66,10 @@ clang-15: error: unsupported argument '-mtune=generic32' to option '-Wa,'
 
 def __exec_clang_plugin_cmd__(gLogF,fileAtGccCmd:FileAtCmd, kvLs_skip:List[str]=None)->Tuple[int, str, str,str]:
     import os
-    print ("当前工作目录，os.getcwd():",os.getcwd(),file=gLogF)
+    curFrm:types.FrameType=inspect.currentframe()
+
+    LOG(gLogF,curFrm,__file__,f"当前工作目录:{os.getcwd()}")
+
     clang:plumbum.machines.local.LocalCommand=local["/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang"]
 
     #  组装 clang 插件命令

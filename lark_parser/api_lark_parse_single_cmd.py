@@ -10,6 +10,9 @@ from lark.visitors import Interpreter
 from lark.lexer import Token
 from lark_my_transformer import MyTransformer
 from file_at_cmd import FileAtCmd
+from common import __NoneOrLenEq0__,LOG
+import inspect
+
 
 def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str,gLogF)->FileAtCmd:
 

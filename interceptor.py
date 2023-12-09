@@ -9,8 +9,11 @@ import time
 import subprocess
 from typing import List,Tuple
 import fcntl
+import inspect
 
 
+
+from common import __NoneOrLenEq0__,LOG
 from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror
