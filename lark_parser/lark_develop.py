@@ -15,8 +15,7 @@ from lark_my_transformer import MyTransformer
 from file_at_cmd import FileAtCmd
 
 #gcc_cmd_5: 源文件在中间，末尾依然是选项
-gcc_cmd_line='/crk/bin/i686-linux-gnu-gcc -Werror -D__KERNEL__ -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -msoft-float -mregparm=3 -freg-struct-return -fno-pic -march=i686 -ffreestanding -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_AVX512=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -O2 --param=allow-store-data-races=0 -c -x c /dev/null -o .tmp_5957/tmp'
-# gcc_cmd_line='/crk/bin/i686-linux-gnu-gcc -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -msoft-float -mregparm=3 -freg-struct-return -fno-pic -march=i686 -ffreestanding -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_AVX512=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -O2 -x c - -c -o /dev/null'
+gcc_cmd_line='/crk/bin/i686-linux-gnu-gcc -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -msoft-float -mregparm=3 -freg-struct-return -fno-pic -march=i686 -ffreestanding -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_AVX512=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -O2 -x c - -c -o /dev/null'
 #此命令输出是: /usr/lib/gcc-cross/i686-linux-gnu/11/include
 #此命令 应该是 make工具为了探测 给出的，并不是编译业务命令
 
@@ -40,21 +39,12 @@ print(f"命令中的源文件相关字段为:{fileAtCmd}")
 
 end=True
 """
-
 D:\miniconda3\python.exe F:/crk/bochs/cmd-wrap/lark_parser/lark_develop.py
 start
   gcc_cmd
-    gcc_cmd_5
+    gcc_cmd_6
       program	/crk/bin/i686-linux-gnu-gcc
       kv_ls
-        kv
-          kv_w__valany
-            -W
-            w_val	error
-        kv
-          kv_d__valany
-            -D
-            d_val	__KERNEL__
         kv
           kv_w__valany
             -W
@@ -181,28 +171,21 @@ start
         kv
           key	-O2
         kv
-          kv_k_eq_valnorm
-            key	--param
-            sep_eq
-            allow-store-data-races=0
-        kv
-          key	-c
-        kv
           kv_k_spc_valnorm
             key	-x
             sep_spc
             c
-      src_file	/dev/null
+      input_is_std_in	-
       kv_ls
+        kv
+          key	-c
         kv
           kv_k_spc_valnorm
             key	-o
             sep_spc
-            .tmp_5957/tmp
+            /dev/null
 
-命令中的源文件相关字段为:  -march=i686 -std=gnu89  -D__KERNEL__ -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_AVX512=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1  -Werror -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -Werror-implicit-function-declaration -Wno-format-security -Wno-sign-compare  -fno-strict-aliasing -fno-common -fshort-wchar -freg-struct-return -fno-pic -ffreestanding -fno-asynchronous-unwind-tables        -c /dev/null
-
-
+此命令中 无源文件名，不拦截此命令
 
 
 """
