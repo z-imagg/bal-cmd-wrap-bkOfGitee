@@ -7,18 +7,21 @@ from typing import List,Tuple
 from datetime_util import getCurrNanoSeconds
 from pathlib import Path
 import inspect
+import types
 
 
 
 from plumbum import local
 import plumbum
-from common import __NoneOrLenEq0__,LOG
+from common import __NoneOrLenEq0__,INFO_LOG
 def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
+    curFrm:types.FrameType=inspect.currentframe()
     exitCode:int=None
-    print(f"【Argv@execute_cmd】:【{Argv}】", file=gLogF)
+    INFO_LOG(gLogF, curFrm, f"真实命令（数组Argv）:【{Argv}】")
     #命令内容写入文件，方便问题查找.
-    ArgvStr:str=' '.join(Argv)
-    print("执行真实命令:",Argv,file=gLogF)
+    _cmdReceived:str=' '.join(Argv)
+    INFO_LOG(gLogF, curFrm, f"真实命令（字符串_cmdReceived）:【{_cmdReceived}】")
+
 
     # 调用真实命令，
     retCode: int; std_out: str; err_out: str
@@ -36,7 +39,7 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
         stdin_str:str=sys.stdin.read()
         std_out, err_out=p.communicate(input=stdin_str)
         exitCode=p.returncode
-        print(f"标准输入为:【{stdin_str}】",file=gLogF,end="")
+        INFO_LOG(gLogF,curFrm,f"标准输入为:【{stdin_str}】",end="")
     else:
         real_prog:plumbum.machines.local.LocalCommand=local[Argv[0]]
         argLs=Argv[1:] if len(Argv) > 1 else []
@@ -46,15 +49,15 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
     # 写 真实命令的 标准输出、错误输出  (不能写到文件，因为调用者可能需要这些输出）
     if not __NoneOrLenEq0__(std_out):
         print(std_out,file=sys.stdout,end="") #真实命令的输出，不要有多余的换行
-        print(f"真实命令标准输出【{std_out}】",file=gLogF,end="")
+        INFO_LOG(gLogF,curFrm,f"真实命令标准输出【{std_out}】",end="")
     if not __NoneOrLenEq0__(err_out):
         print(err_out, file=sys.stderr,end="") #真实命令的输出，不要有多余的换行
-        print(f"真实命令错误输出【{err_out}】",file=gLogF,end="")
+        INFO_LOG(gLogF,curFrm,f"真实命令错误输出【{err_out}】",end="")
 
     # 断言 exitCode非空，即 断言 subprocess.run 必须执行了
     assert exitCode is not None
     exitCodeDesc:str='异常退出码' if exitCode != 0 else '正常退出码'
-    print(f"真实命令退出码,{exitCodeDesc}:【{exitCode}】",file=gLogF,end="")
+    INFO_LOG(gLogF,curFrm,f"真实命令退出码,{exitCodeDesc}:【{exitCode}】",end="")
     return exitCode
 
 

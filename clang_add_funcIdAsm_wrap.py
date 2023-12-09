@@ -15,7 +15,7 @@ from plumbum import local
 from pathlib import Path
 from lark_parser.file_at_cmd import FileAtCmd
 
-from common import __NoneOrLenEq0__,LOG
+from common import __NoneOrLenEq0__,INFO_LOG
 
 def __list_filter_NoneEle_emptyStrEle__(ls:List[Any])->List[Any]:
     if ls is None or len(ls) == 0 : return ls
@@ -68,7 +68,7 @@ def __exec_clang_plugin_cmd__(gLogF,fileAtGccCmd:FileAtCmd, kvLs_skip:List[str]=
     import os
     curFrm:types.FrameType=inspect.currentframe()
 
-    LOG(gLogF,curFrm,__file__,f"当前工作目录:{os.getcwd()}")
+    INFO_LOG(gLogF, curFrm, f"当前工作目录:{os.getcwd()}")
 
     clang:plumbum.machines.local.LocalCommand=local["/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang"]
 
@@ -93,6 +93,7 @@ def __exec_clang_plugin_cmd__(gLogF,fileAtGccCmd:FileAtCmd, kvLs_skip:List[str]=
     return retCode,std_out,err_out,cmd
 
 def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
+    curFrm:types.FrameType=inspect.currentframe()
     # 调用本地主机ubuntu22x64上的clang-add-funcIdAsm插件修改本地源文件 , 源文件路径 、 头文件目录列表 、 各种选项 在 入参对象 fileAtCmd 中
 
 
@@ -105,18 +106,18 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
 
     # 参数列表
     retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd)
-    print(f"cmd:【{cmd}】",file=gLogF)
+    INFO_LOG(gLogF, curFrm, f"该clang命令及结果： cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
 
     if retCode != OkRetCode:
+        INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
         unknown_argument__val_ls:List[str]=__parse_clang__errOut__unknown_argument__val__(err_out)
         unsupported_argument_to_option__val_ls:List[str]=__parse_clang__errOut__unsupported_argument_to_option__val__(err_out)
 
         bad_kv_line_ls:List[str] = [*unknown_argument__val_ls, *unsupported_argument_to_option__val_ls]
         #如果 clang报错 中 没有unknown argument ，则打印 并返回即可
         if __NoneOrLenEq0__(bad_kv_line_ls):
-            print(retCode,std_out,err_out,file=gLogF)
+            INFO_LOG(gLogF, curFrm, "并未发现不支持选项,因此该clang命令的异常退出无法挽救")
             return retCode
         else:
             retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd,bad_kv_line_ls)
-            msg=f"尝试 从clang错误输出中 解析出 【unknown argument|unsupported argument v to option k】 并对应的去掉cmd中这些选项 后再执行的新cmd:【{cmd} 】； 新命令结果： retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】"
-            print(msg,file=gLogF)
+            INFO_LOG(gLogF, curFrm, f"发现不支持选项,去掉后再次执行, 新命令及结果:  retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")

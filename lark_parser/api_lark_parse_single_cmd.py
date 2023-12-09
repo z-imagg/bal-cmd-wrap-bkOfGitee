@@ -10,11 +10,12 @@ from lark.visitors import Interpreter
 from lark.lexer import Token
 from lark_my_transformer import MyTransformer
 from file_at_cmd import FileAtCmd
-from common import __NoneOrLenEq0__,LOG
+from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
 import inspect
-
+import types
 
 def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str,gLogF)->FileAtCmd:
+    curFrm:types.FrameType=inspect.currentframe()
 
 
     # gcc_cmd_line="  gcc -nostdlib -o arch/x86/vdso/vdso32-int80.so.dbg -fPIC -shared  -Wl,--hash-style=sysv -m32 -Wl,-soname=linux-gate.so.1 -Wl,-T,arch/x86/vdso/vdso32/vdso32.lds arch/x86/vdso/vdso32/note.o arch/x86/vdso/vdso32/int80.o"
@@ -25,21 +26,19 @@ def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str,gLogF)->FileAtCmd:
     # parser取 earley 或 lalr 时， Lark.open运行正常 ;
     # parser取 cyk 时， Lark.open运行报错 ;
 
-    print(f"lark即将解析文本singleGccCmd：【{singleGccCmd}】",file=gLogF)
+    INFO_LOG(gLogF,curFrm,f"lark即将解析文本singleGccCmd：【{singleGccCmd}】")
     try:
         treeK:Tree = parser.parse(singleGccCmd)
         # print(treeK.pretty())
     except UnexpectedCharacters as uec:
-        import traceback
-        print(f"lark解析文本singleGccCmd异常：【{uec}】",file=gLogF)
-        traceback.print_exc(file=gLogF)
+        EXCEPT_LOG(gLogF,curFrm,f"lark解析文本singleGccCmd异常",uec)
         raise uec
 
     transformer = MyTransformer()
     transformer_ret = transformer.transform(treeK)
     #但  transformer_ret 是 整棵结果树 ，并不是 单独该非终结符  内容
     fileAtCmd:FileAtCmd=transformer.__getFileAtCmd__()
-    print(f"命令中的源文件相关字段为:{fileAtCmd.__str__()}",file=gLogF)
+    INFO_LOG(gLogF,curFrm,f"命令中的源文件相关字段为:{fileAtCmd.__str__()}")
 
 
     return fileAtCmd
