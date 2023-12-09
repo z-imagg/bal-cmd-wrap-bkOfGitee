@@ -17,12 +17,12 @@ def _prefix(_type:str,curFrm:types.FrameType)->str:
     return prefix
 
 def INFO_LOG(_LogFile, curFrm:types.FrameType, _MSG:str,end="\n"):
-    prefix:str=_prefix('INFO')
+    prefix:str=_prefix('INFO',curFrm)
     print(f"{prefix}:{_MSG}",file=_LogFile,end=end)
     return
 
 def EXCEPT_LOG(_LogFile, curFrm:types.FrameType, _MSG:str, _except:BaseException):
-    prefix:str=_prefix('EXCEPT')
+    prefix:str=_prefix('EXCEPT',curFrm)
     print(f"{prefix}:{_MSG}",file=_LogFile)
     import traceback
     traceback.print_exception(_except,file=_LogFile)
