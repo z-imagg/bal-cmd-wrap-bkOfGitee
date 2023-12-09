@@ -49,10 +49,11 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
     if not __NoneOrLenEq0__(err_out):
         print(err_out, file=sys.stderr,end="") #真实命令的输出，不要有多余的换行
         print(f"真实命令错误输出【{err_out}】",file=gLogF,end="")
-    #假如没有执行到此行 , 即 subprocess.run 没执行 ,即 变量 exitCode 为 None。 原因肯定是 上面的三个open发生的异常。
 
     # 断言 exitCode非空，即 断言 subprocess.run 必须执行了
     assert exitCode is not None
+    exitCodeDesc:str='异常退出码' if exitCode != 0 else '正常退出码'
+    print(f"真实命令退出码,{exitCodeDesc}:【{exitCode}】",file=gLogF,end="")
     return exitCode
 
 
