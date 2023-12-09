@@ -15,7 +15,8 @@ from lark_my_transformer import MyTransformer
 from file_at_cmd import FileAtCmd
 
 #gcc_cmd_5: 源文件在中间，末尾依然是选项
-gcc_cmd_line='i686-linux-gnu-gcc -Werror -D__KERNEL__ -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -mretpoline-external-thunk -c -x c /dev/null -o .tmp_28820/tmp'
+gcc_cmd_line='/crk/bin/i686-linux-gnu-gcc -Werror -D__KERNEL__ -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -msoft-float -mregparm=3 -freg-struct-return -fno-pic -march=i686 -ffreestanding -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_AVX512=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -O2 --param=allow-store-data-races=0 -c -x c /dev/null -o .tmp_5957/tmp'
+# gcc_cmd_line='/crk/bin/i686-linux-gnu-gcc -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -fshort-wchar -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -msoft-float -mregparm=3 -freg-struct-return -fno-pic -march=i686 -ffreestanding -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_AVX512=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -O2 -x c - -c -o /dev/null'
 #此命令输出是: /usr/lib/gcc-cross/i686-linux-gnu/11/include
 #此命令 应该是 make工具为了探测 给出的，并不是编译业务命令
 
@@ -39,79 +40,6 @@ print(f"命令中的源文件相关字段为:{fileAtCmd}")
 
 end=True
 """
-D:\miniconda3\python.exe F:/crk/bochs/cmd-wrap/lark_parser/lark_develop.py
-start
-  gcc_cmd
-    gcc_cmd_5
-      program	i686-linux-gnu-gcc
-      kv_ls
-        kv
-          kv_w__valany
-            -W
-            w_val	error
-        kv
-          kv_d__valany
-            -D
-            d_val	__KERNEL__
-        kv
-          kv_w__valany
-            -W
-            w_val	all
-        kv
-          kv_w__valany
-            -W
-            w_val	undef
-        kv
-          kv_w__valany
-            -W
-            w_val	strict-prototypes
-        kv
-          kv_w__valany
-            -W
-            w_val	no-trigraphs
-        kv
-          kv_f__valany
-            -f
-            f_val	no-strict-aliasing
-        kv
-          kv_f__valany
-            -f
-            f_val	no-common
-        kv
-          kv_f__valany
-            -f
-            f_val	short-wchar
-        kv
-          kv_w__valany
-            -W
-            w_val	error-implicit-function-declaration
-        kv
-          kv_w__valany
-            -W
-            w_val	no-format-security
-        kv
-          kv_std_eq_valany
-            -std
-            sep_eq
-            std_val	gnu89
-        kv
-          key	-mretpoline-external-thunk
-        kv
-          key	-c
-        kv
-          kv_k_spc_valnorm
-            key	-x
-            sep_spc
-            c
-      src_file	/dev/null
-      kv_ls
-        kv
-          kv_k_spc_valnorm
-            key	-o
-            sep_spc
-            .tmp_28820/tmp
-
-命令中的源文件相关字段为:   -std=gnu89  -D__KERNEL__  -Werror -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -Werror-implicit-function-declaration -Wno-format-security  -fno-strict-aliasing -fno-common -fshort-wchar        -c /dev/null
 
 
 
