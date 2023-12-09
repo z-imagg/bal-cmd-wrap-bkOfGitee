@@ -13,7 +13,7 @@ import inspect
 import types
 
 
-from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
+from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_emptyStrEle__
 from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror
@@ -39,7 +39,7 @@ calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()
 #参数数组复制一份 (不要直接修改sys.argv)
-Argv=list(sys.argv)
+Argv=__list_filter_NoneEle_emptyStrEle__(list(sys.argv))
 #备份假程序名
 progFake:str=Argv[0]
 #打印参数
