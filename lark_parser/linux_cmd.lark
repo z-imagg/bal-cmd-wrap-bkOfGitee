@@ -65,7 +65,7 @@ m_arch_val : VAL_NORMAL
 std_val : VAL_NORMAL
 m_dd_val : DD
 d_val: VAL_NORMAL_NO_EQ
-d_eq_val: VAL_NORMAL_NO_EQ SEP_EQ VAL_ANY
+d_eq_val: D_XX_EQ_VAL
 w_val: VAL_ANY
 w_eq_val: VAL_ANY
 f_val: VAL_ANY
@@ -93,6 +93,7 @@ KEY: "-" ("-")? (L|D) ("-"|"_"|L|D)*
 DASH : "-"
 
 ///选项的值
+D_XX_EQ_VAL: VAL_NORMAL_NO_EQ SEP_EQ VAL_ANY
 VAL_NORMAL: TK_NORMAL |   STR
 VAL_NORMAL_NO_EQ: TK_NORMAL_NO_EQ |   STR
 VAL_ANY: TK_ANY |   STR

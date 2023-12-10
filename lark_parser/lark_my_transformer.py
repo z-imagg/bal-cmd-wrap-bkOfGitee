@@ -143,12 +143,12 @@ class MyTransformer(Transformer):
 
     #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
     def d_val(self, tokens:List[Token]):
-        self.d_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_ANY', tokens))
+        self.d_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_NORMAL_NO_EQ', tokens))
         return tokens
 
     #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
     def d_eq_val(self, tokens:List[Token]):
-        self.d_eq_val_ls.append(MyTransformer.__assertLsSz1_get0__('VAL_ANY', tokens))
+        self.d_eq_val_ls.append(MyTransformer.__assertLsSz1_get0__('D_XX_EQ_VAL', tokens))
         return tokens
 
     #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
