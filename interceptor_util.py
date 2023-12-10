@@ -14,6 +14,18 @@ import types
 from plumbum import local
 import plumbum
 from common import __NoneOrLenEq0__,INFO_LOG
+
+def execute_script_file(gLogF,scriptFile:Path)->None:
+    curFrm:types.FrameType=inspect.currentframe()
+
+    scriptF: plumbum.machines.LocalCommand = local.get(scriptFile)
+    retCode, std_out, err_out = scriptF.run()
+
+    INFO_LOG(gLogF, curFrm, f"执行脚本文件及结果： 脚本文件:【{scriptFile}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+
+    return
+
+
 def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
     curFrm:types.FrameType=inspect.currentframe()
     exitCode:int=None

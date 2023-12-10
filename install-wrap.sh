@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+#建立 目录cmd-wrap  软连接
+{ [   -e /crk/cmd-wrap ] || ln -s /crk/bochs/cmd-wrap /crk/cmd-wrap ;} && \
+
 source /app/miniconda3/bin/activate
 
 pip install lark
@@ -24,6 +28,19 @@ export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 InterceptorLogF=/crk/g-0.log
 UniqueId="$InterceptorLogF-$(date +'%Y%m%d%H%M%S_%s_%N')"
 [ -f $InterceptorLogF ] && mv $InterceptorLogF "$InterceptorLogF_$UniqueId"
+
+#记录初始的环境变量名字列表
+chmod +x /crk/cmd-wrap/env-diff-show.sh
+ignore_env_name_list_f=/crk/.ignore_env_name_list.txt
+env | cut -d= -f1 > $ignore_env_name_list_f
+echo "CONDA_EXE
+CONDA_PREFIX
+CONDA_PROMPT_MODIFIER
+_CE_CONDA
+CONDA_SHLVL
+CONDA_PYTHON_EXE
+CONDA_DEFAULT_ENV
+" >> $ignore_env_name_list_f
 
 sudo mkdir -p $fake_bin && sudo chown -R $(id -gn).$(whoami) $fake_bin
 

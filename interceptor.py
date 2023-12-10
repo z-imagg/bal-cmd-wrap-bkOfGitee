@@ -17,7 +17,7 @@ from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_em
 from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
-from interceptor_util import execute_cmd
+from interceptor_util import execute_cmd,execute_script_file
 from lark_parser.api_lark_parse_single_cmd import larkGetSrcFileFromSingleGccCmd
 from clang_add_funcIdAsm_wrap import clangAddFuncIdAsmWrap
 
@@ -100,6 +100,8 @@ try:#try业务块
     else:
         INFO_LOG(gLogF, curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
+    #捕捉编译时的env环境变量和初始环境变量差异
+    execute_script_file(gLogF,"/crk/cmd-wrap/env-diff-show.sh")
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
     exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
 except BaseException  as bexp:
