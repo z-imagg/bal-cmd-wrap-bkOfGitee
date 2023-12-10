@@ -30,28 +30,28 @@ kv: kv_i_spc_incpth|kv_i_spc_includepth |kv_isystem_spc_valnorm | kv_k_spc_valno
 //kv : kv_I_incPth(即 -Ixxx) 必须 比 key 靠前, 否则 kv_I_incPth(即 -Ixxx) 会被 key 淹没
 
 //各种 选项名_选项值 样式
-kv_k_spc_valnorm: key sep_spc VAL_NORMAL
+kv_k_spc_valnorm: key SEP_SPC VAL_NORMAL
 //kv_k_spc_valnorm : k v 之间的分割符 是  空格
-kv_isystem_spc_valnorm: ARG_ISYSTEM sep_spc isystem_val
-kv_k_eq_valnorm: key sep_eq VAL_NORMAL
+kv_isystem_spc_valnorm: ARG_ISYSTEM SEP_SPC isystem_val
+kv_k_eq_valnorm: key SEP_EQ VAL_NORMAL
 //kv_k_eq_valnorm : k v 之间的分割符 是  等号
 kv_k__str: key STR
 //kv_k__str: 当v用引号包裹时, k v之间 不需要 分割符
-kv_k_comma_valany: key sep_comma VAL_ANY
+kv_k_comma_valany: key SEP_COMMA VAL_ANY
 // kv_k_comma_valany: 当k v之间的分割符 为 逗号 时, v的形式是任意的
 kv_i__incpth: ARG_INC inc_val
-kv_i_spc_incpth: ARG_INC sep_spc sep_inc_val
+kv_i_spc_incpth: ARG_INC SEP_SPC sep_inc_val
 // kv_i__incpth: 当k 是 -I  时, k v之间 不需要 分割符
-kv_i_spc_includepth: ARG_INCLUDE sep_spc sep_include_val
-kv_march_eq_valany: ARG_MARCH sep_eq m_arch_val
+kv_i_spc_includepth: ARG_INCLUDE SEP_SPC sep_include_val
+kv_march_eq_valany: ARG_MARCH SEP_EQ m_arch_val
 kv_m_dd: ARG_M m_dd_val
-kv_std_eq_valany: ARG_STD sep_eq std_val
+kv_std_eq_valany: ARG_STD SEP_EQ std_val
 kv_d__valany: ARG_D d_val
-kv_d_eq_valany: ARG_D sep_eq d_eq_val
+kv_d_eq_valany: ARG_D SEP_EQ d_eq_val
 kv_w__valany: ARG_W w_val
-kv_w_eq_valany: ARG_W sep_eq w_eq_val
+kv_w_eq_valany: ARG_W SEP_EQ w_eq_val
 kv_f__valany: ARG_F f_val
-kv_f_eq_valany: ARG_F sep_eq f_eq_val
+kv_f_eq_valany: ARG_F SEP_EQ f_eq_val
 
 //选项的名字
 key: KEY
@@ -73,9 +73,9 @@ f_eq_val: VAL_ANY
 //kv_sep: KV_SEP
 
 //分割符 （割开 选项名 和 选项值 ）
-sep_eq: "="
-sep_spc: " "+
-sep_comma: ","
+SEP_EQ: "="
+SEP_SPC: " "+
+SEP_COMMA: ","
 
 ///////////////终结符
 ///选项的名字
