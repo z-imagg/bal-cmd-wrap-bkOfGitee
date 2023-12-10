@@ -16,7 +16,7 @@ import types
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_emptyStrEle__
 from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
-from argv_process import ArgvRemoveWerror
+from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O0
 from interceptor_util import execute_cmd
 from lark_parser.api_lark_parse_single_cmd import larkGetSrcFileFromSingleGccCmd
 from clang_add_funcIdAsm_wrap import clangAddFuncIdAsmWrap
@@ -46,6 +46,8 @@ progFake:str=Argv[0]
 _cmdReceived:str=' '.join(Argv) ;
 #参数中-Werror替换为-Wno-error
 Argv:List[str] = ArgvRemoveWerror(Argv)
+#参数中-O2替换为-o0
+Argv=ArgvReplace_O2As_O0(Argv)
 #换回真程序名（从假程序名算出真程序名，并以真填假）
 Argv[0]=calcTrueProg(Argv[0])
 
