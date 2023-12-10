@@ -16,7 +16,7 @@ import types
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_emptyStrEle__
 from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
-from argv_process import ArgvRemoveWerror
+from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd
 from lark_parser.api_lark_parse_single_cmd import larkGetSrcFileFromSingleGccCmd
 from clang_add_funcIdAsm_wrap import clangAddFuncIdAsmWrap
@@ -38,18 +38,21 @@ calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()
+#备份sys.argv
+sysArgvAsStr:str= ' '.join(sys.argv) ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=__list_filter_NoneEle_emptyStrEle__(list(sys.argv))
 #备份假程序名
 progFake:str=Argv[0]
-#打印参数
-_cmdReceived:str=' '.join(Argv) ;
 #参数中-Werror替换为-Wno-error
 Argv:List[str] = ArgvRemoveWerror(Argv)
+#参数中-O2替换为-o1
+Argv=ArgvReplace_O2As_O1(Argv)
 #换回真程序名（从假程序名算出真程序名，并以真填假）
 Argv[0]=calcTrueProg(Argv[0])
 
 #尝试锁定日志文件，最多尝试N次
+# 折叠此for循环，可在一页内看明白 此脚本业务逻辑
 gLogF_LockOk:bool=False
 Max_Try_Lock_Times=100
 for k in range(Max_Try_Lock_Times):
@@ -88,9 +91,9 @@ exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
     # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
-    INFO_LOG(gLogF, curFrm, f"收到命令及参数（字符串_cmdReceived）:【{_cmdReceived}】")
+    INFO_LOG(gLogF, curFrm, f"收到命令及参数（即sys.argv即字符串sysArgvAsStr）:【{sysArgvAsStr}】")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived,gLogF)
+    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(sysArgvAsStr, gLogF)
     if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命令
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
         clangAddFuncIdAsmWrap(fileAtCmd,gLogF)
