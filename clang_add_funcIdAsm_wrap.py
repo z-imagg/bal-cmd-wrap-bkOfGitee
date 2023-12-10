@@ -118,4 +118,4 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
             return retCode
         else:
             retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd,bad_kv_line_ls)
-            INFO_LOG(gLogF, curFrm, f"发现不支持选项,去掉后再次执行, 新命令及结果:  retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+            INFO_LOG(gLogF, curFrm, f"发现不支持选项,去掉后再次执行, 新命令及结果:  cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
