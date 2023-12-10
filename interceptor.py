@@ -50,6 +50,7 @@ Argv:List[str] = ArgvRemoveWerror(Argv)
 Argv[0]=calcTrueProg(Argv[0])
 
 #尝试锁定日志文件，最多尝试N次
+# 折叠此for循环，可在一页内看明白 此脚本业务逻辑
 gLogF_LockOk:bool=False
 Max_Try_Lock_Times=100
 for k in range(Max_Try_Lock_Times):
