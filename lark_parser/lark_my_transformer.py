@@ -53,7 +53,7 @@ class MyTransformer(Transformer):
         # -Dxxx
         self.d_val_ls:List[ Token ] = []
         # -Dxxx=yyy
-        self.d_eq_val_ls: List[ Token ] = []
+        self.d_xx_eq_val_ls: List[ Token ] = []
 
         # -Wxxx
         self.w_val_ls:List[ Token ] = []
@@ -89,7 +89,7 @@ class MyTransformer(Transformer):
         # 取 -Dxxx
         fileAtCmd.d_val_ls:List[ str] = MyTransformer.__tokenLs2strLs__(self.d_val_ls)
         # 取 -Dxxx=yyy
-        fileAtCmd.d_eq_val_ls: List[str] = MyTransformer.__tokenLs2strLs__(self.d_eq_val_ls)
+        fileAtCmd.d_xx_eq_val_ls: List[str] = MyTransformer.__tokenLs2strLs__(self.d_xx_eq_val_ls)
 
         # 取 -Wxxx
         fileAtCmd.w_val_ls:List[ str] = MyTransformer.__tokenLs2strLs__(self.w_val_ls)
@@ -147,8 +147,8 @@ class MyTransformer(Transformer):
         return tokens
 
     #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称
-    def d_eq_val(self, tokens:List[Token]):
-        self.d_eq_val_ls.append(MyTransformer.__assertLsSz1_get0__('D_XX_EQ_VAL', tokens))
+    def d_xx_eq_val(self, tokens:List[Token]):
+        self.d_xx_eq_val_ls.append(MyTransformer.__assertLsSz1_get0__('D_XX_EQ_VAL', tokens))
         return tokens
 
     #lark Transformer 回调方法, 方法名 为 lark文法文件linux_cmd.lark 中的 非终结符名称

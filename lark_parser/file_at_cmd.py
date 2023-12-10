@@ -66,7 +66,7 @@ class FileAtCmd:
         # -Dxxx
         self.d_val_ls:List[ str] = None
         # -Dxxx=yyy
-        self.d_eq_val_ls: List[str] = None
+        self.d_xx_eq_val_ls: List[str] = None
 
         # -Wxxx
         self.w_val_ls:List[ str] = None
@@ -106,7 +106,7 @@ class FileAtCmd:
         # -Dxxx
         kv_d_val_ls:List[str]  = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.d_val_ls,'-D',kvLs_skip)
         # -Dxxx=yyy
-        kv_d_eq_val_ls: str = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.d_eq_val_ls,'-D',kvLs_skip)
+        kv_d_eq_val_ls: str = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.d_xx_eq_val_ls,'-D',kvLs_skip)
 
         # -Wxxx
         kv_w_val_ls:str  = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.w_val_ls,'-W',kvLs_skip)
