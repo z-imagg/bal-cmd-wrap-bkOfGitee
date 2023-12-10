@@ -38,12 +38,12 @@ calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()
+#备份sys.argv
+sysArgvAsStr:str= ' '.join(sys.argv) ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=__list_filter_NoneEle_emptyStrEle__(list(sys.argv))
 #备份假程序名
 progFake:str=Argv[0]
-#打印参数
-_cmdReceived:str=' '.join(Argv) ;
 #参数中-Werror替换为-Wno-error
 Argv:List[str] = ArgvRemoveWerror(Argv)
 #参数中-O2替换为-o0
@@ -91,9 +91,9 @@ exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
     # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
-    INFO_LOG(gLogF, curFrm, f"收到命令及参数（字符串_cmdReceived）:【{_cmdReceived}】")
+    INFO_LOG(gLogF, curFrm, f"收到命令及参数（即sys.argv即字符串sysArgvAsStr）:【{sysArgvAsStr}】")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(_cmdReceived,gLogF)
+    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(sysArgvAsStr, gLogF)
     if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命令
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
         clangAddFuncIdAsmWrap(fileAtCmd,gLogF)
