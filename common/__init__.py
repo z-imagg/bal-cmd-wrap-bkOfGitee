@@ -3,28 +3,6 @@ import types
 import inspect
 
 def __parse_clang__errOut__by__re_pattern___(clang_err_out:str, re_pattern:str)->List[str]:
-    """解析如下clang错误输出 中的 参数
-error: unknown warning option '-Wno-format-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Wimplicit-fallthrough=5'; did you mean '-Wimplicit-fallthrough'? [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Wno-stringop-truncation'; did you mean '-Wno-string-concatenation'? [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Wno-stringop-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Wno-restrict' [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Wno-maybe-uninitialized'; did you mean '-Wno-uninitialized'? [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Wno-alloc-size-larger-than'; did you mean '-Wno-frame-larger-than'? [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over-aligned'? [-Werror,-Wunknown-warning-option]
-:return:
-    以上输入，返回如下
-[
- ('-Wno-format-overflow', '-Wno-shift-overflow',  '-Werror',  '-Wunknown-warning-option'),
- ('-Wimplicit-fallthrough=5',  '-Wimplicit-fallthrough',  '-Werror',  '-Wunknown-warning-option'),
- ('-Wno-stringop-truncation',  '-Wno-string-concatenation',   '-Werror', '-Wunknown-warning-option'),
- ('-Wno-stringop-overflow',  '-Wno-shift-overflow',  '-Werror', '-Wunknown-warning-option'),
- ('-Wno-maybe-uninitialized',  '-Wno-uninitialized',  '-Werror', '-Wunknown-warning-option'),
- ('-Wno-alloc-size-larger-than', '-Wno-frame-larger-than', '-Werror', '-Wunknown-warning-option'),
- ('-Wno-packed-not-aligned', '-Wno-over-aligned', '-Werror', '-Wunknown-warning-option')
- ]
-    """
     import re
     if  __NoneOrLenEq0__(clang_err_out): return None
     if not __NoneOrLenEq0__(clang_err_out):
