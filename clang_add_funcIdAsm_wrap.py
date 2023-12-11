@@ -220,7 +220,7 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         gccCmd.kv_ls_for_clang,_=__rm_Ls2_from_Ls__(gccCmd.kv_ls_for_clang,kv_ls_toDel)
 
         #clang 的 kv列表 改进2: 添加选项（添加 报错文本中的选项的加前缀no-所得选项）
-        _4_kv_ls_toAdd:List[str]=__parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(err_out)
+        _4_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(err_out))
         gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_4_kv_ls_toAdd]))
 
 
