@@ -327,23 +327,24 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
             INFO_LOG(gLogF, curFrm, f"1,unknown_type_name_ls:{unknown_type_name_ls}")
             import random
             unknown_type_name_ls=list(filter(lambda k:len(k)>=5,unknown_type_name_ls))
-            unknown_type_name_k = unknown_type_name_ls[random.randint(0, len(unknown_type_name_ls)-1)]
-            INFO_LOG(gLogF, curFrm, f"2,unknown_type_name_ls:{unknown_type_name_ls};unknown_type_name_k:{unknown_type_name_k}")
-            # if len(unknown_type_name_k) <= 5:
-            #     INFO_LOG(gLogF, curFrm, f"跳过短unknown_type_name_k:{unknown_type_name_k}")
-            #     continue
-            retCode, std_out, err_out = execute_script_file(gLogF, "/crk/cmd-wrap/find_grep.sh",["/crk/linux-stable/",unknown_type_name_k])
-            if retCode == OkRetCode and not __NoneOrLenLe0__(std_out):
-                headFLs:List[str]=std_out.split("\n")
-                for headFK in headFLs:
-                    include_headFK:str=f"-include {headFK}"
-                    if headFK.startswith("/crk/linux-stable/arch/"):
-                        if headFK.startswith("/crk/linux-stable/arch/x86") or headFK.startswith("/crk/linux-stable/arch/i386"):
+            if not __NoneOrLenLe0__(unknown_type_name_ls):
+                unknown_type_name_k = unknown_type_name_ls[random.randint(0, len(unknown_type_name_ls)-1)]
+                INFO_LOG(gLogF, curFrm, f"2,unknown_type_name_ls:{unknown_type_name_ls};unknown_type_name_k:{unknown_type_name_k}")
+                # if len(unknown_type_name_k) <= 5:
+                #     INFO_LOG(gLogF, curFrm, f"跳过短unknown_type_name_k:{unknown_type_name_k}")
+                #     continue
+                retCode, std_out, err_out = execute_script_file(gLogF, "/crk/cmd-wrap/find_grep.sh",["/crk/linux-stable/",unknown_type_name_k])
+                if retCode == OkRetCode and not __NoneOrLenLe0__(std_out):
+                    headFLs:List[str]=std_out.split("\n")
+                    for headFK in headFLs:
+                        include_headFK:str=f"-include {headFK}"
+                        if headFK.startswith("/crk/linux-stable/arch/"):
+                            if headFK.startswith("/crk/linux-stable/arch/x86") or headFK.startswith("/crk/linux-stable/arch/i386"):
+                                gccCmd.kv_ls_for_clang.append(include_headFK)
+                        else:
                             gccCmd.kv_ls_for_clang.append(include_headFK)
-                    else:
-                        gccCmd.kv_ls_for_clang.append(include_headFK)
-            else:
-                INFO_LOG(gLogF, curFrm, f"报错，find_grep.sh脚本有问题,参数为:{unknown_type_name_k}")
+                else:
+                    INFO_LOG(gLogF, curFrm, f"报错，find_grep.sh脚本有问题,参数为:{unknown_type_name_k}")
 
 
         gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_5_kv_ls_toAdd,*_6_kv_ls_toAdd,*_7_kv_ls_toAdd]))
