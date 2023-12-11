@@ -92,8 +92,8 @@ error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over
     #secondLs==['-Wno-format-overflow', '-Wimplicit-fallthrough=5', '-Wno-stringop-truncation', '-Wno-stringop-overflow', '-Wno-maybe-uninitialized' ,'-Wno-alloc-size-larger-than', '-Wno-packed-not-aligned']
     return secondLs
 
-errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension__re_pattern:str = r"error: field '[^']*' with variable sized type '[^']*' not at the end of a struct or class is a GNU extension \[(.+),(.+)\]"
-def __parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_toAddMe__(clang_err_out:str)->List[str]:
+errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension__re_pattern:str = r"error: field '[^']*' with variable sized type '[^']*' not at the end of a struct or class is a GNU extension \[(.+),\-W(.+)\]"
+def __parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(clang_err_out:str)->List[str]:
     """解析如下clang错误输出 中的 参数
 ./include/linux/cgroup-defs.h:509:16: error: field 'cgrp' with variable sized type 'struct cgroup' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
         struct cgroup cgrp;
@@ -124,28 +124,30 @@ In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
 :return:
     以上输入，正则匹配结果matches如下
 [
-('-Werror', '-Wgnu-variable-sized-type-not-at-end'),
-('-Werror', '-Wgnu-variable-sized-type-not-at-end'),
-('-Werror', '-Wgnu-variable-sized-type-not-at-end'),
-('-Werror', '-Wgnu-variable-sized-type-not-at-end'),
-('-Werror', '-Wgnu-variable-sized-type-not-at-end')
+('-Werror', 'gnu-variable-sized-type-not-at-end'),
+('-Werror', 'gnu-variable-sized-type-not-at-end'),
+('-Werror', 'gnu-variable-sized-type-not-at-end'),
+('-Werror', 'gnu-variable-sized-type-not-at-end'),
+('-Werror', 'gnu-variable-sized-type-not-at-end')
 ]
 返回如下:
-['-Wgnu-variable-sized-type-not-at-end']
+['-Wno-gnu-variable-sized-type-not-at-end']
     """
     matches= __parse_clang__errOut__by__re_pattern___(clang_err_out, errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension__re_pattern)
-#     matches=[ ('-Werror', '-Wgnu-variable-sized-type-not-at-end'),
-# ('-Werror', '-Wgnu-variable-sized-type-not-at-end'),
-# ('-Werror', '-Wgnu-variable-sized-type-not-at-end'),
-# ('-Werror', '-Wgnu-variable-sized-type-not-at-end'),
-# ('-Werror', '-Wgnu-variable-sized-type-not-at-end') ]
+#     matches=[
+# ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+# ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+# ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+# ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+# ('-Werror', 'gnu-variable-sized-type-not-at-end')
+# ]
     if __NoneOrLenEq0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 2
-    secondLs= [f"{_[1]}" for _ in matches]
+    secondLs= [f"-Wno-{_[1]}" for _ in matches]
     #去重
     secondLs=list(set(secondLs))
-    #secondLs==['-Wgnu-variable-sized-type-not-at-end']
+    #secondLs==['-Wno-gnu-variable-sized-type-not-at-end']
     return secondLs
 
 
@@ -194,18 +196,21 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
 
     # clKvLsAsStr:str=gccCmd.__asStr_kv_ls_for_clang__()
 
+    k=0
     while True:
+        k+=1
         kv_ls_for_clang__prev=[*gccCmd.kv_ls_for_clang]
         # 参数列表
         retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF, gccCmd.__asStr_kv_ls_for_clang__())
-        INFO_LOG(gLogF, curFrm, f"该clang命令及结果： cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+        retCodeMsg=f"clang命令正常退出" if retCode == OkRetCode else f"clang命令异常退出"
+        INFO_LOG(gLogF, curFrm, f"第{k}次执行clang命令,{retCodeMsg}, cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
 
 
         if retCode == OkRetCode:
-            INFO_LOG(gLogF, curFrm, f"clang命令正常退出1,命令为:{cmd}")
+            # INFO_LOG(gLogF, curFrm, f"第{k}次执行clang命令,clang命令正常退出,命令为:{cmd}")
             return retCode
         # else :# 即 retCode != OkRetCode # 即 异常退出
-        INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
+        # INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
 
         #clang 的 kv列表 改进1: 删除选项（删除报错文本中的选项）
         _1_kv_ls_toDel:List[str]=__parse_clang__errOut__unknown_argument__toDelMe__(err_out)
@@ -215,14 +220,13 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         gccCmd.kv_ls_for_clang,_=__rm_Ls2_from_Ls__(gccCmd.kv_ls_for_clang,kv_ls_toDel)
 
         #clang 的 kv列表 改进2: 添加选项（添加 报错文本中的选项的加前缀no-所得选项）
-        _4_kv_ls_toAdd:List[str]=__parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_toAddMe__(err_out)
+        _4_kv_ls_toAdd:List[str]=__parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(err_out)
         gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_4_kv_ls_toAdd]))
 
 
         #clang kv列表 没变化, 说明 没有改进余地, 结束循环.
         if sorted(kv_ls_for_clang__prev)==sorted(gccCmd.kv_ls_for_clang):
-            INFO_LOG(gLogF, curFrm, "并未发现不支持选项,因此该clang命令的异常退出无法挽救")
-            INFO_LOG(gLogF, curFrm, f"clang命令异常退出1,命令为:{cmd}")
+            INFO_LOG(gLogF, curFrm, f"第{k}次执行clang命令,从errOut中没有改进clang选项,clang命令异常退出无法挽救,命令为:{cmd}")
             return retCode
         else:
             continue
