@@ -55,17 +55,15 @@ clang-15: error: unsupported argument '-mtune=generic32' to option '-Wa,'
         return kv_line_ls # kv_line_ls==['-Wa,-mtune=generic32' ]
     return None
 
-errOut__error_unknown_warning_option__re_pattern:str = r"error: unknown warning option '([^']*)'; did you mean '([^']*)'\? \[(.+),(.+)\]"
-def __parse_clang__errOut__error_unknown_warning_option_toDelMe__(clang_err_out:str)->List[str]:
+errOut__error_unknown_warning_option_did_you_mean__re_pattern:str = r"error: unknown warning option '([^']*)'; did you mean '([^']*)'\? \[(.+),(.+)\]"
+def __parse_clang__errOut__error_unknown_warning_option_did_you_mean_toDelMe__(clang_err_out:str)->List[str]:
     """解析如下clang错误输出 中的 参数
 error: unknown warning option '-Wno-format-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
 error: unknown warning option '-Wimplicit-fallthrough=5'; did you mean '-Wimplicit-fallthrough'? [-Werror,-Wunknown-warning-option]
 error: unknown warning option '-Wno-stringop-truncation'; did you mean '-Wno-string-concatenation'? [-Werror,-Wunknown-warning-option]
 error: unknown warning option '-Wno-stringop-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Wno-restrict' [-Werror,-Wunknown-warning-option]
 error: unknown warning option '-Wno-maybe-uninitialized'; did you mean '-Wno-uninitialized'? [-Werror,-Wunknown-warning-option]
 error: unknown warning option '-Wno-alloc-size-larger-than'; did you mean '-Wno-frame-larger-than'? [-Werror,-Wunknown-warning-option]
-error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warning-option]
 error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over-aligned'? [-Werror,-Wunknown-warning-option]
 :return:
     以上输入，正则匹配结果如下
@@ -82,7 +80,7 @@ error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over
  ['-Wno-format-overflow', '-Wimplicit-fallthrough=5', '-Wno-stringop-truncation', '-Wno-stringop-overflow', '-Wno-maybe-uninitialized' ,'-Wno-alloc-size-larger-than', '-Wno-packed-not-aligned']
     """
     # matches ==  [('-Wno-format-overflow', '-Wno-shift-overflow','-Werror','-Wunknown-warning-option')]
-    matches= __parse_clang__errOut__by__re_pattern___(clang_err_out,errOut__error_unknown_warning_option__re_pattern)
+    matches= __parse_clang__errOut__by__re_pattern___(clang_err_out,errOut__error_unknown_warning_option_did_you_mean__re_pattern)
     if __NoneOrLenEq0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 4
@@ -91,6 +89,34 @@ error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over
     secondLs=list(set(secondLs))
     #secondLs==['-Wno-format-overflow', '-Wimplicit-fallthrough=5', '-Wno-stringop-truncation', '-Wno-stringop-overflow', '-Wno-maybe-uninitialized' ,'-Wno-alloc-size-larger-than', '-Wno-packed-not-aligned']
     return secondLs
+
+
+errOut__error_unknown_warning_option__re_pattern:str = r"error: unknown warning option '([^']*)' \[(.+),(.+)\]"
+def __parse_clang__errOut__error_unknown_warning_option_toDelMe__(clang_err_out:str)->List[str]:
+    """解析如下clang错误输出 中的 参数
+error: unknown warning option '-Wno-restrict' [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warning-option]
+:return:
+    以上输入，正则匹配结果如下
+[
+('-Wno-restrict', '-Werror', '-Wunknown-warning-option'),
+('-Werror=designated-init', '-Werror', '-Wunknown-warning-option')
+ ]
+
+ 返回如下：
+ ['-Wno-restrict', '-Werror=designated-init' ]
+    """
+    # matches ==  [('-Wno-format-overflow', '-Wno-shift-overflow','-Werror','-Wunknown-warning-option')]
+    matches= __parse_clang__errOut__by__re_pattern___(clang_err_out,errOut__error_unknown_warning_option__re_pattern)
+    if __NoneOrLenEq0__(matches):
+        return None
+    assert len(matches) >=1 and len(matches[0]) == 3
+    secondLs= [_[0] for _ in matches]
+    #去重
+    secondLs=list(set(secondLs))
+    #secondLs== ['-Wno-restrict', '-Werror=designated-init' ]
+    return secondLs
+
 
 errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension__re_pattern:str = r"error: field '[^']*' with variable sized type '[^']*' not at the end of a struct or class is a GNU extension \[(.+),\-W(.+)\]"
 def __parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(clang_err_out:str)->List[str]:
@@ -215,13 +241,14 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         #clang 的 kv列表 改进1: 删除选项（删除报错文本中的选项）
         _1_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__unknown_argument__toDelMe__(err_out))
         _2_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__unsupported_argument_to_option_toDelMel__(err_out))
-        _3_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_unknown_warning_option_toDelMe__(err_out))
-        kv_ls_toDel:List[str] = [*_1_kv_ls_toDel, *_2_kv_ls_toDel,*_3_kv_ls_toDel]
+        _3_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_unknown_warning_option_did_you_mean_toDelMe__(err_out))
+        _4_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_unknown_warning_option_toDelMe__(err_out))
+        kv_ls_toDel:List[str] = [*_1_kv_ls_toDel, *_2_kv_ls_toDel,*_3_kv_ls_toDel,*_4_kv_ls_toDel]
         gccCmd.kv_ls_for_clang,_=__rm_Ls2_from_Ls__(gccCmd.kv_ls_for_clang,kv_ls_toDel)
 
         #clang 的 kv列表 改进2: 添加选项（添加 报错文本中的选项的加前缀no-所得选项）
-        _4_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(err_out))
-        gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_4_kv_ls_toAdd]))
+        _5_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(err_out))
+        gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_5_kv_ls_toAdd]))
 
 
         #clang kv列表 没变化, 说明 没有改进余地, 结束循环.
