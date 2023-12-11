@@ -106,16 +106,19 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
     retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd)
     INFO_LOG(gLogF, curFrm, f"该clang命令及结果： cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
 
-    if retCode != OkRetCode:
-        INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
-        unknown_argument__val_ls:List[str]=__parse_clang__errOut__unknown_argument__val__(err_out)
-        unsupported_argument_to_option__val_ls:List[str]=__parse_clang__errOut__unsupported_argument_to_option__val__(err_out)
 
-        bad_kv_line_ls:List[str] = [*unknown_argument__val_ls, *unsupported_argument_to_option__val_ls]
-        #如果 clang报错 中 没有unknown argument ，则打印 并返回即可
-        if __NoneOrLenEq0__(bad_kv_line_ls):
-            INFO_LOG(gLogF, curFrm, "并未发现不支持选项,因此该clang命令的异常退出无法挽救")
-            return retCode
-        else:
-            retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd,bad_kv_line_ls)
-            INFO_LOG(gLogF, curFrm, f"发现不支持选项,去掉后再次执行, 新命令及结果:  cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+    if retCode == OkRetCode:
+        return
+    # else :# 即 retCode != OkRetCode # 即 异常退出
+    INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
+    unknown_argument__val_ls:List[str]=__parse_clang__errOut__unknown_argument__val__(err_out)
+    unsupported_argument_to_option__val_ls:List[str]=__parse_clang__errOut__unsupported_argument_to_option__val__(err_out)
+
+    bad_kv_line_ls:List[str] = [*unknown_argument__val_ls, *unsupported_argument_to_option__val_ls]
+    #如果 clang报错 中 没有unknown argument ，则打印 并返回即可
+    if __NoneOrLenEq0__(bad_kv_line_ls):
+        INFO_LOG(gLogF, curFrm, "并未发现不支持选项,因此该clang命令的异常退出无法挽救")
+        return retCode
+    else:
+        retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd,bad_kv_line_ls)
+        INFO_LOG(gLogF, curFrm, f"发现不支持选项,去掉后再次执行, 新命令及结果:  cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
