@@ -133,8 +133,17 @@ error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warni
 
     return replaceLs
 
+def __parse_clang__errOut__addPrefixNo_toAddMe_1__(errOut__re_pattern,clang_err_out:str)->List[str]:
+    matches= __parse_clang__errOut__by__re_pattern___(clang_err_out, errOut__re_pattern)
+    if __NoneOrLenEq0__(matches):
+        return None
+    assert len(matches) >=1
+    kLs= [f"-Wno-{_[0]}" for _ in matches]
+    #去重
+    kLs=list(set(kLs))
+    return kLs
 
-def __parse_clang__errOut__addPrefixNo_toAddMe__(errOut__re_pattern,clang_err_out:str)->List[str]:
+def __parse_clang__errOut__addPrefixNo_toAddMe_2__(errOut__re_pattern,clang_err_out:str)->List[str]:
     matches= __parse_clang__errOut__by__re_pattern___(clang_err_out, errOut__re_pattern)
 #     比如: matches=[
 # ('-Werror', 'gnu-variable-sized-type-not-at-end'),
@@ -146,7 +155,7 @@ def __parse_clang__errOut__addPrefixNo_toAddMe__(errOut__re_pattern,clang_err_ou
     if __NoneOrLenEq0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 2
-    kLs= [f"-Wno-{_[1]}" for _ in matches]
+    kLs= __list_filter_NoneEle__([f"-Wno-{_[1]}" if _[0] == '-Werror' else None for _ in matches])
     #去重
     kLs=list(set(kLs))
     #kLs==['-Wno-gnu-variable-sized-type-not-at-end']
@@ -287,7 +296,7 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         返回如下:
         ['-Wno-gnu-variable-sized-type-not-at-end']
             """
-        _5_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe__(
+        _5_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe_2__(
             r"error: field '[^']*' with variable sized type '[^']*' not at the end of a struct or class is a GNU extension \[(.+),\-W(.+)\]",
             err_out ))
         """解析如下clang错误输出 中的 参数
@@ -300,15 +309,15 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         返回如下:
         ['-Wno-implicit-function-declaration']
             """
-        _6_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe__(
+        _6_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe_1__(
             r"error: call to undeclared function '([^']*)'; ISO C99 and later do not support implicit function declarations \[\-W(.+)\]",
             err_out))
         """
         arch/x86/kernel/fpu/bugs.c:28:6: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
 加 -Wno-declaration-after-statement
         """
-        _7_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe__(
-            r"error: mixing declarations and code is (incompatible) with standards before C99 \[(.+),\-W(.+)\]",
+        _7_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe_2__(
+            r"error: mixing declarations and code is incompatible with standards before C99 \[(.+),\-W(.+)\]",
             err_out))
 
         gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_5_kv_ls_toAdd,*_6_kv_ls_toAdd,*_7_kv_ls_toAdd]))
