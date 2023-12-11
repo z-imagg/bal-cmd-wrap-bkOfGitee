@@ -108,6 +108,7 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
 
 
     if retCode == OkRetCode:
+        INFO_LOG(gLogF, curFrm, f"clang命令正常退出1,命令为:{cmd}")
         return
     # else :# 即 retCode != OkRetCode # 即 异常退出
     INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
@@ -118,7 +119,9 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
     #如果 clang报错 中 没有unknown argument ，则打印 并返回即可
     if __NoneOrLenEq0__(bad_kv_line_ls):
         INFO_LOG(gLogF, curFrm, "并未发现不支持选项,因此该clang命令的异常退出无法挽救")
+        INFO_LOG(gLogF, curFrm, f"clang命令异常退出1,命令为:{cmd}")
         return retCode
     else:
         retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd,bad_kv_line_ls)
+        INFO_LOG(gLogF, curFrm, f"clang命令正常退出2,命令为:{cmd}" if retCode == OkRetCode else f"clang命令异常退出2,命令为:{cmd}")
         INFO_LOG(gLogF, curFrm, f"发现不支持选项,去掉后再次执行, 新命令及结果:  cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
