@@ -329,7 +329,7 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
                 INFO_LOG(gLogF, curFrm, f"跳过短unknown_type_name_k:{unknown_type_name_k}")
                 continue
             retCode, std_out, err_out = execute_script_file(gLogF, "/crk/cmd-wrap/find_grep.sh",["/crk/linux-stable/",unknown_type_name_k])
-            if retCode == OkRetCode:
+            if retCode == OkRetCode and not __NoneOrLenLe0__(std_out):
                 headFLs:List[str]=std_out.split("\n")
                 for headFK in headFLs:
                     include_headFK:str=f"-include {headFK}"
