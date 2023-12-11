@@ -21,7 +21,7 @@ def execute_script_file(gLogF,scriptFile:Path,args:()=[])->Tuple[int,str,str]:
     scriptF: plumbum.machines.LocalCommand = local.get(scriptFile)
     retCode, std_out, err_out = scriptF.run(args=args)
 
-    INFO_LOG(gLogF, curFrm, f"执行脚本文件及结果： 脚本文件:【{scriptFile}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+    INFO_LOG(gLogF, curFrm, f"执行脚本文件及结果： 脚本文件:【{scriptFile}】,参数:【{' '.join(args)}】 retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
 
     return retCode, std_out, err_out
 
