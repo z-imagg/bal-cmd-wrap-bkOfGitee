@@ -66,10 +66,10 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
     INFO_LOG(gLogF,curFrm,f"真实命令退出码,{exitCodeDesc}:【{exitCode}】")
 
     # 写 真实命令的 标准输出、错误输出  (不能写到文件，因为调用者可能需要这些输出）
-    if not __NoneOrLenEq0__(std_out):
+    if std_out is not None:
         print(std_out,file=sys.stdout,end="") #真实命令的输出，不要有多余的换行
         INFO_LOG(gLogF,curFrm,f"真实命令标准输出【{std_out}】")
-    if not __NoneOrLenEq0__(err_out):
+    if err_out is not None:
         print(err_out, file=sys.stderr,end="") #真实命令的输出，不要有多余的换行
         INFO_LOG(gLogF,curFrm,f"真实命令错误输出【{err_out}】")
 
