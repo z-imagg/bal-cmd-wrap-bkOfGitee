@@ -15,8 +15,8 @@ from plumbum import local
 from pathlib import Path
 from lark_parser.file_at_cmd import FileAtCmd
 
-from common import __NoneOrLenEq0__,INFO_LOG,__NoneStr2Empty__,__list_filter_NoneEle_emptyStrEle__
-
+from common import __NoneOrLenEq0__, INFO_LOG, __NoneStr2Empty__, __list_filter_NoneEle_emptyStrEle__, \
+    __rm_Ls2_from_Ls__
 
 OkRetCode:int=0
 LineFeed_NF="\n"
@@ -41,6 +41,7 @@ clang-15: error: no input files
     if not __NoneOrLenEq0__(clang_err_out):
         matches = re.findall(clang_errOut__unknown_argument__re_pattern, clang_err_out)
         return matches
+    return None
 
 
 clang__errOut__unsupported_argument_to_option__re_pattern:str = r"clang-\d+: error: unsupported argument '([^']*)' to option '([^']*)'"
@@ -58,8 +59,76 @@ clang-15: error: unsupported argument '-mtune=generic32' to option '-Wa,'
         # matches ==  [('-mtune=generic32', '-Wa,')]
         kv_line_ls:List[str]= [f"{_[1]}{_[0]}" for _ in matches]
         return kv_line_ls # kv_line_ls==['-Wa,-mtune=generic32' ]
+    return None
 
-def __exec_clang_plugin_cmd__(gLogF,fileAtGccCmd:FileAtCmd, kvLs_skip:List[str]=None)->Tuple[int, str, str,str]:
+errOut__error_unknown_warning_option__re_pattern:str = r"error: unknown warning option '([^']*)'; did you mean '([^']*)'\? \[(.+),(.+)\]"
+def __parse_clang__errOut__error_unknown_warning_option__(clang_err_out:str)->List[str]:
+    """解析如下clang错误输出 中的 参数
+error: unknown warning option '-Wno-format-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wimplicit-fallthrough=5'; did you mean '-Wimplicit-fallthrough'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-stringop-truncation'; did you mean '-Wno-string-concatenation'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-stringop-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-restrict' [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-maybe-uninitialized'; did you mean '-Wno-uninitialized'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-alloc-size-larger-than'; did you mean '-Wno-frame-larger-than'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over-aligned'? [-Werror,-Wunknown-warning-option]
+:return:
+    以上输入，返回如下
+[
+ ('-Wno-format-overflow', '-Wno-shift-overflow',  '-Werror',  '-Wunknown-warning-option'),
+ ('-Wimplicit-fallthrough=5',  '-Wimplicit-fallthrough',  '-Werror',  '-Wunknown-warning-option'),
+ ('-Wno-stringop-truncation',  '-Wno-string-concatenation',   '-Werror', '-Wunknown-warning-option'),
+ ('-Wno-stringop-overflow',  '-Wno-shift-overflow',  '-Werror', '-Wunknown-warning-option'),
+ ('-Wno-maybe-uninitialized',  '-Wno-uninitialized',  '-Werror', '-Wunknown-warning-option'),
+ ('-Wno-alloc-size-larger-than', '-Wno-frame-larger-than', '-Werror', '-Wunknown-warning-option'),
+ ('-Wno-packed-not-aligned', '-Wno-over-aligned', '-Werror', '-Wunknown-warning-option')
+ ]
+    """
+    if  __NoneOrLenEq0__(clang_err_out): return None
+    if not __NoneOrLenEq0__(clang_err_out):
+        matches = re.findall(errOut__error_unknown_warning_option__re_pattern, clang_err_out)
+        # matches ==  [('-Wno-format-overflow', '-Wno-shift-overflow','-Werror','-Wunknown-warning-option')]
+        return matches
+    return None
+
+errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension__re_pattern:str = r"error: field '[^']*' with variable sized type '[^']*' not at the end of a struct or class is a GNU extension \[(.+),(.+)\]"
+def __parse_clang__errOut__xxx__val__(clang_err_out:str)->List[str]:
+    """解析如下clang错误输出 中的 参数
+./include/linux/cgroup-defs.h:509:16: error: field 'cgrp' with variable sized type 'struct cgroup' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        struct cgroup cgrp;
+                      ^
+In file included from arch/x86/kernel/asm-offsets.c:22:
+In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
+In file included from ./include/linux/kvm_host.h:45:
+In file included from ./arch/x86/include/asm/kvm_host.h:27:
+In file included from ./include/linux/hyperv.h:27:
+In file included from ./arch/x86/include/asm/hyperv-tlfs.h:638:
+./include/asm-generic/hyperv-tlfs.h:472:18: error: field 'hv_vp_set' with variable sized type 'struct hv_vpset' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        struct hv_vpset hv_vp_set;
+                        ^
+In file included from arch/x86/kernel/asm-offsets.c:22:
+In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
+In file included from ./include/linux/kvm_host.h:45:
+In file included from ./arch/x86/include/asm/kvm_host.h:27:
+./include/linux/hyperv.h:747:31: error: field 'info' with variable sized type 'struct vmbus_channel_msginfo' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        struct vmbus_channel_msginfo info;
+                                     ^
+./include/linux/hyperv.h:845:25: error: field 'close_msg' with variable sized type 'struct vmbus_close_msg' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        struct vmbus_close_msg close_msg;
+                               ^
+In file included from arch/x86/kernel/asm-offsets.c:22:
+In file included from arch/x86/kernel/../kvm/vmx/vmx.h:5:
+./include/linux/kvm_host.h:1747:24: error: field 'desc' with variable sized type 'struct kvm_stats_desc' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        struct kvm_stats_desc desc;
+:return:
+    以上输入，返回如下
+    ['-Wno-gnu-variable-sized-type-not-at-end']
+    TODO 调用者增加此选项
+    """
+    pass #TODO
+
+def __exec_clang_plugin_cmd__(gLogF,clKvLsAsStr:str)->Tuple[int, str, str,str]:
     import os
     curFrm:types.FrameType=inspect.currentframe()
 
@@ -69,9 +138,9 @@ def __exec_clang_plugin_cmd__(gLogF,fileAtGccCmd:FileAtCmd, kvLs_skip:List[str]=
 
     #  组装 clang 插件命令
     clang_plugin_so="/crk/clang-add-funcIdAsm/build/lib/libCTk.so"
-    as_clang_cmd_part:str=fileAtGccCmd.__as_clang_cmd_part__(kvLs_skip)
+    # as_clang_cmd_part:str=fileAtGccCmd.__as_clang_cmd_part__(kvLs_skip)
 
-    clang_plugin_cmd:str=f"-Xclang   -load -Xclang {clang_plugin_so}  -Xclang   -add-plugin -Xclang  CTk   {as_clang_cmd_part}"
+    clang_plugin_cmd:str=f"-Xclang   -load -Xclang {clang_plugin_so}  -Xclang   -add-plugin -Xclang  CTk   {clKvLsAsStr}"
 
     # 参数列表
     argLs:List[str]=\
@@ -87,12 +156,12 @@ def __exec_clang_plugin_cmd__(gLogF,fileAtGccCmd:FileAtCmd, kvLs_skip:List[str]=
 
     return retCode,std_out,err_out,cmd
 
-def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
+def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
     curFrm:types.FrameType=inspect.currentframe()
     # 调用本地主机ubuntu22x64上的clang-add-funcIdAsm插件修改本地源文件 , 源文件路径 、 头文件目录列表 、 各种选项 在 入参对象 fileAtCmd 中
 
-    if fileAtGccCmd.src_file is None or fileAtGccCmd.src_file=='/dev/null':
-        INFO_LOG(gLogF, curFrm, f"非关注源文件，不执行clang插件。src_file==【{__NoneStr2Empty__(fileAtGccCmd.src_file)}】")
+    if gccCmd.src_file is None or gccCmd.src_file== '/dev/null':
+        INFO_LOG(gLogF, curFrm, f"非关注源文件，不执行clang插件。src_file==【{__NoneStr2Empty__(gccCmd.src_file)}】")
         return
 
     #执行例子:
@@ -100,28 +169,34 @@ def clangAddFuncIdAsmWrap(fileAtGccCmd:FileAtCmd,gLogF):
     # print( clang["-c", "/crk/bochs/linux4-run_at_bochs/linux-4.14.259/arch/x86/boot/a20.c"]() ,file=of_stdout_cmd)
 
     #  组装 clang 插件命令
-    as_clang_cmd_part:str=fileAtGccCmd.__as_clang_cmd_part__()
+    gccCmd.__init_clang_argv__()
 
-    # 参数列表
-    retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd)
-    INFO_LOG(gLogF, curFrm, f"该clang命令及结果： cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+    # clKvLsAsStr:str=gccCmd.__asStr_kv_ls_for_clang__()
+
+    while True:
+        # 参数列表
+        retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF, gccCmd.__asStr_kv_ls_for_clang__())
+        INFO_LOG(gLogF, curFrm, f"该clang命令及结果： cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
 
 
-    if retCode == OkRetCode:
-        INFO_LOG(gLogF, curFrm, f"clang命令正常退出1,命令为:{cmd}")
-        return
-    # else :# 即 retCode != OkRetCode # 即 异常退出
-    INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
-    unknown_argument__val_ls:List[str]=__parse_clang__errOut__unknown_argument__val__(err_out)
-    unsupported_argument_to_option__val_ls:List[str]=__parse_clang__errOut__unsupported_argument_to_option__val__(err_out)
-
-    bad_kv_line_ls:List[str] = [*unknown_argument__val_ls, *unsupported_argument_to_option__val_ls]
-    #如果 clang报错 中 没有unknown argument ，则打印 并返回即可
-    if __NoneOrLenEq0__(bad_kv_line_ls):
-        INFO_LOG(gLogF, curFrm, "并未发现不支持选项,因此该clang命令的异常退出无法挽救")
-        INFO_LOG(gLogF, curFrm, f"clang命令异常退出1,命令为:{cmd}")
-        return retCode
-    else:
-        retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF,fileAtGccCmd,bad_kv_line_ls)
-        INFO_LOG(gLogF, curFrm, f"clang命令正常退出2,命令为:{cmd}" if retCode == OkRetCode else f"clang命令异常退出2,命令为:{cmd}")
-        INFO_LOG(gLogF, curFrm, f"发现不支持选项,去掉后再次执行, 新命令及结果:  cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+        if retCode == OkRetCode:
+            INFO_LOG(gLogF, curFrm, f"clang命令正常退出1,命令为:{cmd}")
+            return retCode
+        # else :# 即 retCode != OkRetCode # 即 异常退出
+        INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
+        #删除选项
+        unknown_argument__val_ls:List[str]=__parse_clang__errOut__unknown_argument__val__(err_out)
+        unsupported_argument_to_option__val_ls:List[str]=__parse_clang__errOut__unsupported_argument_to_option__val__(err_out)
+        bad_kv_line_ls:List[str] = [*unknown_argument__val_ls, *unsupported_argument_to_option__val_ls]
+        gccCmd.kv_ls_for_clang,_=__rm_Ls2_from_Ls__(gccCmd.kv_ls_for_clang,bad_kv_line_ls)
+        #
+        #如果 clang报错 中 没有unknown argument ，则打印 并返回即可
+        if __NoneOrLenEq0__(bad_kv_line_ls):
+            INFO_LOG(gLogF, curFrm, "并未发现不支持选项,因此该clang命令的异常退出无法挽救")
+            INFO_LOG(gLogF, curFrm, f"clang命令异常退出1,命令为:{cmd}")
+            return retCode
+        else:
+            continue
+            # retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF, gccCmd.__asStr_kv_ls_for_clang__())
+            # INFO_LOG(gLogF, curFrm, f"clang命令正常退出2,命令为:{cmd}" if retCode == OkRetCode else f"clang命令异常退出2,命令为:{cmd}")
+            # INFO_LOG(gLogF, curFrm, f"发现不支持选项,去掉后再次执行, 新命令及结果:  cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
