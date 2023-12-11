@@ -16,7 +16,7 @@ from pathlib import Path
 from lark_parser.file_at_cmd import FileAtCmd
 
 from common import __NoneOrLenEq0__, INFO_LOG, __NoneStr2Empty__, __list_filter_NoneEle_emptyStrEle__, \
-    __rm_Ls2_from_Ls__, __parse_clang__errOut__by__re_pattern___, __ifNone_toEmptyLs
+    __rm_Ls2_from_Ls__, __parse_clang__errOut__by__re_pattern___, __ifNone_toEmptyLs, __list_filter_NoneEle__
 
 OkRetCode:int=0
 LineFeed_NF="\n"
@@ -55,8 +55,8 @@ clang-15: error: unsupported argument '-mtune=generic32' to option '-Wa,'
         return kv_line_ls # kv_line_ls==['-Wa,-mtune=generic32' ]
     return None
 
-errOut__error_unknown_warning_option_did_you_mean__re_pattern:str = r"error: unknown warning option '([^']*)'; did you mean '([^']*)'\? \[(.+),(.+)\]"
-def __parse_clang__errOut__error_unknown_warning_option_did_you_mean_toDelMe__(clang_err_out:str)->List[str]:
+errOut__error_unknown_warning_option_did_you_mean__re_pattern:str = r"error: unknown warning option '([^']*)'; did you mean '([^']*)'\? \[(.+),\-W(.+)\]"
+def __parse_clang__errOut__error_unknown_warning_option_did_you_mean_toReplaceMe__(clang_err_out:str)->List[str]:
     """解析如下clang错误输出 中的 参数
 error: unknown warning option '-Wno-format-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
 error: unknown warning option '-Wimplicit-fallthrough=5'; did you mean '-Wimplicit-fallthrough'? [-Werror,-Wunknown-warning-option]
@@ -68,31 +68,39 @@ error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over
 :return:
     以上输入，正则匹配结果如下
 [
- ('-Wno-format-overflow', '-Wno-shift-overflow',  '-Werror',  '-Wunknown-warning-option'),
- ('-Wimplicit-fallthrough=5',  '-Wimplicit-fallthrough',  '-Werror',  '-Wunknown-warning-option'),
- ('-Wno-stringop-truncation',  '-Wno-string-concatenation',   '-Werror', '-Wunknown-warning-option'),
- ('-Wno-stringop-overflow',  '-Wno-shift-overflow',  '-Werror', '-Wunknown-warning-option'),
- ('-Wno-maybe-uninitialized',  '-Wno-uninitialized',  '-Werror', '-Wunknown-warning-option'),
- ('-Wno-alloc-size-larger-than', '-Wno-frame-larger-than', '-Werror', '-Wunknown-warning-option'),
- ('-Wno-packed-not-aligned', '-Wno-over-aligned', '-Werror', '-Wunknown-warning-option')
+ ('-Wno-format-overflow', '-Wno-shift-overflow',  '-Werror',  'unknown-warning-option'),
+ ('-Wimplicit-fallthrough=5',  '-Wimplicit-fallthrough',  '-Werror',  'unknown-warning-option'),
+ ('-Wno-stringop-truncation',  '-Wno-string-concatenation',   '-Werror', 'unknown-warning-option'),
+ ('-Wno-stringop-overflow',  '-Wno-shift-overflow',  '-Werror', 'unknown-warning-option'),
+ ('-Wno-maybe-uninitialized',  '-Wno-uninitialized',  '-Werror', 'unknown-warning-option'),
+ ('-Wno-alloc-size-larger-than', '-Wno-frame-larger-than', '-Werror', 'unknown-warning-option'),
+ ('-Wno-packed-not-aligned', '-Wno-over-aligned', '-Werror', 'unknown-warning-option')
  ]
  返回如下：
- ['-Wno-format-overflow', '-Wimplicit-fallthrough=5', '-Wno-stringop-truncation', '-Wno-stringop-overflow', '-Wno-maybe-uninitialized' ,'-Wno-alloc-size-larger-than', '-Wno-packed-not-aligned']
+ [
+ ('-Wno-format-overflow','-Wno-unknown-warning-option'), #表示 把 前者 替换为 后者，下同
+ ('-Wimplicit-fallthrough=5','-Wno-unknown-warning-option'),
+ ('-Wno-stringop-truncation','-Wno-unknown-warning-option'),
+ ('-Wno-stringop-overflow','-Wno-unknown-warning-option'),
+ ('-Wno-maybe-uninitialized' ,'-Wno-unknown-warning-option'),
+ ('-Wno-alloc-size-larger-than','-Wno-unknown-warning-option'),
+ ('-Wno-packed-not-aligned','-Wno-unknown-warning-option')
+ ]
     """
     # matches ==  [('-Wno-format-overflow', '-Wno-shift-overflow','-Werror','-Wunknown-warning-option')]
     matches= __parse_clang__errOut__by__re_pattern___(clang_err_out,errOut__error_unknown_warning_option_did_you_mean__re_pattern)
     if __NoneOrLenEq0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 4
-    secondLs= [_[0] for _ in matches]
+    replaceLs= __list_filter_NoneEle__([(_[0],f"-Wno-{_[3]}") if _[2] == '-Werror' else None for _ in matches])
     #去重
-    secondLs=list(set(secondLs))
+    replaceLs=list(set(replaceLs))
     #secondLs==['-Wno-format-overflow', '-Wimplicit-fallthrough=5', '-Wno-stringop-truncation', '-Wno-stringop-overflow', '-Wno-maybe-uninitialized' ,'-Wno-alloc-size-larger-than', '-Wno-packed-not-aligned']
-    return secondLs
+    return replaceLs
 
 
-errOut__error_unknown_warning_option__re_pattern:str = r"error: unknown warning option '([^']*)' \[(.+),(.+)\]"
-def __parse_clang__errOut__error_unknown_warning_option_toDelMe__(clang_err_out:str)->List[str]:
+errOut__error_unknown_warning_option__re_pattern:str = r"error: unknown warning option '([^']*)' \[(.+),\-W(.+)\]"
+def __parse_clang__errOut__error_unknown_warning_option_toReplaceMe__(clang_err_out:str)->List[str]:
     """解析如下clang错误输出 中的 参数
 error: unknown warning option '-Wno-restrict' [-Werror,-Wunknown-warning-option]
 error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warning-option]
@@ -104,18 +112,25 @@ error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warni
  ]
 
  返回如下：
- ['-Wno-restrict', '-Werror=designated-init' ]
+ [
+ ('-Wno-restrict','-Wno-unknown-warning-option'),
+ ('-Werror=designated-init','-Wno-unknown-warning-option')
+ ]
     """
     # matches ==  [('-Wno-format-overflow', '-Wno-shift-overflow','-Werror','-Wunknown-warning-option')]
     matches= __parse_clang__errOut__by__re_pattern___(clang_err_out,errOut__error_unknown_warning_option__re_pattern)
     if __NoneOrLenEq0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 3
-    secondLs= [_[0] for _ in matches]
+    replaceLs= __list_filter_NoneEle__([(_[0],f"-Wno-{_[3]}") if _[2] == '-Werror' else None for _ in matches])
     #去重
-    secondLs=list(set(secondLs))
-    #secondLs== ['-Wno-restrict', '-Werror=designated-init' ]
-    return secondLs
+    replaceLs=list(set(replaceLs))
+    # replaceLs==[
+ # ('-Wno-restrict','-Wno-unknown-warning-option'),
+ # ('-Werror=designated-init','-Wno-unknown-warning-option')
+ # ]
+
+    return replaceLs
 
 
 errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension__re_pattern:str = r"error: field '[^']*' with variable sized type '[^']*' not at the end of a struct or class is a GNU extension \[(.+),\-W(.+)\]"
@@ -222,14 +237,14 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
 
     # clKvLsAsStr:str=gccCmd.__asStr_kv_ls_for_clang__()
 
-    k=0
+    kvJ=0
     while True:
-        k+=1
+        kvJ+=1
         kv_ls_for_clang__prev=[*gccCmd.kv_ls_for_clang]
         # 参数列表
         retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF, gccCmd.__asStr_kv_ls_for_clang__())
         retCodeMsg=f"clang命令正常退出" if retCode == OkRetCode else f"clang命令异常退出"
-        INFO_LOG(gLogF, curFrm, f"第{k}次执行clang命令,{retCodeMsg}, cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+        INFO_LOG(gLogF, curFrm, f"第{kvJ}次执行clang命令,{retCodeMsg}, cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
 
 
         if retCode == OkRetCode:
@@ -241,10 +256,20 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         #clang 的 kv列表 改进1: 删除选项（删除报错文本中的选项）
         _1_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__unknown_argument__toDelMe__(err_out))
         _2_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__unsupported_argument_to_option_toDelMel__(err_out))
-        _3_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_unknown_warning_option_did_you_mean_toDelMe__(err_out))
-        _4_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_unknown_warning_option_toDelMe__(err_out))
-        kv_ls_toDel:List[str] = [*_1_kv_ls_toDel, *_2_kv_ls_toDel,*_3_kv_ls_toDel,*_4_kv_ls_toDel]
+        kv_ls_toDel:List[str] = [*_1_kv_ls_toDel, *_2_kv_ls_toDel]
         gccCmd.kv_ls_for_clang,_=__rm_Ls2_from_Ls__(gccCmd.kv_ls_for_clang,kv_ls_toDel)
+
+
+        _3_kv_ls_toReplace:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_unknown_warning_option_did_you_mean_toReplaceMe__(err_out))
+        _4_kv_ls_toReplace:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_unknown_warning_option_toReplaceMe__(err_out))
+        # __replace_Ls__(gccCmd.kv_ls_for_clang,_3_kv_ls_toReplace)
+        # __replace_Ls__(gccCmd.kv_ls_for_clang,_4_kv_ls_toReplace)
+        # A=[ a for a,b in _3_kv_ls_toReplace]
+        # B = [b for a, b in _3_kv_ls_toReplace]
+        # for j,kvJ in enumerate (gccCmd.kv_ls_for_clang):
+        #     if kvJ in A :
+        #         gccCmd.kv_ls_for_clang[j]=B[A.index(kvJ)]
+
 
         #clang 的 kv列表 改进2: 添加选项（添加 报错文本中的选项的加前缀no-所得选项）
         _5_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(err_out))
@@ -253,7 +278,7 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
 
         #clang kv列表 没变化, 说明 没有改进余地, 结束循环.
         if sorted(kv_ls_for_clang__prev)==sorted(gccCmd.kv_ls_for_clang):
-            INFO_LOG(gLogF, curFrm, f"第{k}次执行clang命令,从errOut中没有改进clang选项,clang命令异常退出无法挽救,命令为:{cmd}")
+            INFO_LOG(gLogF, curFrm, f"第{kvJ}次执行clang命令,从errOut中没有改进clang选项,clang命令异常退出无法挽救,命令为:{cmd}")
             return retCode
         else:
             continue

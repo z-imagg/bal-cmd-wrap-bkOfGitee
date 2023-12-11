@@ -15,6 +15,27 @@ def __parse_clang__errOut__by__re_pattern___(clang_err_out:str, re_pattern:str)-
         return matches
     return None
 
+def __replace_Ls__(ls:List[str], replacer:List[Tuple[str, str]]) -> Tuple[List[Any], bool]:
+    """
+举例:
+ls=['xxx','yyy','zzz']
+replacer=[('xxx','111'),('yyy','222'),('zzz','333')]
+__replace_Ls__(ls,replacer)
+#ls:['111', '222', '333']
+    :param ls:
+    :param replacer:
+    :return:
+    """
+    if  __NoneOrLenEq0__(ls): return
+    if  __NoneOrLenEq0__(replacer): return
+    A = [a for a, b in replacer]
+    B = [b for a, b in replacer]
+    for j, kvJ in enumerate(ls):
+        if kvJ in A:
+            ls[j] = B[A.index(kvJ)]
+
+    return
+
 def __rm_Ls2_from_Ls__( ls:List[Any], ls2:List[Any]) -> Tuple[List[Any],bool]:
     if ls2 is None:
         return ls
@@ -33,6 +54,12 @@ def __NoneStr2Empty__(string: str):
 
 def __NoneOrLenEq0__(x:Any):
     return x is None or len(x) == 0
+
+def __list_filter_NoneEle__(ls:List[Any])->List[Any]:
+    if ls is None or len(ls) == 0 : return ls
+    filter_=filter(lambda elemK:   elemK is not None  , ls)
+    result_ls=list(filter_)
+    return result_ls
 
 def __list_filter_NoneEle_emptyStrEle__(ls:List[Any])->List[Any]:
     if ls is None or len(ls) == 0 : return ls
