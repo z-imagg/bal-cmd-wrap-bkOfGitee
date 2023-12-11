@@ -18,6 +18,8 @@ from common import __NoneOrLenLe0__,INFO_LOG
 def execute_script_file(gLogF,scriptFile:Path,args:()=[])->Tuple[int,str,str]:
     curFrm:types.FrameType=inspect.currentframe()
 
+    INFO_LOG(gLogF, curFrm, f"执行脚本文件： 脚本文件:【{scriptFile}】,参数:【{' '.join(args)}】  ")
+    
     scriptF: plumbum.machines.LocalCommand = local.get(scriptFile)
     retCode, std_out, err_out = scriptF.run(args=args)
 
