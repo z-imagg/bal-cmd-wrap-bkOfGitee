@@ -3,7 +3,7 @@
 start: gcc_cmd
 
 ///////////非终结符
-gcc_cmd: gcc_cmd_1  | gcc_cmd_3 | gcc_cmd_2 | gcc_cmd_4| gcc_cmd_5 | gcc_cmd_6
+gcc_cmd: gcc_cmd_1  | gcc_cmd_3 | gcc_cmd_2 | gcc_cmd_4| gcc_cmd_5 | gcc_cmd_6 | gcc_cmd_7
 //gcc_cmd: lark 将 先 gcc_cmd_1 后 gcc_cmd_3
 gcc_cmd_1: program kv_ls src_file
 //gcc_cmd_1: gcc编译源代码命令，比如 gcc -c -o User.o User.c, 其中 src_file 就是 User.c
@@ -15,6 +15,8 @@ gcc_cmd_5: program kv_ls src_file kv_ls
 //gcc_cmd_5: 源文件在中间，末尾依然是选项
 gcc_cmd_6: program kv_ls input_is_std_in kv_ls
 //gcc_cmd_6: 源文件在中间，源文件为 终端输入
+gcc_cmd_7: program kv_ls input_is_std_in kv_ls kv_o_std_out
+//gcc_cmd_7: 源文件在中间，源文件为 终端输入, 末尾 指定了 '-o -' 即 输出到 标准输出（屏幕）
 gcc_cmd_3: program kv_ls file+
 //gcc_cmd_3: gcc链接命令 ； 比如  多个.o文件 链接为 单个.so 文件 ，具体例子 比如  gcc -o xxx.so User.o Util.o Price.o，其中 file+ 就是 【Util.o Price.o】
 
@@ -52,6 +54,7 @@ kv_w__valany: ARG_W w_val
 kv_w_eq_valany: ARG_W SEP_EQ w_eq_val
 kv_f__valany: ARG_F f_val
 kv_f_eq_valany: ARG_F SEP_EQ f_eq_val
+kv_o_std_out: ARG_O SEP_SPC DASH
 
 //选项的名字
 key: KEY
@@ -91,6 +94,7 @@ ARG_ISYSTEM: "-isystem"
 KEY: "-" ("-")? (L|D) ("-"|"_"|L|D)*
 // KEY的定义中 末尾部分 '("-"|"_"|L|D)*' 如果少了 中划线 会导致   lack文法 linux_cmd.lark  bug : -Wno-trigraphs  错误的 被按-拆开成两个选项 -Wno 和 -trigraphs
 DASH : "-"
+ARG_O: "-o"
 
 ///选项的值
 D_XX_EQ_VAL: VAL_NORMAL_NO_EQ SEP_EQ VAL_ANY
