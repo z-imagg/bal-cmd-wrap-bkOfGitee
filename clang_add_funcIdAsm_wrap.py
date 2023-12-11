@@ -13,6 +13,8 @@ import plumbum
 from plumbum import local
 # from plumbum.commands.processes import PIPE
 from pathlib import Path
+
+from interceptor_util import execute_script_file
 from lark_parser.file_at_cmd import FileAtCmd
 
 from common import __NoneOrLenLe0__, INFO_LOG, __NoneStr2Empty__, __list_filter_NoneEle_emptyStrEle__, \
@@ -246,9 +248,7 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
 
     # clKvLsAsStr:str=gccCmd.__asStr_kv_ls_for_clang__()
 
-    kvJ=0
-    while True:
-        kvJ+=1
+    for kvJ in range(20):#最多尝试20次
         kv_ls_for_clang__prev=[*gccCmd.kv_ls_for_clang]
         # 参数列表
         retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF, gccCmd.__asStr_kv_ls_for_clang__())
@@ -319,6 +319,23 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         _7_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe_2__(
             r"error: mixing declarations and code is incompatible with standards before C99 \[(.+),\-W(.+)\]",
             err_out))
+
+        unknown_type_name_ls:List[str] = __parse_clang__errOut__by__re_pattern___(err_out, r"unknown type name '([^']*)'")
+        if not __NoneOrLenLe0__(unknown_type_name_ls):
+            for unknown_type_name_k in unknown_type_name_ls:
+                retCode, std_out, err_out = execute_script_file(gLogF, "/crk/cmd-wrap/find_grep.sh",["/crk/linux-stable/",unknown_type_name_k])
+                if retCode == OkRetCode:
+                    headFLs:List[str]=std_out.split("\n")
+                    for headFK in headFLs:
+                        include_headFK:str=f"-include {headFK}"
+                        if headFK.startswith("/crk/linux-stable/arch/"):
+                            if headFK.startswith("/crk/linux-stable/arch/x86") or headFK.startswith("/crk/linux-stable/arch/i386"):
+                                gccCmd.kv_ls_for_clang.append(include_headFK)
+                        else:
+                            gccCmd.kv_ls_for_clang.append(include_headFK)
+                else:
+                    INFO_LOG(gLogF, curFrm, f"报错，find_grep.sh脚本有问题,参数为:{unknown_type_name_k}")
+
 
         gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_5_kv_ls_toAdd,*_6_kv_ls_toAdd,*_7_kv_ls_toAdd]))
 
