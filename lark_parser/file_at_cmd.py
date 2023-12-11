@@ -93,7 +93,9 @@ class FileAtCmd:
 
 
     def __str__(self):
-        return self.__asStr_kv_ls_for_clang__()
+        _kv_ls_for_clang=self.__init_clang_argv__()
+        __assert_notNone_lenBT0__(_kv_ls_for_clang)
+        return ' '.join(_kv_ls_for_clang)
 
     def __init_clang_argv__(self)->None:
 
@@ -136,7 +138,7 @@ kv_m_dd, kv_m_arch, kv_std,
 *kv_isystem_val_ls, *kv_inc_val_ls,  *kv_sep_inc_val_ls,   *kv_sep_include_val_ls,
 f"-c {_srcFile}"]
 
-        return
+        return self.kv_ls_for_clang
 
 
     def __asStr_kv_ls_for_clang__(self)->str:
