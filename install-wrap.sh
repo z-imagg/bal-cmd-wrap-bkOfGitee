@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+source /crk/bochs/bash-simplify/dir_util.sh
+
 #建立 目录cmd-wrap  软连接
 { [   -e /crk/cmd-wrap ] || ln -s /crk/bochs/cmd-wrap /crk/cmd-wrap ;} && \
 
@@ -24,10 +26,9 @@ export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 #export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 #' | tee -a $BashRcF ;}
 
-#重命名上一次的日志文件
-InterceptorLogF=/crk/g-0.log
-UniqueId="$InterceptorLogF-$(date +'%Y%m%d%H%M%S_%s_%N')"
-[ -f $InterceptorLogF ] && mv $InterceptorLogF "$InterceptorLogF_$UniqueId"
+#重命名上一次的日志文件们
+gFLs=$(ls /crk/g-{0..10}.log 2>/dev/null) && \
+mvFile_AppendCurAbsTime_multi $gFLs && \
 
 #记录初始的环境变量名字列表
 chmod +x /crk/cmd-wrap/env-diff-show.sh
