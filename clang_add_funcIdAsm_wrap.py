@@ -134,6 +134,24 @@ error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warni
     return replaceLs
 
 
+def __parse_clang__errOut__addPrefixNo_toAddMe__(errOut__re_pattern,clang_err_out:str)->List[str]:
+    matches= __parse_clang__errOut__by__re_pattern___(clang_err_out, errOut__re_pattern)
+#     比如: matches=[
+# ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+# ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+# ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+# ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+# ('-Werror', 'gnu-variable-sized-type-not-at-end')
+# ]
+    if __NoneOrLenEq0__(matches):
+        return None
+    assert len(matches) >=1 and len(matches[0]) == 2
+    kLs= [f"-Wno-{_[1]}" for _ in matches]
+    #去重
+    kLs=list(set(kLs))
+    #kLs==['-Wno-gnu-variable-sized-type-not-at-end']
+    return kLs
+
 errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension__re_pattern:str = r"error: field '[^']*' with variable sized type '[^']*' not at the end of a struct or class is a GNU extension \[(.+),\-W(.+)\]"
 def __parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(clang_err_out:str)->List[str]:
     """解析如下clang错误输出 中的 参数
@@ -172,30 +190,6 @@ def __parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_t
     return kLs
 
 
-errOut__error_call_to_undeclared_function_xxx_ISO_C99_and_later_do_not_support_implicit_function_declarations__re_pattern:str = r"error: call to undeclared function '[^']*'; ISO C99 and later do not support implicit function declarations \[\-W(.+)\]"
-def __parse_clang__error_call_to_undeclared_function_xxx_ISO_C99_and_later_do_not_support_implicit_function_declarations_addPrefixNo_toAddMe__(clang_err_out:str)->List[str]:
-    """解析如下clang错误输出 中的 参数
-./arch/x86/include/asm/processor.h:690:2: error: call to undeclared function 'rdmsrl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-:return:
-    以上输入，正则匹配结果matches如下
-[
--Wimplicit-function-declaration
-]
-返回如下:
-['-Wno-implicit-function-declaration']
-    """
-    matches= __parse_clang__errOut__by__re_pattern___(clang_err_out, errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension__re_pattern)
-#     matches=[
-# -Wimplicit-function-declaration
-# ]
-    if __NoneOrLenEq0__(matches):
-        return None
-    assert len(matches) >=1 and len(matches[0]) == 2
-    kLs= [f"-Wno-{_[1]}" for _ in matches]
-    #去重
-    kLs=list(set(kLs))
-    #secondLs==['-Wno-gnu-variable-sized-type-not-at-end']
-    return kLs
 
 
 def __exec_clang_plugin_cmd__(gLogF,clKvLsAsStr:str)->Tuple[int, str, str,str]:
@@ -274,10 +268,50 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang]))
 
         #clang 的 kv列表 改进3: 添加选项（添加 报错文本中的选项的加前缀no-所得选项）
-        _5_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_the_end_of_a_struct_or_class_is_a_GNU_extension_addPrefixNo_toAddMe__(err_out))
-        _6_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__error_call_to_undeclared_function_xxx_ISO_C99_and_later_do_not_support_implicit_function_declarations_addPrefixNo_toAddMe__(err_out))
-        gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_5_kv_ls_toAdd,*_6_kv_ls_toAdd]))
+        """解析如下clang错误输出 中的 参数
+        ./include/linux/cgroup-defs.h:509:16: error: field 'cgrp' with variable sized type 'struct cgroup' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        ./include/asm-generic/hyperv-tlfs.h:472:18: error: field 'hv_vp_set' with variable sized type 'struct hv_vpset' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        ./include/linux/hyperv.h:747:31: error: field 'info' with variable sized type 'struct vmbus_channel_msginfo' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        ./include/linux/hyperv.h:845:25: error: field 'close_msg' with variable sized type 'struct vmbus_close_msg' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        ./include/linux/kvm_host.h:1747:24: error: field 'desc' with variable sized type 'struct kvm_stats_desc' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        :return:
+            以上输入，正则匹配结果matches如下
+        [
+        ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+        ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+        ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+        ('-Werror', 'gnu-variable-sized-type-not-at-end'),
+        ('-Werror', 'gnu-variable-sized-type-not-at-end')
+        ]
+        # 去重
+        返回如下:
+        ['-Wno-gnu-variable-sized-type-not-at-end']
+            """
+        _5_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe__(
+            r"error: field '[^']*' with variable sized type '[^']*' not at the end of a struct or class is a GNU extension \[(.+),\-W(.+)\]",
+            err_out ))
+        """解析如下clang错误输出 中的 参数
+        ./arch/x86/include/asm/processor.h:690:2: error: call to undeclared function 'rdmsrl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+        :return:
+            以上输入，正则匹配结果matches如下
+        [
+        -Wimplicit-function-declaration
+        ]
+        返回如下:
+        ['-Wno-implicit-function-declaration']
+            """
+        _6_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe__(
+            r"error: call to undeclared function '([^']*)'; ISO C99 and later do not support implicit function declarations \[\-W(.+)\]",
+            err_out))
+        """
+        arch/x86/kernel/fpu/bugs.c:28:6: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
+加 -Wno-declaration-after-statement
+        """
+        _7_kv_ls_toAdd:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__addPrefixNo_toAddMe__(
+            r"error: mixing declarations and code is (incompatible) with standards before C99 \[(.+),\-W(.+)\]",
+            err_out))
 
+        gccCmd.kv_ls_for_clang=list(set([*gccCmd.kv_ls_for_clang,*_5_kv_ls_toAdd,*_6_kv_ls_toAdd,*_7_kv_ls_toAdd]))
 
         #clang kv列表 没变化, 说明 没有改进余地, 结束循环.
         if sorted(kv_ls_for_clang__prev)==sorted(gccCmd.kv_ls_for_clang):
