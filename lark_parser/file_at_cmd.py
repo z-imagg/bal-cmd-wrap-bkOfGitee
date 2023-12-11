@@ -93,7 +93,7 @@ class FileAtCmd:
 
 
     def __str__(self):
-        return self.__as_clang_cmd_part__()
+        return self.__asStr_kv_ls_for_clang__()
 
     def __init_clang_argv__(self)->None:
 
