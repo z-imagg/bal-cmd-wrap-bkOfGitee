@@ -323,6 +323,9 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         unknown_type_name_ls:List[str] = __parse_clang__errOut__by__re_pattern___(err_out, r"unknown type name '([^']*)'")
         if not __NoneOrLenLe0__(unknown_type_name_ls):
             for unknown_type_name_k in unknown_type_name_ls:
+                if len(unknown_type_name_k) <= 5:
+                    INFO_LOG(gLogF, curFrm, f"跳过短unknown_type_name_k:{unknown_type_name_k}")
+                    continue
                 retCode, std_out, err_out = execute_script_file(gLogF, "/crk/cmd-wrap/find_grep.sh",["/crk/linux-stable/",unknown_type_name_k])
                 if retCode == OkRetCode:
                     headFLs:List[str]=std_out.split("\n")
