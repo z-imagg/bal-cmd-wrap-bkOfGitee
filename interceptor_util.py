@@ -15,7 +15,7 @@ from plumbum import local
 import plumbum
 from common import __NoneOrLenLe0__,INFO_LOG
 
-def execute_script_file(gLogF,scriptFile:Path,args:()=None)->Tuple[int,str,str]:
+def execute_script_file(gLogF,scriptFile:Path,args:()=[])->Tuple[int,str,str]:
     curFrm:types.FrameType=inspect.currentframe()
 
     scriptF: plumbum.machines.LocalCommand = local.get(scriptFile)
