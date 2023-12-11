@@ -30,6 +30,9 @@ export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 gFLs=$(find /crk/  -maxdepth 1  -regex '/crk/g-[0-9]+\.log' | xargs -I% echo -n "% ") && \
 mvFile_AppendCurAbsTime_multi $gFLs && \
 
+#find_grep.sh
+chmod +x  /crk/bochs/cmd-wrap/find_grep.sh
+
 #记录初始的环境变量名字列表
 chmod +x /crk/cmd-wrap/env-diff-show.sh
 ignore_env_name_list_f=/crk/.ignore_env_name_list.txt
