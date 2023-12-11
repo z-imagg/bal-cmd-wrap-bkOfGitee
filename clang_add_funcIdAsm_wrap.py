@@ -16,7 +16,7 @@ from pathlib import Path
 from lark_parser.file_at_cmd import FileAtCmd
 
 from common import __NoneOrLenEq0__, INFO_LOG, __NoneStr2Empty__, __list_filter_NoneEle_emptyStrEle__, \
-    __rm_Ls2_from_Ls__, __parse_clang__errOut__by__re_pattern___
+    __rm_Ls2_from_Ls__, __parse_clang__errOut__by__re_pattern___, __ifNone_toEmptyLs
 
 OkRetCode:int=0
 LineFeed_NF="\n"
@@ -213,9 +213,9 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
         # INFO_LOG(gLogF, curFrm, f"clang命令异常退出,退出码【{retCode}】")
 
         #clang 的 kv列表 改进1: 删除选项（删除报错文本中的选项）
-        _1_kv_ls_toDel:List[str]=__parse_clang__errOut__unknown_argument__toDelMe__(err_out)
-        _2_kv_ls_toDel:List[str]=__parse_clang__errOut__unsupported_argument_to_option_toDelMel__(err_out)
-        _3_kv_ls_toDel:List[str]=__parse_clang__errOut__error_unknown_warning_option_toDelMe__(err_out)
+        _1_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__unknown_argument__toDelMe__(err_out))
+        _2_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__unsupported_argument_to_option_toDelMel__(err_out))
+        _3_kv_ls_toDel:List[str]=__ifNone_toEmptyLs(__parse_clang__errOut__error_unknown_warning_option_toDelMe__(err_out))
         kv_ls_toDel:List[str] = [*_1_kv_ls_toDel, *_2_kv_ls_toDel,*_3_kv_ls_toDel]
         gccCmd.kv_ls_for_clang,_=__rm_Ls2_from_Ls__(gccCmd.kv_ls_for_clang,kv_ls_toDel)
 

@@ -2,6 +2,10 @@ from typing import Any, List, Tuple
 import types
 import inspect
 
+def __ifNone_toEmptyLs(ls:List[Any]):
+    if ls is None: return []
+    return ls
+
 def __parse_clang__errOut__by__re_pattern___(clang_err_out:str, re_pattern:str)->List[str]:
     import re
     if  __NoneOrLenEq0__(clang_err_out): return None
