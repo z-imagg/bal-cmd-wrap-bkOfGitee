@@ -16,5 +16,5 @@ word=$2
 resultCacheF=/tmp/find_grep_cache__$word && \
 { [ -f $resultCacheF ] && cat $resultCacheF ;} ||
 #如果缓存结果存在, 则直接使用缓存作为结果 返回即可
-{ find $dir -not -path "./.git/*"   -name "*.h" | xargs -I% sh -c "grep -Hn   $word  % | egrep '#[[:space:]]*define ${word}|typedef[[:space:]]+.+[[:space:]]+${word}[[:space:]]*'  "| cut -d ':' -f1 > $resultCacheF ;}
+{ find $dir -not -path "./.git/*"   -name "*.h" | xargs -I% sh -c "grep -Hn   $word  % | egrep '#[[:space:]]*define ${word}[[:space:]]+|typedef[[:space:]]+.+[[:space:]]+${word}[[:space:]]*'  "| cut -d ':' -f1 > $resultCacheF ;}
 #否则 执行 find_grep 并 将结果存入 缓存文件
