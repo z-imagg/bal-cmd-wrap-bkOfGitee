@@ -251,7 +251,9 @@ def clangAddFuncIdAsmWrap(gccCmd:FileAtCmd, gLogF):
     for kvJ in range(20):#最多尝试20次
         kv_ls_for_clang__prev=[*gccCmd.kv_ls_for_clang]
         # 参数列表
-        retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF, gccCmd.__asStr_kv_ls_for_clang__())
+        asStr_kv_ls_for_clang=gccCmd.__asStr_kv_ls_for_clang__()
+        INFO_LOG(gLogF, curFrm, f"第{kvJ}次执行clang命令前, asStr_kv_ls_for_clang:【{asStr_kv_ls_for_clang}】")
+        retCode,std_out,err_out,cmd=__exec_clang_plugin_cmd__(gLogF, asStr_kv_ls_for_clang)
         retCodeMsg=f"clang命令正常退出" if retCode == OkRetCode else f"clang命令异常退出"
         INFO_LOG(gLogF, curFrm, f"第{kvJ}次执行clang命令,{retCodeMsg}, cmd:【{cmd}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
 
