@@ -1,0 +1,58 @@
+
+原命令:
+/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang -Xclang -load -Xclang /crk/clang-add-funcIdAsm/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk -Wdeclaration-after-statement -include ./include/linux/kconfig.h -Wno-stringop-truncation -Wcast-function-type -Wno-stringop-overflow -march=i686 -m32 -Werror=return-type -Wno-format-security -fno-pic -fno-asynchronous-unwind-tables -fstack-protector-strong -DKBUILD_BASENAME="bugs" -Wundef -Wp,-MMD,arch/x86/kernel/fpu/.bugs.o.d -fno-stack-clash-protection -Werror=strict-prototypes -D__KBUILD_MODNAME=kmod_bugs -I./arch/x86/include/generated/uapi -Wvla -c arch/x86/kernel/fpu/bugs.c -I./arch/x86/include/uapi -include ./include/linux/compiler_types.h -fno-delete-null-pointer-checks -include ./include/linux/compiler-version.h -fno-PIE -Wno-trigraphs -fno-omit-frame-pointer -D__KERNEL__ -Werror -fmacro-prefix-map=./= -Wno-packed-not-aligned -Wno-unused-but-set-variable -Wno-alloc-size-larger-than -Wno-address-of-packed-member -Wall -Werror=date-time -freg-struct-return -Wno-format-truncation -Werror=incompatible-pointer-types -I./include/generated/uapi -DKBUILD_MODFILE="arch/x86/kernel/fpu/bugs" -Wframe-larger-than=1024 -Werror=implicit-function-declaration -Werror=implicit-int -fno-jump-tables -Wno-unused-const-variable -Wno-restrict -I./include -std=gnu11 -ffreestanding -fno-strict-overflow -Wno-pointer-sign -Wno-main -I./arch/x86/include -DKBUILD_MODNAME="bugs" -Wno-sign-compare -Wno-frame-address -Wno-maybe-uninitialized -fcf-protection=none -Werror=designated-init -fno-optimize-sibling-calls -I./arch/x86/include/generated -I./include/uapi -Wimplicit-fallthrough=5 -fno-stack-check -fno-common -Wno-format-overflow -fno-strict-aliasing -fshort-wchar
+
+1. 
+ 【
+error: unknown warning option '-Wno-stringop-truncation'; did you mean '-Wno-string-concatenation'? [-Werror,-Wunknown-warning-option]
+解释 gcc的 -Wno-stringop-truncation   ==   clang的 -Werror,-Wunknown-warning-option, 因此 将 -Werror,-Wunknown-warning-option 反转成 -Wno-unknown-warning-option
+以下类似，不再赘述
+error: unknown warning option '-Wno-stringop-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over-aligned'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-alloc-size-larger-than'; did you mean '-Wno-frame-larger-than'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-format-truncation' [-Werror,-Wunknown-warning-option]
+解释 gcc的 -Wno-format-truncation   ==   clang的 -Werror,-Wunknown-warning-option, 因此 将 -Werror,-Wunknown-warning-option 反转成 -Wno-unknown-warning-option
+error: unknown warning option '-Wno-restrict' [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-maybe-uninitialized'; did you mean '-Wno-uninitialized'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wimplicit-fallthrough=5'; did you mean '-Wimplicit-fallthrough'? [-Werror,-Wunknown-warning-option]
+error: unknown warning option '-Wno-format-overflow'; did you mean '-Wno-shift-overflow'? [-Werror,-Wunknown-warning-option]
+】
+解决:
+换成 -Wno-unknown-warning-option
+
+2. 
+./arch/x86/include/asm/processor.h:690:2: error: call to undeclared function 'rdmsrl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+加 -Wno-implicit-function-declaration
+
+3. 
+arch/x86/kernel/fpu/bugs.c:28:6: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
+加 -Wno-declaration-after-statement
+
+4. 
+./include/linux/types.h:70:9: error: unknown type name '__kernel_clock_t'
+
+z@x:/crk/linux-stable$ find . -not -path "./.git/*"   -name "*.h" | xargs -I% grep -Hn   __kernel_clockid_t  %
+./include/uapi/asm-generic/posix_types.h:96:typedef int         __kernel_clockid_t;
+./include/uapi/linux/net_tstamp.h:200:  __kernel_clockid_t      clockid;/* reference clockid */
+./include/linux/types.h:27:typedef __kernel_clockid_t   clockid_t;
+
+加:
+ -include ./include/uapi/asm-generic/posix_types.h 
+
+5. 
+./arch/x86/include/asm/processor.h:257:31: error: use of undeclared identifier 'CR3_ADDR_MASK'
+
+find . -not -path "./.git/*"   -name "*.h" | xargs -I% grep -Hn   CR3_ADDR_MASK  %
+./arch/x86/include/asm/processor-flags.h:34: * CR3_ADDR_MASK is the mask used by read_cr3_pa().
+./arch/x86/include/asm/processor-flags.h:38:#define CR3_ADDR_MASK       __sme_clr(0x7FFFFFFFFFFFF000ull)
+./arch/x86/include/asm/processor-flags.h:44: * CR3_ADDR_MASK needs at least bits 31:5 set on PAE systems, and we save
+./arch/x86/include/asm/processor-flags.h:47:#define CR3_ADDR_MASK       0xFFFFFFFFull
+./arch/x86/include/asm/processor.h:252: return __read_cr3() & CR3_ADDR_MASK;
+./arch/x86/include/asm/processor.h:257: return __native_read_cr3() & CR3_ADDR_MASK;
+
+加:
+ -include ./arch/x86/include/asm/processor-flags.h
+
+改后命令：（正常编译）
+/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang -Xclang -load -Xclang /crk/clang-add-funcIdAsm/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk -Wdeclaration-after-statement -include ./include/linux/kconfig.h -Wno-stringop-truncation -Wcast-function-type   -march=i686 -m32 -Werror=return-type -Wno-format-security -fno-pic -fno-asynchronous-unwind-tables -fstack-protector-strong -DKBUILD_BASENAME="bugs" -Wundef -Wp,-MMD,arch/x86/kernel/fpu/.bugs.o.d -fno-stack-clash-protection -Werror=strict-prototypes -D__KBUILD_MODNAME=kmod_bugs -I./arch/x86/include/generated/uapi -Wvla -c arch/x86/kernel/fpu/bugs.c -I./arch/x86/include/uapi -include ./include/linux/compiler_types.h -fno-delete-null-pointer-checks -include ./include/linux/compiler-version.h -fno-PIE -Wno-trigraphs -fno-omit-frame-pointer -D__KERNEL__ -Werror -fmacro-prefix-map=./= -Wno-unused-but-set-variable   -Wno-address-of-packed-member -Wall -Werror=date-time -freg-struct-return   -Werror=incompatible-pointer-types -I./include/generated/uapi -DKBUILD_MODFILE="arch/x86/kernel/fpu/bugs" -Wframe-larger-than=1024 -Werror=implicit-function-declaration -Werror=implicit-int -fno-jump-tables -Wno-unused-const-variable   -I./include -std=gnu11 -ffreestanding -fno-strict-overflow -Wno-pointer-sign -Wno-main -I./arch/x86/include -DKBUILD_MODNAME="bugs" -Wno-sign-compare -Wno-frame-address   -fcf-protection=none   -fno-optimize-sibling-calls -I./arch/x86/include/generated -I./include/uapi   -fno-stack-check -fno-common   -fno-strict-aliasing -fshort-wchar -Wno-unknown-warning-option  -include ./include/uapi/asm-generic/posix_types.h  -include ./arch/x86/include/asm/processor-flags.h -Wno-implicit-function-declaration -Wno-declaration-after-statement
