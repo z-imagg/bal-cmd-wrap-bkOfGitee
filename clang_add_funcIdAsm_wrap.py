@@ -15,7 +15,7 @@ from plumbum import local
 from pathlib import Path
 from lark_parser.file_at_cmd import FileAtCmd
 
-from common import __NoneOrLenEq0__, INFO_LOG, __NoneStr2Empty__, __list_filter_NoneEle_emptyStrEle__, \
+from common import __NoneOrLenLe0__, INFO_LOG, __NoneStr2Empty__, __list_filter_NoneEle_emptyStrEle__, \
     __rm_Ls2_from_Ls__, __parse_clang__errOut__by__re_pattern___, __ifNone_toEmptyLs, __list_filter_NoneEle__, \
     __replace_Ls__
 
@@ -48,8 +48,8 @@ clang-15: error: unsupported argument '-mtune=generic32' to option '-Wa,'
     ['-Wa,-mtune=generic32' ]
     """
 
-    if  __NoneOrLenEq0__(clang_err_out): return None
-    if not __NoneOrLenEq0__(clang_err_out):
+    if  __NoneOrLenLe0__(clang_err_out): return None
+    if not __NoneOrLenLe0__(clang_err_out):
         matches = re.findall(clang__errOut__unsupported_argument_to_option__re_pattern, clang_err_out)
         # matches ==  [('-mtune=generic32', '-Wa,')]
         kv_line_ls:List[str]= [f"{_[1]}{_[0]}" for _ in matches]
@@ -90,7 +90,7 @@ error: unknown warning option '-Wno-packed-not-aligned'; did you mean '-Wno-over
     """
     # matches ==  [('-Wno-format-overflow', '-Wno-shift-overflow','-Werror','-Wunknown-warning-option')]
     matches= __parse_clang__errOut__by__re_pattern___(clang_err_out,errOut__error_unknown_warning_option_did_you_mean__re_pattern)
-    if __NoneOrLenEq0__(matches):
+    if __NoneOrLenLe0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 4
     replaceLs= __list_filter_NoneEle__([(_[0],f"-Wno-{_[3]}") if _[2] == '-Werror' else None for _ in matches])
@@ -120,7 +120,7 @@ error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warni
     """
     # matches ==  [('-Wno-format-overflow', '-Wno-shift-overflow','-Werror','-Wunknown-warning-option')]
     matches= __parse_clang__errOut__by__re_pattern___(clang_err_out,errOut__error_unknown_warning_option__re_pattern)
-    if __NoneOrLenEq0__(matches):
+    if __NoneOrLenLe0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 3
     replaceLs= __list_filter_NoneEle__([(_[0],f"-Wno-{_[3]}") if _[2] == '-Werror' else None for _ in matches])
@@ -135,7 +135,7 @@ error: unknown warning option '-Werror=designated-init' [-Werror,-Wunknown-warni
 
 def __parse_clang__errOut__addPrefixNo_toAddMe_1__(errOut__re_pattern,clang_err_out:str)->List[str]:
     matches= __parse_clang__errOut__by__re_pattern___(clang_err_out, errOut__re_pattern)
-    if __NoneOrLenEq0__(matches):
+    if __NoneOrLenLe0__(matches):
         return None
     assert len(matches) >=1
     kLs= [f"-Wno-{_[0]}" for _ in matches]
@@ -152,7 +152,7 @@ def __parse_clang__errOut__addPrefixNo_toAddMe_2__(errOut__re_pattern,clang_err_
 # ('-Werror', 'gnu-variable-sized-type-not-at-end'),
 # ('-Werror', 'gnu-variable-sized-type-not-at-end')
 # ]
-    if __NoneOrLenEq0__(matches):
+    if __NoneOrLenLe0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 2
     kLs= __list_filter_NoneEle__([f"-Wno-{_[1]}" if _[0] == '-Werror' else None for _ in matches])
@@ -189,7 +189,7 @@ def __parse_clang__errOut__error_field_xxx_with_variable_sized_type_yyy_not_at_t
 # ('-Werror', 'gnu-variable-sized-type-not-at-end'),
 # ('-Werror', 'gnu-variable-sized-type-not-at-end')
 # ]
-    if __NoneOrLenEq0__(matches):
+    if __NoneOrLenLe0__(matches):
         return None
     assert len(matches) >=1 and len(matches[0]) == 2
     kLs= [f"-Wno-{_[1]}" for _ in matches]

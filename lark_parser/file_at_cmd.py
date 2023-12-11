@@ -3,7 +3,7 @@
 
 from typing import List
 
-from common import __NoneOrLenEq0__,__NoneStr2Empty__,__assert_notNone_lenBT0__
+from common import __NoneOrLenLe0__,__NoneStr2Empty__,__assert_notNone_lenBT0__
 
 #在 ubuntu22上 将 ubuntu14的根目录 被 挂载 为 目录  /ubt14x86root
 class FileAtCmd:
@@ -39,7 +39,7 @@ class FileAtCmd:
         assert argName is not None
         if v_ls is None or len(v_ls) == 0 : return ''
         kv_ls:List[str]=FileAtCmd.__valLs_addNamePrefix__(v_ls, argName)
-        if __NoneOrLenEq0__(kvLsToRemove):
+        if __NoneOrLenLe0__(kvLsToRemove):
             return kv_ls
 
         #在kvLsToRemove中出现的，都丢弃

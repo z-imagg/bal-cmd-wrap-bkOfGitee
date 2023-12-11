@@ -13,7 +13,7 @@ import inspect
 import types
 
 
-from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_emptyStrEle__
+from common import __NoneOrLenLe0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_emptyStrEle__
 from lark_parser.file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1

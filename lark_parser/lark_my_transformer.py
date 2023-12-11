@@ -8,7 +8,7 @@ from lark.tree import Tree
 from lark.visitors import Interpreter
 from lark.lexer import Token
 from file_at_cmd import FileAtCmd
-from common import __NoneOrLenEq0__
+from common import __NoneOrLenLe0__
 
 ################获取 结果树 中的 src_file 非终结符 节点 的 值
 ### 用lark的Transformer访问 解析结果树 中 的 非终结符 src_file
@@ -76,7 +76,7 @@ class MyTransformer(Transformer):
     def __getFileAtCmd__(self)->FileAtCmd:
         fileAtCmd: FileAtCmd = FileAtCmd()
 
-        fileAtCmd.input_is_std_in : bool =  not __NoneOrLenEq0__(self.input_is_std_in_val_ls)
+        fileAtCmd.input_is_std_in : bool =  not __NoneOrLenLe0__(self.input_is_std_in_val_ls)
 
         # 取 -m32
         fileAtCmd.m_dd_val: str  =  MyTransformer.__Ls_get0_fieldValue__(self.m_dd_val_ls)

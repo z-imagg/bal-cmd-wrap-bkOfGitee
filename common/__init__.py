@@ -8,8 +8,8 @@ def __ifNone_toEmptyLs(ls:List[Any]):
 
 def __parse_clang__errOut__by__re_pattern___(clang_err_out:str, re_pattern:str)->List[str]:
     import re
-    if  __NoneOrLenEq0__(clang_err_out): return None
-    if not __NoneOrLenEq0__(clang_err_out):
+    if  __NoneOrLenLe0__(clang_err_out): return None
+    if not __NoneOrLenLe0__(clang_err_out):
         matches = re.findall(re_pattern, clang_err_out)
         # 比如 matches ==  [('-Wno-format-overflow', '-Wno-shift-overflow','-Werror','-Wunknown-warning-option')]
         return matches
@@ -26,8 +26,8 @@ __replace_Ls__(ls,replacer)
     :param replacer:
     :return:
     """
-    if  __NoneOrLenEq0__(ls): return
-    if  __NoneOrLenEq0__(replacer): return
+    if  __NoneOrLenLe0__(ls): return
+    if  __NoneOrLenLe0__(replacer): return
     A = [a for a, b in replacer]
     B = [b for a, b in replacer]
     for j, kvJ in enumerate(ls):
@@ -39,7 +39,7 @@ __replace_Ls__(ls,replacer)
 def __rm_Ls2_from_Ls__( ls:List[Any], ls2:List[Any]) -> Tuple[List[Any],bool]:
     if ls2 is None:
         return ls
-    if __NoneOrLenEq0__(ls):
+    if __NoneOrLenLe0__(ls):
         return ls
     newLs=list(filter(lambda k: k not in ls2, ls))
     do_remove:bool=len(newLs)!=len(ls)
@@ -52,8 +52,8 @@ def __NoneStr2Empty__(string: str):
     if string is None: return ''
     return string
 
-def __NoneOrLenEq0__(x:Any):
-    return x is None or len(x) == 0
+def __NoneOrLenLe0__(x:Any):
+    return x is None or len(x) <= 0
 
 def __list_filter_NoneEle__(ls:List[Any])->List[Any]:
     if ls is None or len(ls) == 0 : return ls
