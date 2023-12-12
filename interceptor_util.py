@@ -59,19 +59,20 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
         exitCode, std_out, err_out = real_cmd.run(retcode=None)
 
     # import ipdb; ipdb.set_trace()
-    
-    # 写 真实命令的 标准输出、错误输出  (不能写到文件，因为调用者可能需要这些输出）
-    if not __NoneOrLenEq0__(std_out):
-        print(std_out,file=sys.stdout,end="") #真实命令的输出，不要有多余的换行
-        INFO_LOG(gLogF,curFrm,f"真实命令标准输出【{std_out}】")
-    if not __NoneOrLenEq0__(err_out):
-        print(err_out, file=sys.stderr,end="") #真实命令的输出，不要有多余的换行
-        INFO_LOG(gLogF,curFrm,f"真实命令错误输出【{err_out}】")
 
     # 断言 exitCode非空，即 断言 subprocess.run 必须执行了
     assert exitCode is not None
     exitCodeDesc:str='异常退出码' if exitCode != 0 else '正常退出码'
     INFO_LOG(gLogF,curFrm,f"真实命令退出码,{exitCodeDesc}:【{exitCode}】")
+
+    # 写 真实命令的 标准输出、错误输出  (不能写到文件，因为调用者可能需要这些输出）
+    if std_out is not None:
+        print(std_out,file=sys.stdout,end="") #真实命令的输出，不要有多余的换行
+        INFO_LOG(gLogF,curFrm,f"真实命令标准输出【{std_out}】")
+    if err_out is not None:
+        print(err_out, file=sys.stderr,end="") #真实命令的输出，不要有多余的换行
+        INFO_LOG(gLogF,curFrm,f"真实命令错误输出【{err_out}】")
+
     return exitCode
 
 
