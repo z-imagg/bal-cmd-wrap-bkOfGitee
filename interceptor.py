@@ -3,7 +3,7 @@
 
 #apt install file uuid-runtime
 import errno
-import sys
+import sys,os
 assert sys.version_info >= (3,6), "错误：需要使用 Python 3.6 或更高版本. 因为 此脚本中大量使用的 字符串格式化语法 f'{变量名}' 是pytho3.6引入的"
 import time
 import subprocess
@@ -43,13 +43,16 @@ sysArgvAsStr:str= ' '.join(sys.argv) ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=__list_filter_NoneEle_emptyStrEle__(list(sys.argv))
 #备份假程序名
-progFake:str=Argv[0]
+progFake:str=Argv[0] if not Argv[0].endswith("interceptor.py") else os.environ.get("progFake",None)
+#即 测试假clang方法:  progFake=clang /crk/cmd-wrap/interceptor.py   ...  
+# print(f"progFake:{progFake}; Argv:{Argv}")
+assert progFake is not None
 #参数中-Werror替换为-Wno-error
 Argv:List[str] = ArgvRemoveWerror(Argv)
 #参数中-O2替换为-o1
 Argv=ArgvReplace_O2As_O1(Argv)
 #换回真程序名（从假程序名算出真程序名，并以真填假）
-Argv[0]=calcTrueProg(Argv[0])
+Argv[0]=calcTrueProg(progFake)
 
 #尝试锁定日志文件，最多尝试N次
 # 折叠此for循环，可在一页内看明白 此脚本业务逻辑
