@@ -103,7 +103,6 @@ try:#try业务块
     if not (fileAtCmd.src_file is  None or fileAtCmd.src_file == '/dev/null'): #当 命令中 有源文件名，才截此命令
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
         assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
-        #libCTk.so 中有写 文件funcIdDescLs.txt.csv 、 文件srcFileIdDict.json , 并发写肯定会错乱，因此 简单起见 libCTk.so 不允许并发， 即 clang编译只能单进程
         clang_plugin_params: str = f"-Xclang -load -Xclang /crk/clang-add-funcIdAsm/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk"
         clang_plugin_param_ls =  __list_filter_NoneEle_emptyStrEle__(  clang_plugin_params.split(' ') )
         #直接将clang插件参数塞到clang编译命令中
