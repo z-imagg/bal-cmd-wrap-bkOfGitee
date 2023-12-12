@@ -3,7 +3,8 @@
 
 SfxWrpPy=".wrap.py"#SUFFIX_WRAP_PY
 LLVM15Home="/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4"
-true_gcc="/usr/bin/i686-linux-gnu-gcc-11"
+# true_gcc="/usr/bin/i686-linux-gnu-gcc-11"
+true_clang=f"{LLVM15Home}/bin/clang"
 progTab=[
 
 ("clang",  
@@ -19,9 +20,13 @@ progTab=[
 # ("g++","/usr/bin/g++-4.4"),
 
 #Ubuntu 22.04.3 LTS  的i686-linux-gnu-gcc路由
-("i686-linux-gnu-gcc",true_gcc),   # readlink -f `which i686-linux-gnu-gcc`
+# ("i686-linux-gnu-gcc",true_gcc),   # readlink -f `which i686-linux-gnu-gcc`
 #全路径的假gcc 也得在路由表中
-("/crk/bin/i686-linux-gnu-gcc",true_gcc),
+# ("/crk/bin/i686-linux-gnu-gcc",true_gcc),
+
+("clang",true_clang),   # readlink -f `which clang`
+#全路径的假clang 也得在路由表中
+("/crk/bin/clang",true_clang),
 
 
 
