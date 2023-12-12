@@ -19,7 +19,6 @@ from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
 from lark_parser.api_lark_parse_single_cmd import larkGetSrcFileFromSingleGccCmd
-from clang_add_funcIdAsm_wrap import clangAddFuncIdAsmWrap
 
 """本脚本执行时的需要的场景如下:
 /usr/bin/gcc  --> interceptor.py
@@ -99,9 +98,15 @@ try:#try业务块
     execute_script_file(gLogF,"/crk/cmd-wrap/env-diff-show.sh")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(sysArgvAsStr, gLogF)
-    if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命令
+    #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
+    #组装 clang插件命令 不再 需要 lark文法解析结果
+    if not (fileAtCmd.src_file is  None or fileAtCmd.src_file == '/dev/null'): #当 命令中 有源文件名，才截此命令
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
-        clangAddFuncIdAsmWrap(fileAtCmd,gLogF)
+        assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
+        clang_plugin_params: str = f"-Xclang -load -Xclang /crk/clang-add-funcIdAsm/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk"
+        clang_plugin_param_ls =  __list_filter_NoneEle_emptyStrEle__(  clang_plugin_params.split(' ') )
+        #直接将clang插件参数塞到clang编译命令中
+        Argv = [Argv[0], *clang_plugin_param_ls, *Argv[1:]]
     else:
         INFO_LOG(gLogF, curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
