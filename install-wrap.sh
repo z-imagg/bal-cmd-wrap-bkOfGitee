@@ -45,19 +45,19 @@ CONDA_DEFAULT_ENV
 
 sudo mkdir -p $fake_bin && sudo chown -R $(id -gn).$(whoami) $fake_bin
 
-#fake_clang=$fake_bin/clang
+fake_clang=$fake_bin/clang
 #fake_clangPP=$fake_bin/clang++
-fake_gcc=$fake_bin/i686-linux-gnu-gcc
+# fake_gcc=$fake_bin/i686-linux-gnu-gcc
 #fake_gpp=$fake_bin/i686-linux-gnu-g++
 
 #安装被拦截clang举例:
-#ln -v -s $interceptor $fake_clang
+unlink $fake_clang && ln -v -s $interceptor $fake_clang
 
 #安装被拦截clang++举例:
 #ln -v -s $interceptor $fake_clangPP
 
 #安装被拦截gcc举例:
-unlink $fake_gcc && ln -v -s $interceptor $fake_gcc
+# unlink $fake_gcc && ln -v -s $interceptor $fake_gcc
 
 #安装被拦截g++举例:
 #ln -v -s $interceptor $fake_gpp

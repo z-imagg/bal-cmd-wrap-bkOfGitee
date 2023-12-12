@@ -92,6 +92,8 @@ try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
     # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG(gLogF, curFrm, f"收到命令及参数（即sys.argv即字符串sysArgvAsStr）:【{sysArgvAsStr}】")
+    #捕捉编译时的env环境变量和初始环境变量差异
+    execute_script_file(gLogF,"/crk/cmd-wrap/env-diff-show.sh")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(sysArgvAsStr, gLogF)
     if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命令
@@ -100,8 +102,6 @@ try:#try业务块
     else:
         INFO_LOG(gLogF, curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
-    #捕捉编译时的env环境变量和初始环境变量差异
-    execute_script_file(gLogF,"/crk/cmd-wrap/env-diff-show.sh")
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
     exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
 except BaseException  as bexp:
