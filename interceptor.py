@@ -3,7 +3,7 @@
 
 #apt install file uuid-runtime
 import errno
-import sys
+import sys,os
 assert sys.version_info >= (3,6), "错误：需要使用 Python 3.6 或更高版本. 因为 此脚本中大量使用的 字符串格式化语法 f'{变量名}' 是pytho3.6引入的"
 import time
 import subprocess
@@ -19,7 +19,6 @@ from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
 from lark_parser.api_lark_parse_single_cmd import larkGetSrcFileFromSingleGccCmd
-from clang_add_funcIdAsm_wrap import clangAddFuncIdAsmWrap
 
 """本脚本执行时的需要的场景如下:
 /usr/bin/gcc  --> interceptor.py
@@ -43,13 +42,16 @@ sysArgvAsStr:str= ' '.join(sys.argv) ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=__list_filter_NoneEle_emptyStrEle__(list(sys.argv))
 #备份假程序名
-progFake:str=Argv[0]
+progFake:str=Argv[0] if not Argv[0].endswith("interceptor.py") else os.environ.get("progFake",None)
+#即 测试假clang方法:  progFake=clang /crk/cmd-wrap/interceptor.py   ...  
+# print(f"progFake:{progFake}; Argv:{Argv}")
+assert progFake is not None
 #参数中-Werror替换为-Wno-error
 Argv:List[str] = ArgvRemoveWerror(Argv)
 #参数中-O2替换为-o1
 Argv=ArgvReplace_O2As_O1(Argv)
 #换回真程序名（从假程序名算出真程序名，并以真填假）
-Argv[0]=calcTrueProg(Argv[0])
+Argv[0]=calcTrueProg(progFake)
 
 #尝试锁定日志文件，最多尝试N次
 # 折叠此for循环，可在一页内看明白 此脚本业务逻辑
@@ -96,9 +98,15 @@ try:#try业务块
     execute_script_file(gLogF,"/crk/cmd-wrap/env-diff-show.sh")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(sysArgvAsStr, gLogF)
-    if fileAtCmd.src_file is not None: #当 命令中 有源文件名，才截此命令
+    #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
+    #组装 clang插件命令 不再 需要 lark文法解析结果
+    if not (fileAtCmd.src_file is  None or fileAtCmd.src_file == '/dev/null'): #当 命令中 有源文件名，才截此命令
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
-        clangAddFuncIdAsmWrap(fileAtCmd,gLogF)
+        assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
+        clang_plugin_params: str = f"-Xclang -load -Xclang /crk/clang-add-funcIdAsm/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk"
+        clang_plugin_param_ls =  __list_filter_NoneEle_emptyStrEle__(  clang_plugin_params.split(' ') )
+        #直接将clang插件参数塞到clang编译命令中
+        Argv = [Argv[0], *clang_plugin_param_ls, *Argv[1:]]
     else:
         INFO_LOG(gLogF, curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 

@@ -51,7 +51,7 @@ fake_clang=$fake_bin/clang
 #fake_gpp=$fake_bin/i686-linux-gnu-g++
 
 #安装被拦截clang举例:
-unlink $fake_clang && ln -v -s $interceptor $fake_clang
+{ { [ -L $fake_clang ] && unlink $fake_clang ;} || : ;} && ln -v -s $interceptor $fake_clang
 
 #安装被拦截clang++举例:
 #ln -v -s $interceptor $fake_clangPP
