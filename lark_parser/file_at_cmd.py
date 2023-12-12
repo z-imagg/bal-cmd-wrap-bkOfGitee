@@ -3,7 +3,7 @@
 
 from typing import List
 
-from common import __NoneOrLenEq0__,__NoneStr2Empty__
+from common import __NoneOrLenLe0__,__NoneStr2Empty__,__assert_notNone_lenBT0__
 
 #在 ubuntu22上 将 ubuntu14的根目录 被 挂载 为 目录  /ubt14x86root
 class FileAtCmd:
@@ -27,7 +27,7 @@ class FileAtCmd:
         return long_text
 
     @staticmethod
-    def __ls_addPrefix__(v_ls:List[str], argName:str)->List[str]:
+    def __valLs_addNamePrefix__(v_ls:List[str], argName:str)->List[str]:
         assert argName is not None
         if v_ls is None or len(v_ls) == 0 : return ''
         kv_ls:List[str]=[f'{argName}{vj}' for vj in v_ls]
@@ -38,8 +38,8 @@ class FileAtCmd:
     def __ls_addPrefix_removeSpecifyKvLs_(v_ls:List[str], argName:str,kvLsToRemove:List[str])->List[str]:
         assert argName is not None
         if v_ls is None or len(v_ls) == 0 : return ''
-        kv_ls:List[str]=FileAtCmd.__ls_addPrefix__(v_ls,argName)
-        if __NoneOrLenEq0__(kvLsToRemove):
+        kv_ls:List[str]=FileAtCmd.__valLs_addNamePrefix__(v_ls, argName)
+        if __NoneOrLenLe0__(kvLsToRemove):
             return kv_ls
 
         #在kvLsToRemove中出现的，都丢弃
@@ -47,8 +47,8 @@ class FileAtCmd:
         return kv_ls_keep
 
     @staticmethod
-    def __ls_addPrefix_removeSpecifyKvLs_join(v_ls:List[str], argName:str,kvLsToRemove:List[str])->str:
-        kv_ls_keep=FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_(v_ls,argName,kvLsToRemove)
+    def __ls_addPrefix_removeSpecifyKvLs__join(v_ls:List[str], argName:str,kvLsToRemove:List[str])->str:
+        kv_ls_keep=FileAtCmd.__ls_addPrefix_removeSpecifyKvLs__(v_ls,argName,kvLsToRemove)
         return ' '.join(kv_ls_keep)
 
     def __init__(self):
@@ -89,11 +89,15 @@ class FileAtCmd:
 
         self.src_file: str  = None
 
+        self.kv_ls_for_clang: List[str]=None
+
 
     def __str__(self):
-        return self.__as_clang_cmd_part__()
+        _kv_ls_for_clang=self.__init_clang_argv__()
+        __assert_notNone_lenBT0__(_kv_ls_for_clang)
+        return ' '.join(_kv_ls_for_clang)
 
-    def __as_clang_cmd_part__(self,kvLs_skip:List[str]=None)->str:
+    def __init_clang_argv__(self)->None:
 
         # -m32
         kv_m_dd: str  = FileAtCmd.__strAppendIfNotEmpty_elseGetEmptyStr__('-m',self.m_dd_val)
@@ -104,30 +108,39 @@ class FileAtCmd:
         kv_std: str =  FileAtCmd.__strAppendIfNotEmpty_elseGetEmptyStr__('-std=',self.std_val)
 
         # -Dxxx
-        kv_d_val_ls:List[str]  = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.d_val_ls,'-D',kvLs_skip)
+        kv_d_val_ls:List[str]  = FileAtCmd.__valLs_addNamePrefix__(self.d_val_ls, '-D')
         # -Dxxx=yyy
-        kv_d_eq_val_ls: str = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.d_xx_eq_val_ls,'-D',kvLs_skip)
+        kv_d_eq_val_ls: List[str] = FileAtCmd.__valLs_addNamePrefix__(self.d_xx_eq_val_ls, '-D')
 
         # -Wxxx
-        kv_w_val_ls:str  = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.w_val_ls,'-W',kvLs_skip)
+        kv_w_val_ls: List[str]  = FileAtCmd.__valLs_addNamePrefix__(self.w_val_ls, '-W')
         # -Wxxx=yyy
-        kv_W_eq_val_ls: str = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.w_eq_val_ls,'-W',kvLs_skip)
+        kv_W_eq_val_ls: List[str] = FileAtCmd.__valLs_addNamePrefix__(self.w_eq_val_ls, '-W')
 
         # -fxxx
-        kv_f_val_ls: str  = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.f_val_ls,'-f',kvLs_skip)
+        kv_f_val_ls: List[str]  = FileAtCmd.__valLs_addNamePrefix__(self.f_val_ls, '-f')
         # -fxxx=yyy
-        kv_f_eq_val_ls: str = FileAtCmd.__ls_addPrefix_removeSpecifyKvLs_join(self.f_eq_val_ls,'-f',kvLs_skip)
+        kv_f_eq_val_ls: List[str] = FileAtCmd.__valLs_addNamePrefix__(self.f_eq_val_ls, '-f')
 
         # -isystem yyy
-        _isystem_val_ls:str=FileAtCmd.__ls_join__(self.isystem_val_ls,'-isystem ')
+        kv_isystem_val_ls: List[str] =FileAtCmd.__valLs_addNamePrefix__(self.isystem_val_ls, '-isystem ')
         # -Iyyy
-        _inc_val_ls:str=FileAtCmd.__ls_join__(self.inc_val_ls,'-I')
+        kv_inc_val_ls: List[str]=FileAtCmd.__valLs_addNamePrefix__(self.inc_val_ls, '-I')
         # -I yyy
-        _sep_inc_val_ls:str=FileAtCmd.__ls_join__(self.sep_inc_val_ls,'-I ')
+        kv_sep_inc_val_ls: List[str]=FileAtCmd.__valLs_addNamePrefix__(self.sep_inc_val_ls, '-I ')
         # -include yyy
-        _sep_include_val_ls:str=FileAtCmd.__ls_join__(self.sep_include_val_ls,'-include ')
+        kv_sep_include_val_ls: List[str]=FileAtCmd.__valLs_addNamePrefix__(self.sep_include_val_ls, '-include ')
         _srcFile:str=self.src_file
 
-        as_clang_cmd_part= f" {kv_m_dd} {kv_m_arch} {kv_std}  {kv_d_val_ls} {kv_d_eq_val_ls} {kv_w_val_ls} {kv_W_eq_val_ls} {kv_f_val_ls} {kv_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
+        self.kv_ls_for_clang:List[str]= [
+kv_m_dd, kv_m_arch, kv_std,
+*kv_d_val_ls, *kv_d_eq_val_ls, *kv_w_val_ls, *kv_W_eq_val_ls, *kv_f_val_ls, *kv_f_eq_val_ls,
+*kv_isystem_val_ls, *kv_inc_val_ls,  *kv_sep_inc_val_ls,   *kv_sep_include_val_ls,
+f"-c {_srcFile}"]
 
-        return as_clang_cmd_part
+        return self.kv_ls_for_clang
+
+
+    def __asStr_kv_ls_for_clang__(self)->str:
+        __assert_notNone_lenBT0__(self.kv_ls_for_clang)
+        return ' '.join(self.kv_ls_for_clang)

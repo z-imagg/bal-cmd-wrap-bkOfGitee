@@ -10,7 +10,7 @@ from lark.visitors import Interpreter
 from lark.lexer import Token
 from lark_my_transformer import MyTransformer
 from file_at_cmd import FileAtCmd
-from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
+from common import __NoneOrLenLe0__,INFO_LOG,EXCEPT_LOG
 import inspect
 import types
 

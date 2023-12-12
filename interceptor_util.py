@@ -13,17 +13,19 @@ import types
 
 from plumbum import local
 import plumbum
-from common import __NoneOrLenEq0__,INFO_LOG
+from common import __NoneOrLenLe0__,INFO_LOG
 
-def execute_script_file(gLogF,scriptFile:Path)->None:
+def execute_script_file(gLogF,scriptFile:Path,args:()=[])->Tuple[int,str,str]:
     curFrm:types.FrameType=inspect.currentframe()
 
+    INFO_LOG(gLogF, curFrm, f"执行脚本文件： 脚本文件:【{scriptFile}】,参数:【{' '.join(args)}】  ")
+    
     scriptF: plumbum.machines.LocalCommand = local.get(scriptFile)
-    retCode, std_out, err_out = scriptF.run()
+    retCode, std_out, err_out = scriptF.run(args=args,timeout=None)
 
-    INFO_LOG(gLogF, curFrm, f"执行脚本文件及结果： 脚本文件:【{scriptFile}】, retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
+    INFO_LOG(gLogF, curFrm, f"执行脚本文件及结果： 脚本文件:【{scriptFile}】,参数:【{' '.join(args)}】 retCode【{retCode}】,std_out【{std_out}】,err_out【{err_out}】")
 
-    return
+    return retCode, std_out, err_out
 
 
 def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
