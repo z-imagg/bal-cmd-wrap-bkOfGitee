@@ -103,6 +103,7 @@ try:#try业务块
     if not (fileAtCmd.src_file is  None or fileAtCmd.src_file == '/dev/null'): #当 命令中 有源文件名，才截此命令
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
         assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
+        #以多进程编译测试函数id生成服务
         clang_plugin_params: str = f"-Xclang -load -Xclang /crk/clang-add-funcIdAsm/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk"
         clang_plugin_param_ls =  __list_filter_NoneEle_emptyStrEle__(  clang_plugin_params.split(' ') )
         #直接将clang插件参数塞到clang编译命令中
