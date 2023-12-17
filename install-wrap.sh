@@ -9,6 +9,7 @@ source /crk/bochs/bash-simplify/dir_util.sh
 source /app/miniconda3/bin/activate
 
 pip install lark
+pip install plumbum
 
 interceptor=/crk/cmd-wrap/interceptor.py
 chmod +x $interceptor
