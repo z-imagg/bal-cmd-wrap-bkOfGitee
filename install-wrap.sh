@@ -54,7 +54,7 @@ export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 
 #重命名上一次的日志文件们
 gFLs=$(find /crk/  -maxdepth 1  -regex '/crk/g-[0-9]+\.log' | xargs -I% echo -n "% ") && \
-mvFile_AppendCurAbsTime_multi $gFLs && \
+( mvFile_AppendCurAbsTime_multi $gFLs || : ) && \
 
 #记录初始的环境变量名字列表
 chmod +x /crk/cmd-wrap/env-diff-show.sh
