@@ -18,7 +18,7 @@ echo "$_out_en_dbg,【$_out_dbg】" && \
 #miniconda activate 不要开调试
 set +x && source /app/miniconda3/bin/activate
 #恢复可能的调试
-$_out_en_dbg && set -x && \
+{ { $_out_en_dbg && set -x && : ;} || : ;} && \
 pip install lark && \
 cd /crk/clang-wrap/ && \
 grep -E "^[ ]*gcc" make_clean_then_make_V\=1.txt > gcc_cmd_ls.txt && \
