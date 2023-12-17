@@ -1,14 +1,40 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 
 source /crk/bochs/bash-simplify/dir_util.sh
+getCurScriptDirName $0
+#当前脚本文件 绝对路径 CurScriptF, 当前脚本文件 名 CurScriptNm, 当前脚本文件 所在目录 绝对路径 CurScriptNm
+#CurScriptDir == /crk/bochs/clang-add-funcIdAsm/
+cd $CurScriptDir && \
+
+#获取调用者 是否开启了 bash -x  即 是否开启 bash 调试
+#返回变量 _out_en_dbg, _out_dbg
+get_out_en_dbg && \
+echo "$_out_en_dbg,【$_out_dbg】" && \
+
 
 #建立 目录cmd-wrap  软连接
-{ [   -e /crk/cmd-wrap ] || ln -s /crk/bochs/cmd-wrap /crk/cmd-wrap ;} && \
+_LNK="/crk/cmd-wrap" && \
+_SRC="/crk/bochs/cmd-wrap" && \
+{ [   -e $_LNK ] || ln -s $_SRC $_LNK ;} && \
+#建立 目录clang-add-funcIdAsm  软连接
+_LNK="/crk/clang-add-funcIdAsm" && \
+_SRC="/crk/bochs/clang-add-funcIdAsm" && \
+{ [   -e $_LNK ] || ln -s $_SRC $_LNK ;} && \
 
-source /app/miniconda3/bin/activate
+
+#如果clang插件不存在，则构建插件
+clPlgSo='/crk/clang-add-funcIdAsm/build/lib/libCTk.so' && \
+{ [ -f $clPlgSo ] || bash $_out_dbg /crk/clang-add-funcIdAsm/build-release_0.sh ;}
+
+
+#miniconda activate 不要开调试
+set +x && source /app/miniconda3/bin/activate
+#恢复可能的调试
+{ { $_out_en_dbg && set -x && : ;} || : ;} && \
 
 pip install lark
+pip install plumbum
 
 interceptor=/crk/cmd-wrap/interceptor.py
 chmod +x $interceptor
@@ -28,7 +54,7 @@ export PYTHONPATH=/crk/cmd-wrap/lark_parser/:$PYTHONPATH
 
 #重命名上一次的日志文件们
 gFLs=$(find /crk/  -maxdepth 1  -regex '/crk/g-[0-9]+\.log' | xargs -I% echo -n "% ") && \
-mvFile_AppendCurAbsTime_multi $gFLs && \
+( mvFile_AppendCurAbsTime_multi $gFLs || : ) && \
 
 #记录初始的环境变量名字列表
 chmod +x /crk/cmd-wrap/env-diff-show.sh
