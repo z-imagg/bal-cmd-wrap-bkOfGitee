@@ -7,12 +7,20 @@ getCurScriptDirName $0
 #CurScriptDir == /crk/bochs/clang-add-funcIdAsm/
 cd $CurScriptDir && \
 
+#建立 目录cmd-wrap  软连接
+_LNK="/crk/cmd-wrap" && \
+_SRC="/crk/bochs/cmd-wrap" && \
+{ [   -e $_LNK ] || ln -s $_SRC $_LNK ;} && \
+#建立 目录clang-add-funcIdAsm  软连接
+_LNK="/crk/clang-add-funcIdAsm" && \
+_SRC="/crk/bochs/clang-add-funcIdAsm" && \
+{ [   -e $_LNK ] || ln -s $_SRC $_LNK ;} && \
+
+
 #如果clang插件不存在，则构建插件
 clPlgSo='/crk/clang-add-funcIdAsm/build/lib/libCTk.so' && \
-{ [ -f $clPlgSo ] || bash /crk/clang-add-funcIdAsm/build_release_0.sh ;}
+{ [ -f $clPlgSo ] || bash /crk/clang-add-funcIdAsm/build-release_0.sh ;}
 
-#建立 目录cmd-wrap  软连接
-{ [   -e /crk/cmd-wrap ] || ln -s /crk/bochs/cmd-wrap /crk/cmd-wrap ;} && \
 
 source /app/miniconda3/bin/activate
 
