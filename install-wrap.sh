@@ -1,7 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 
 source /crk/bochs/bash-simplify/dir_util.sh
+getCurScriptDirName $0
+#当前脚本文件 绝对路径 CurScriptF, 当前脚本文件 名 CurScriptNm, 当前脚本文件 所在目录 绝对路径 CurScriptNm
+#CurScriptDir == /crk/bochs/clang-add-funcIdAsm/
+cd $CurScriptDir && \
+
+#如果clang插件不存在，则构建插件
+clPlgSo='/crk/clang-add-funcIdAsm/build/lib/libCTk.so' && \
+{ [ -f $clPlgSo ] || bash /crk/clang-add-funcIdAsm/build_release_0.sh ;}
 
 #建立 目录cmd-wrap  软连接
 { [   -e /crk/cmd-wrap ] || ln -s /crk/bochs/cmd-wrap /crk/cmd-wrap ;} && \
