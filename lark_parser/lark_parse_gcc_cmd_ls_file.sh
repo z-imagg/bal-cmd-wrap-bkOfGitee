@@ -15,10 +15,9 @@ echo "$_out_en_dbg,【$_out_dbg】" && \
 
 #runme : nohup bash lark_parse_gcc_cmd_ls_file.sh &
 
-#miniconda activate 不要开调试
-set +x && source /app/miniconda3/bin/activate
-#恢复可能的调试
-{ { $_out_en_dbg && set -x && : ;} || : ;} && \
+#miniconda activate
+miniconda3Activate && \
+
 pip install lark && \
 cd /crk/clang-wrap/ && \
 grep -E "^[ ]*gcc" make_clean_then_make_V\=1.txt > gcc_cmd_ls.txt && \

@@ -28,10 +28,8 @@ clPlgSo='/crk/clang-add-funcIdAsm/build/lib/libCTk.so' && \
 { [ -f $clPlgSo ] || bash $_out_dbg /crk/clang-add-funcIdAsm/build-release_0.sh ;}
 
 
-#miniconda activate 不要开调试
-set +x && source /app/miniconda3/bin/activate
-#恢复可能的调试
-{ { $_out_en_dbg && set -x && : ;} || : ;} && \
+#miniconda activate
+miniconda3Activate && \
 
 pip install lark
 pip install plumbum
