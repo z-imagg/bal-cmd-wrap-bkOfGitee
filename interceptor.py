@@ -43,7 +43,7 @@ sysArgvAsStr:str= ' '.join(sys.argv) ;
 Argv=__list_filter_NoneEle_emptyStrEle__(list(sys.argv))
 #备份假程序名
 progFake:str=Argv[0] if not Argv[0].endswith("interceptor.py") else os.environ.get("progFake",None)
-#即 测试假clang方法:  progFake=clang /crk/cmd-wrap/interceptor.py   ...  
+#即 测试假clang方法:  progFake=clang /bal/cmd-wrap/interceptor.py   ...  
 # print(f"progFake:{progFake}; Argv:{Argv}")
 assert progFake is not None
 #参数中-Werror替换为-Wno-error
@@ -95,7 +95,7 @@ try:#try业务块
     # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG(gLogF, curFrm, f"收到命令及参数（即sys.argv即字符串sysArgvAsStr）:【{sysArgvAsStr}】")
     #捕捉编译时的env环境变量和初始环境变量差异
-    execute_script_file(gLogF,"/crk/cmd-wrap/env-diff-show.sh")
+    execute_script_file(gLogF,"/bal/cmd-wrap/env-diff-show.sh")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(sysArgvAsStr, gLogF)
     #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
