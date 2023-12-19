@@ -41,7 +41,7 @@ print(f"命令中的源文件相关字段为:{fileAtCmd}")
 
 end=True
 """
-D:\miniconda3\python.exe F:/crk/bochs/cmd-wrap/lark_parser/lark_develop.py
+D:\miniconda3\python.exe F:/bal/cmd-wrap/lark_parser/lark_develop.py
 start
   gcc_cmd
     gcc_cmd_1
