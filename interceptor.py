@@ -59,7 +59,7 @@ gLogF_LockOk:bool=False
 Max_Try_Lock_Times=100
 for k in range(Max_Try_Lock_Times):
     try:
-        logFK=f"/crk/g-{k}.log"
+        logFK=f"/bal/g-{k}.log"
         gLogF = open(logFK, "a") #append(追加地写入)模式打开文件
         # 锁定文件的一部分
         fcntl.flock(gLogF.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
