@@ -89,6 +89,7 @@ for k in range(Max_Try_Lock_Times):
 
 assert gLogF is not None,f"断言错误，尝试锁定{k}次不同日志文件，依然锁定失败(此时已经有{k}个进程同时需要独立的日志文件？)。 最后尝试日志文件是【{logFK}】。请检查代码，应该是bug。"
 
+exitCodePlg:int = None
 exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
@@ -109,11 +110,12 @@ try:#try业务块
         clang_plugin_param_ls =  __list_filter_NoneEle_emptyStrEle__(  clang_plugin_params.split(' ') )
         #直接将clang插件参数塞到clang编译命令中
         ArgvPlg = [Argv[0], *clang_plugin_param_ls, *Argv[1:]] #TODO 干净一点 这里应该去掉  复制fileAtCmd为fileAtCmdCp 并 对 fileAtCmdCp 做 去掉中的"-c" 、去掉 "-o xxx.o", 再ArgvPlg <-- [*clang_plugin_param_ls ,fileAtCmdCp]. 目前这样由-fsyntax-only导致"-c" "-o xxx.o"无效也可以.
+        exitCodePlg:int=execute_cmd(ArgvPlg, gLogF,fileAtCmd.input_is_std_in)
+        assert exitCodePlg is not None and exitCodePlg==0
     else:
         INFO_LOG(gLogF, curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
-    exitCodePlg:int=execute_cmd(ArgvPlg, gLogF,fileAtCmd.input_is_std_in)
     exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
     if not ign_srcF:
         pass #TODO clang插件修改.c再编译后，检查.o文件中有没有对应的指令序列
@@ -134,8 +136,8 @@ finally:
         #关闭日志文件
         gLogF.close()
         gLogF=None
-        assert exitCodePlg is not None and exitCode is not None
+        assert exitCode is not None
         #以真实命令的退出码退出（假装自己是真实命令）
-        exit(abs(exitCodePlg)+abs(exitCode)) #插件运行正常 且 真编译命令运行正常 才会正常退出
+        exit(exitCode)
 #拦截过程 结束}
 
