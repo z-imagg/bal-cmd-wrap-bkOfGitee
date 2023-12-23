@@ -131,3 +131,6 @@ class FileAtCmd:
         as_clang_cmd_part= f" {kv_m_dd} {kv_m_arch} {kv_std}  {kv_d_val_ls} {kv_d_eq_val_ls} {kv_w_val_ls} {kv_W_eq_val_ls} {kv_f_val_ls} {kv_f_eq_val_ls} {_isystem_val_ls} {_inc_val_ls}  {_sep_inc_val_ls}  { _sep_include_val_ls} -c {_srcFile}"
 
         return as_clang_cmd_part
+
+    def ism16(self)->bool:
+        return self.m_dd_val=="16"

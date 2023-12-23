@@ -100,7 +100,7 @@ try:#try业务块
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(sysArgvAsStr, gLogF)
     #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
     #组装 clang插件命令 不再 需要 lark文法解析结果
-    if not (fileAtCmd.src_file is  None or fileAtCmd.src_file == '/dev/null'): #当 命令中 有源文件名，才截此命令
+    if not (fileAtCmd.src_file is  None or fileAtCmd.src_file == '/dev/null' or fileAtCmd.ism16() ): #当 命令中 有源文件名，才截此命令; 忽略-m16
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
         assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
         #以多进程编译测试函数id生成服务
