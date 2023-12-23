@@ -105,14 +105,15 @@ try:#try业务块
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
         assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
         #以多进程编译测试函数id生成服务
-        clang_plugin_params: str = f"-Xclang -load -Xclang /bal/clang-add-funcIdAsm/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk"
+        clang_plugin_params: str = f"-Xclang -load -Xclang /bal/clang-add-funcIdAsm/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk -fsyntax-only"
         clang_plugin_param_ls =  __list_filter_NoneEle_emptyStrEle__(  clang_plugin_params.split(' ') )
         #直接将clang插件参数塞到clang编译命令中
-        Argv = [Argv[0], *clang_plugin_param_ls, *Argv[1:]]
+        ArgvPlg = [Argv[0], *clang_plugin_param_ls, *Argv[1:]] #TODO 干净一点 这里应该去掉  复制fileAtCmd为fileAtCmdCp 并 对 fileAtCmdCp 做 去掉中的"-c" 、去掉 "-o xxx.o", 再ArgvPlg <-- [*clang_plugin_param_ls ,fileAtCmdCp]. 目前这样由-fsyntax-only导致"-c" "-o xxx.o"无效也可以.
     else:
         INFO_LOG(gLogF, curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
+    exitCodePlg:int=execute_cmd(ArgvPlg, gLogF,fileAtCmd.input_is_std_in)
     exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
     if not ign_srcF:
         pass #TODO clang插件修改.c再编译后，检查.o文件中有没有对应的指令序列
@@ -133,7 +134,8 @@ finally:
         #关闭日志文件
         gLogF.close()
         gLogF=None
-        assert exitCode is not None
+        assert exitCodePlg is not None and exitCode is not None
         #以真实命令的退出码退出（假装自己是真实命令）
-        exit(exitCode)
+        exit(abs(exitCodePlg)+abs(exitCode)) #插件运行正常 且 真编译命令运行正常 才会正常退出
 #拦截过程 结束}
+
