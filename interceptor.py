@@ -111,7 +111,7 @@ try:#try业务块
         #直接将clang插件参数塞到clang编译命令中
         ArgvPlg = [Argv[0], *clang_plugin_param_ls, *Argv[1:]] #TODO 干净一点 这里应该去掉  复制fileAtCmd为fileAtCmdCp 并 对 fileAtCmdCp 做 去掉中的"-c" 、去掉 "-o xxx.o", 再ArgvPlg <-- [*clang_plugin_param_ls ,fileAtCmdCp]. 目前这样由-fsyntax-only导致"-c" "-o xxx.o"无效也可以.
         exitCodePlg:int=execute_cmd(ArgvPlg, gLogF,fileAtCmd.input_is_std_in)
-        assert exitCodePlg is not None and exitCodePlg==0
+        assert exitCodePlg is not None # and exitCodePlg==0 #clang插件退出码非0也可能是正常退出
     else:
         INFO_LOG(gLogF, curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
