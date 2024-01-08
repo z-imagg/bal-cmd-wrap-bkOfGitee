@@ -103,6 +103,11 @@ try:#try业务块
     #组装 clang插件命令 不再 需要 lark文法解析结果
     ign_srcF:bool=fileAtCmd.src_file is  None or  fileAtCmd.src_file in [ '/dev/null'  ] or fileAtCmd.ism16()  #假设只需要忽略/dev/null和-m16
     if not ign_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
+
+        ArgvResetSrcF=f"git checkout -- {fileAtCmd.src_file}".split(' ')
+        exitCodeResetSrcF:int=execute_cmd(ArgvResetSrcF, gLogF,False)
+        assert exitCodeResetSrcF == 0,"断言git重置源文件修改失败,(运行clang插件前，git重置源文件理由是：一个函数f被N次编译 第1次有static修饰【asm块不能加'i'(fn)】 第2次无static修饰【asm块加'i'(fn)】 导致clang插件修改结果不一致)"
+
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
         assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
         #以多进程编译测试函数id生成服务
