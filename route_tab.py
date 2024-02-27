@@ -22,11 +22,11 @@ progTab=[
 #Ubuntu 22.04.3 LTS  的i686-linux-gnu-gcc路由
 # ("i686-linux-gnu-gcc",true_gcc),   # readlink -f `which i686-linux-gnu-gcc`
 #全路径的假gcc 也得在路由表中
-# ("/bal/bin/i686-linux-gnu-gcc",true_gcc),
+# ("/app_spy/bin/i686-linux-gnu-gcc",true_gcc),
 
 ("clang",true_clang),   # readlink -f `which clang`
 #全路径的假clang 也得在路由表中
-("/bal/bin/clang",true_clang),
+("/app_spy/bin/clang",true_clang),
 
 
 

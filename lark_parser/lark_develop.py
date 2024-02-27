@@ -17,7 +17,7 @@ from file_at_cmd import FileAtCmd
 # clang命令中遗漏 -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx   -msoft-float  -mpreferred-stack-boundary=2 -mtune=generic -Wa,-mtune=generic32 -pipe  -mindirect-branch=thunk-extern -mindirect-branch-register -O1 -fno-allow-store-data-races -fno-var-tracking-assignments -fconserve-stack -DKBUILD_BASENAME="pt" -DKBUILD_MODNAME="pt"
 
 #gcc_cmd_5: 源文件在中间，末尾依然是选项
-gcc_cmd_line='/bal/bin/clang -Wp,-MD,arch/x86/boot/.cpucheck.o.d -nostdinc -isystem /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/lib/clang/15.0.0/include -I./arch/x86/include -I./arch/x86/include/generated -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -D__KERNEL__ -Qunused-arguments -m16 -g -Os -D__KERNEL__ -DDISABLE_BRANCH_PROFILING -Wall -Wstrict-prototypes -march=i386 -mregparm=3 -fno-strict-aliasing -fomit-frame-pointer -fno-pic -mno-mmx -mno-sse -fcf-protection=none -ffreestanding -fno-stack-protector -Wno-address-of-packed-member -mstack-alignment=4 -no-integrated-as -Werror=unknown-warning-option -D_SETUP -DKBUILD_BASENAME="cpucheck" -DKBUILD_MODNAME="cpucheck" -c -o arch/x86/boot/cpucheck.o arch/x86/boot/cpucheck.c'
+gcc_cmd_line='/app_spy/bin/clang -Wp,-MD,arch/x86/boot/.cpucheck.o.d -nostdinc -isystem /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/lib/clang/15.0.0/include -I./arch/x86/include -I./arch/x86/include/generated -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -D__KERNEL__ -Qunused-arguments -m16 -g -Os -D__KERNEL__ -DDISABLE_BRANCH_PROFILING -Wall -Wstrict-prototypes -march=i386 -mregparm=3 -fno-strict-aliasing -fomit-frame-pointer -fno-pic -mno-mmx -mno-sse -fcf-protection=none -ffreestanding -fno-stack-protector -Wno-address-of-packed-member -mstack-alignment=4 -no-integrated-as -Werror=unknown-warning-option -D_SETUP -DKBUILD_BASENAME="cpucheck" -DKBUILD_MODNAME="cpucheck" -c -o arch/x86/boot/cpucheck.o arch/x86/boot/cpucheck.c'
 #此命令输出是: /usr/lib/gcc-cross/i686-linux-gnu/11/include
 #此命令 应该是 make工具为了探测 给出的，并不是编译业务命令
 
@@ -41,11 +41,11 @@ print(f"命令中的源文件相关字段为:{fileAtCmd}")
 
 end=True
 """
-D:\miniconda3\python.exe F:/bal/cmd-wrap/lark_parser/lark_develop.py
+D:\miniconda3\python.exe F:/app_spy/cmd-wrap/lark_parser/lark_develop.py
 start
   gcc_cmd
     gcc_cmd_1
-      program	/bal/bin/clang
+      program	/app_spy/bin/clang
       kv_ls
         kv
           kv_w__valany

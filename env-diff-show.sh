@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-ignore_env_name_list_f=/bal/.ignore_env_name_list.txt
+ignore_env_name_list_f=/app_spy/.ignore_env_name_list.txt
 { [ -f $ignore_env_name_list_f ] || exit 1  ;} && \
 UniqueId="$fileName-$(date +'%Y%m%d%H%M%S_%s_%N')" && \
 ResultF="/tmp/env-diff-$UniqueId.txt" && \
