@@ -106,7 +106,7 @@ try:#try业务块
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
         assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
         #以多进程编译测试函数id生成服务
-        clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libCTk.so -Xclang -add-plugin -Xclang CTk -fsyntax-only"
+        clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang CTk -fsyntax-only"
         clang_plugin_param_ls =  __list_filter_NoneEle_emptyStrEle__(  clang_plugin_params.split(' ') )
         #直接将clang插件参数塞到clang编译命令中
         ArgvPlg = [Argv[0], *clang_plugin_param_ls, *Argv[1:]] #TODO 干净一点 这里应该去掉  复制fileAtCmd为fileAtCmdCp 并 对 fileAtCmdCp 做 去掉中的"-c" 、去掉 "-o xxx.o", 再ArgvPlg <-- [*clang_plugin_param_ls ,fileAtCmdCp]. 目前这样由-fsyntax-only导致"-c" "-o xxx.o"无效也可以.

@@ -20,7 +20,7 @@ file /llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang-15
 # clang-15包装器 使用场景
 
 ## tick.cpp 举例
-1. 应用clang插件libCTk.so对pytorch编译一趟，用以对源码增加tick语句
+1. 应用clang插件libClnFuncSpy.so对pytorch编译一趟，用以对源码增加tick语句
 2. 编译t_clock_tick.cpp成为t_clock_tick.o
 2. 不带插件，正常编译修改后的源码，此时引用了tick接口的x.cpp 编译会报错, 由clang-15包装器解决:
 > 在clang-15.wrap.py中新增逻辑:  
@@ -30,7 +30,7 @@ file /llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang-15
 
 
 ## libTick.so 举例
-1. 应用clang插件libCTk.so对pytorch编译一趟，用以对源码增加tick语句
+1. 应用clang插件libClnFuncSpy.so对pytorch编译一趟，用以对源码增加tick语句
 2. 编译t_clock_tick.cpp成为/pubx/clang-ctk/build/lib/libTick.so
 2. 不带插件，正常编译修改后的源码，此时引用了tick接口的x.cpp 编译会报错, 由clang-15包装器解决:
 > 在clang-15.wrap.py中新增逻辑:  
