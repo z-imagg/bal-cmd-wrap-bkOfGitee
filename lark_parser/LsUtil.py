@@ -176,3 +176,19 @@ def lsDelNone(ls:typing.List[EmT])->str:
         ))
     return newLs
 
+
+#给定数组ls, 保留以prefix开头的元素，原始数组ls保持不变
+def lsStartWith(ls:typing.List[str],prefix:str)->typing.Tuple[bool, typing.List[str],str]:
+    
+    #若空，则否定
+    if isEmptyLs(ls) or prefix is None  :
+        return None
+    
+    newLs:typing.List[EmT]=list(filter(
+        lambda eleK:eleK.startswith(prefix),
+        ls
+        ))
+        
+    #返回 是否有以prefix开头的元素 、 以prefix开头的元素们 、 这些元素的join
+    return (not isEmptyLs(newLs),newLs)
+
