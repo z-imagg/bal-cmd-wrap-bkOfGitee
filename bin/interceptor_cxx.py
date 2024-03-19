@@ -123,7 +123,7 @@ finally:
         #关闭日志文件
         getGlbVarInst().gLogF.close()
         getGlbVarInst().gLogF=None
-        assert exitCode is not None
+        # assert exitCode is not None
         #以真实命令的退出码退出（假装自己是真实命令）
         exit(exitCode)
 #拦截过程 结束}

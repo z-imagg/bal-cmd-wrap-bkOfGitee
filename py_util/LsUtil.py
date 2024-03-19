@@ -235,7 +235,7 @@ def lsStartWith(ls:typing.List[str],prefix:str)->typing.Tuple[bool, typing.List[
     
     #若空，则否定
     if isEmptyLs(ls) or prefix is None  :
-        return None
+        return (False,None,None)
     
     newLs:typing.List[EmT]=list(filter(
         lambda eleK:eleK.startswith(prefix),
@@ -243,5 +243,5 @@ def lsStartWith(ls:typing.List[str],prefix:str)->typing.Tuple[bool, typing.List[
         ))
         
     #返回 是否有以prefix开头的元素 、 以prefix开头的元素们 、 这些元素的join
-    return (not isEmptyLs(newLs),newLs)
+    return (not isEmptyLs(newLs),newLs," ".join(newLs))
 
