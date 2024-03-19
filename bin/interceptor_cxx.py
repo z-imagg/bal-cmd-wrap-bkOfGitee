@@ -30,6 +30,7 @@ import time
 
 
 curDir:str=os.getcwd()
+#curDir=='/fridaAnlzAp/cmd-wrap'
 progAbsPth:str=f'{curDir}/{sys.argv[0]}'
 #progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
 #progName 为 真程序名
@@ -52,10 +53,10 @@ Argv=ArgvReplace_O2As_O1(Argv)
 
 approxId:str=genApproxId()
 from pathlib import Path
-logFK=f"/app_spy/g-{approxId}.log"
+logFK=f"/tmp/{progName}-{approxId}.log"
 assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
 gLogF = open(logFK, "a") #append(追加地写入)模式打开文件
-INFO_LOG(gLogF, curFrm, f"日志文件{logFK}锁定成功,立即退出循环")
+INFO_LOG(gLogF, curFrm, f"生成唯一文件名成功{logFK},作为日志文件")
 #一旦 成功 锁定 某个日志文件 后的操作
 # 获得文件锁后，立即 将 stdio缓存 写出
 sys.stdout.flush()
@@ -71,7 +72,8 @@ try:#try业务块
     # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG(gLogF, curFrm, f"收到命令及参数:【{gccCmdHum}】")
     #捕捉编译时的env环境变量和初始环境变量差异
-    execute_script_file(gLogF,"/app_spy/cmd-wrap/env-diff-show.sh")
+    execute_script_file(gLogF,f"{curDir}/cmd-wrap/env-diff-show.sh")
+    #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(Argv, gLogF)
     #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
