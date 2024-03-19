@@ -8,7 +8,7 @@ from file_at_cmd import FileAtCmd
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
 import inspect
 import types
-from LsUtil import neibEqu,neighbor,elmEndWith,elmEndWithAny,elm1stNotNone,elmExistEqu
+from LsUtil import neibEqu,neibGet,elmEndWith,elmEndWithAny,elm1stNotNone,elmExistEqu
 import select
 
 def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
@@ -26,7 +26,7 @@ def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     fac.srcFpIsDevNull=neibEqu(sysArgv, "-c", "/dev/null")
     
     #获得源文件路径
-    srcFp1:str=neighbor(sysArgv,"-c")
+    srcFp1:str=neibGet(sysArgv,"-c")
     srcFp2:str=elmEndWithAny(sysArgv,suffixLs=[".c",".cpp",".cxx"])
     srcFp:str=elm1stNotNone([srcFp1,srcFp2])
     if srcFp1 is None and srcFp2 is not None:

@@ -24,7 +24,7 @@ from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
 from CxxccParser import larkGetSrcFileFromSingleGccCmd
 
-from LsUtil import lsDelNone,elmDelEqu_,neibEqu,neighbor,neighborRm2_,elmExistEqu
+from LsUtil import lsDelNone,elmRmEqu_,neibEqu,neibGet,neighborRm2_,elmExistEqu
 from busz import myBusz
 from IdUtil import genApproxId
 
@@ -50,7 +50,7 @@ gccCmdHum:str=" ".join(sys.argv)
 # sysArgv:List[str]= sys.argv.copy() ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=lsDelNone(list(sys.argv))
-en_dev_mode:bool=elmDelEqu_(Argv,"--__enable_develop_mode")
+en_dev_mode:bool=elmRmEqu_(Argv,"--__enable_develop_mode")
 
 if elmExistEqu(Argv,"--__target"):
     assert progAbsPth == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"

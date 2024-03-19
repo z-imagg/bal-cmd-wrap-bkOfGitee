@@ -31,108 +31,107 @@ def isEmptyLs(ls:typing.List[EmT]):
     return empty
 
 #给定数组ls, 判定元素which的邻居是否为 neighbor
-def neibEqu(ls:typing.List[EmT],x:EmT,_neib:EmT)->bool:
+def neibEqu(ls:typing.List[EmT],x:EmT,neibFit:EmT)->bool:
     
     #若空，则否定
-    if isEmptyLs(ls) or isNone(x)  or isNone(_neib)  : return False
+    if isEmptyLs(ls) or isNone(x)  or isNone(neibFit)  : return False
 
     #若无x，则否定
     if not  Counter(ls).__contains__(x): return False
     
+    #走到这里, 有x
+
     #获取x下标
     _,i,noNeib=idxOf(ls,x)  ; 
     #若无邻居，则否定
     if noNeib: return False
 
+    #走到这里, 有邻居
+    
     #获取邻居
     neib:EmT=ls[i+1]
 
     #邻居等于给定值吗？
-    equ:bool = neib == _neib
+    equ:bool = neib == neibFit
 
     return equ
 
 
 #给定数组ls, 获得元素which的邻居
-def neighbor(ls:typing.List[EmT],target:EmT)->EmT:
-    targetExist,neighbIdx,neighb=neighborBIE(ls=ls,which=target)
-    return neighb
-
-#给定数组ls, 若元素which存则，则删除该元素、其邻居，原始数组ls将被改变 
-#  返回 是否有做删除动作、该元素、其邻居
-def neighborRm2_(ls:typing.List[EmT],target:EmT)->typing.Tuple[bool,EmT,EmT]:
-    
-    LEN=len(ls)
-    targetExist,neighbIdx,neighb=neighborBIE(ls=ls,which=target)
-    if targetExist:
-        targetIdx=neighbIdx-1
-        assert targetIdx < LEN and targetIdx >= 0 , "断言7"
-        tgt=ls[targetIdx]
-        assert tgt == target
-        del ls[targetIdx]
-        del ls[neighbIdx]
-        return (True,tgt,neighb)
-
-    return (False,None,None)
-
-
-#给定数组ls, 获得元素which的邻居, 返回 存在吗(bool)、邻居的下标(int)、该邻居
-def neighborBIE(ls:typing.List[EmT],which:EmT)->typing.Tuple[bool,int,EmT]:
+def neibGet(ls:typing.List[EmT],x:EmT)->EmT:
     
     #若空，则否定
-    if isEmptyLs(ls) or which is None  :
-        return (False,None,None)
+    if isEmptyLs(ls) or isNone(x)   : return None
+
+    #若无x，则否定
+    if not  Counter(ls).__contains__(x): return None
     
+    #走到这里, 有x
+
+    #获取x下标
+    _,i,noNeib=idxOf(ls,x)  ; 
+    #若无邻居，则否定
+    if noNeib: return None
+
+    #走到这里, 有邻居
+
+    #获取邻居
+    neib:EmT=ls[i+1]
+
+    return neib
+
+
+#给定数组ls, 若元素x存则，则删除该元素、其邻居，原始数组ls将被改变 
+#  返回 是否有做删除动作、该元素、其邻居
+def neighborRm2_(ls:typing.List[EmT],x:EmT)->typing.Tuple[bool,EmT,EmT]:
+    Negative = (False,None,None)
+
+    #若空，则否定
+    if isEmptyLs(ls) or isNone(x)   : return Negative
+
+    #若无x，则否定
+    if not  Counter(ls).__contains__(x): return Negative
     
-    Len=len(ls)
-    for  k,eleK in enumerate(ls):
+    #走到这里, 有x
 
-        #找到末尾了，已经无邻居了，则否定
-        if k>=Len-1:
-            return (False,None,None)
-        
-        _cur=ls[k]; _nxt=ls[k+1]
+    #获取x下标
+    _,i,noNeib=idxOf(ls,x)  ; 
+    #若无邻居，则否定
+    if noNeib: return Negative
 
-        #若 当前元素 为 空 或者 下一个元素为空，则跳过
-        if _cur is None or _nxt is None: 
-            continue
+    #走到这里, 有邻居
 
-        #如果 当前元素为 which   ，则肯定
-        if _cur == which  :
-            return (True,k,_cur)
+    #获取邻居下标、邻居
+    j=i+1; neib= ls[j]
 
-    #找到末尾了， 则否定
-    return (False,None,None)
+    #删除x、邻居
+    del ls[i]; del ls[j]
+
+    return (True,x,neib)
+
 
 
 #给定数组ls, 删除指定元素，原始数组ls将被改变. 不支持删除空元素
-def elmDelEqu_(ls:typing.List[EmT],target:EmT)->bool:
-    
+def elmRmEqu_(ls:typing.List[EmT],x:EmT)->bool:
+    Negative = False
+    Positive = True
+
     #若空，则否定
-    if isEmptyLs(ls) or target is None  :
-        return False
+    if isEmptyLs(ls) or isNone(x)   : return Negative
+
+    #若无x，则否定
+    if not  Counter(ls).__contains__(x): return Negative
     
-    for  k,eleK in enumerate(ls):
+    #走到这里, 有x
 
-        _cur=ls[k]
-        
-        #若 当前元素 为 空  ，则...
-        if _cur is None  : 
-            #若 目标元素也为空，即 相等， 则肯定
-            if target is None :
-                del ls[k]
-                return True
-            #若 目标元素非空， 即 不相等，则跳过
-            else:
-                continue
+    #获取x下标
+    _,i,_=idxOf(ls,x)  ; 
 
-        #如果 当前元素 等于 目标元素，则肯定
-        if _cur == target :
-            del ls[k]
-            return True
+    #删除x、邻居
+    del ls[i]
 
-    #找到末尾了， 则否定
-    return False
+    return Positive
+
 
 
 #给定数组ls, 获得元素以suffix结尾的元素
