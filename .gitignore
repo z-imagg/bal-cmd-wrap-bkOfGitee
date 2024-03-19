@@ -8,3 +8,13 @@ linux-2.6.27.15__make_clean_then_make_V=__grep_gcc1.txt
 __pycache__/
 
 antlr4_gcc_cmd/parser_generated/
+
+.venv/
+
+nohup.out
+
+bin/gcc
+bin/g++
+bin/clang
+bin/clang++
+TestCxx01.o

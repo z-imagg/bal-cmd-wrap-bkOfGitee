@@ -1,42 +1,38 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-SfxWrpPy=".wrap.py"#SUFFIX_WRAP_PY
+
+import typing
+from PathUtil import pathNorm
+
+fakeBinHm="/fridaAnlzAp/cmd-wrap/bin/"
+fake_clang=pathNorm(f"{fakeBinHm}/clang")
+fake_clangxx=pathNorm(f"{fakeBinHm}/clang++")
+fake_gcc=pathNorm(f"{fakeBinHm}/gcc")
+fake_gxx=pathNorm(f"{fakeBinHm}/g++")
+
 LLVM15Home="/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4"
-# true_gcc="/usr/bin/i686-linux-gnu-gcc-11"
-true_clang=f"{LLVM15Home}/bin/clang"
+true_clang=pathNorm(f"{LLVM15Home}/bin/clang")
+true_clangxx=pathNorm(f"{LLVM15Home}/bin/clang++")
+true_gcc=pathNorm(f"/usr/bin/x86_64-linux-gnu-gcc-11")
+true_gxx=pathNorm(f"/usr/bin/x86_64-linux-gnu-g++-11")
+
 progTab=[
-
-("clang",  
- f"{LLVM15Home}/bin/clang" #指向 {LLVM15Home}/bin/clang-15的软连接
- ),
-
-("clang++",
- f"{LLVM15Home}/bin/clang++" #指向 {LLVM15Home}/bin/clang-15的软连接
- ),
-
-#ubuntu 14.04 的gcc、g++路由
-# ("gcc","/usr/bin/gcc-4.4"),
-# ("g++","/usr/bin/g++-4.4"),
-
-#Ubuntu 22.04.3 LTS  的i686-linux-gnu-gcc路由
-# ("i686-linux-gnu-gcc",true_gcc),   # readlink -f `which i686-linux-gnu-gcc`
-#全路径的假gcc 也得在路由表中
-# ("/app_spy/bin/i686-linux-gnu-gcc",true_gcc),
-
-("clang",true_clang),   # readlink -f `which clang`
-#全路径的假clang 也得在路由表中
-("/app_spy/bin/clang",true_clang),
-
-
-
+(fake_clang,true_clang),
+(fake_clangxx,true_clangxx),
+(fake_gcc,true_gcc),
+(fake_gxx,true_gxx),
 
 ]
 progMap=dict(progTab)
 
-def calcTrueProg(progFake:str)->str:
-    if progFake.endswith(SfxWrpPy):
-        return progFake.replace(SfxWrpPy,"")
-    if progMap.__contains__(progFake):
-        return progMap.__getitem__(progFake)
-    raise f"错误，路由表中不包含 假程序【{progFake}】，请人工补全路由表【route_tab.py:progTab】"
+def calcTrueProg(curDir:str,SysArgv:typing.List[str])->None:
+    progAbsPth:str=f'{curDir}/{SysArgv[0]}'
+    progAbsPth=pathNorm(progAbsPth)
+    if progMap.__contains__(progAbsPth):
+        progTrue:str= progMap.__getitem__(progAbsPth)
+        SysArgv[0]=progTrue
+        return
+    
+    errMsg:str=f"错误，路由表中不包含 假程序【{progAbsPth}】，请人工补全路由表【route_tab.py:progTab】"
+    raise Exception(errMsg)
