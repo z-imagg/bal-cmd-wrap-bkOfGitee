@@ -38,6 +38,7 @@
             "program": "bin/gcc",
             "console": "integratedTerminal",
             "args": [  
+"-c", "/fridaAnlzAp/cmd-wrap/test_cxx_src/TestCxx01.cpp",
 "--__enable_develop_mode",
 ],
             "env": {

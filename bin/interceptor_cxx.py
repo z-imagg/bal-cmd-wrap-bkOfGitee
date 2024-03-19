@@ -11,6 +11,7 @@ from typing import List,Tuple
 import fcntl
 import inspect
 import types
+from pathlib import Path
 
 
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_emptyStrEle__
@@ -23,25 +24,26 @@ from CxxccParser import larkGetSrcFileFromSingleGccCmd
 from py_util.LsUtil import lsDelNone
 from busz import myBusz
 
+curDir:str=os.getcwd()
+progAbsPth:str=f'{curDir}/{sys.argv[0]}'
+#progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
+#progName 为 真程序名
+progName:str=Path(progAbsPth).name
+#progName=='gcc'
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()
+#人类可读命令字符串
+gccCmdHum:str=" ".join(sys.argv)
 #备份sys.argv
-sysArgvAsStr:str= ' '.join(sys.argv) ;
 # sysArgv:List[str]= sys.argv.copy() ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=lsDelNone(list(sys.argv))
 #备份假程序名
-progFake:str=Argv[0] if not Argv[0].endswith("interceptor.py") else os.environ.get("progFake",None)
-#即 测试假clang方法:  progFake=clang /app_spy/cmd-wrap/interceptor.py   ...  
-# print(f"progFake:{progFake}; Argv:{Argv}")
-assert progFake is not None
 #参数中-Werror替换为-Wno-error
 Argv:List[str] = ArgvRemoveWerror(Argv)
 #参数中-O2替换为-o1
 Argv=ArgvReplace_O2As_O1(Argv)
-#换回真程序名（从假程序名算出真程序名，并以真填假）
-Argv[0]=calcTrueProg(progFake)
 
 import os
 pid:int=os.getpid()
@@ -67,7 +69,7 @@ exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
     # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
-    INFO_LOG(gLogF, curFrm, f"收到命令及参数（即sys.argv即字符串sysArgvAsStr）:【{sysArgvAsStr}】")
+    INFO_LOG(gLogF, curFrm, f"收到命令及参数:【{gccCmdHum}】")
     #捕捉编译时的env环境变量和初始环境变量差异
     execute_script_file(gLogF,"/app_spy/cmd-wrap/env-diff-show.sh")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表

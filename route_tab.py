@@ -26,7 +26,7 @@ progTab=[
 
 ("clang",true_clang),   # readlink -f `which clang`
 #全路径的假clang 也得在路由表中
-("/app_spy/bin/clang",true_clang),
+("/fridaAnlzAp/cmd-wrap/bin/clang",true_clang),
 
 
 

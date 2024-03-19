@@ -12,7 +12,7 @@ from LsUtil import neighborEqu,neighbor,elmEndWith,elmEndWithAny,elm1stNotNone,e
 def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     curFrm:types.FrameType=inspect.currentframe()
 
-    sglGccCmdHm:str=" ".join(sysArgv)
+    gccCmdHum:str=" ".join(sysArgv)
 
     fac:FileAtCmd=FileAtCmd()
 
@@ -27,16 +27,16 @@ def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     srcFp2:str=elmEndWithAny(sysArgv,suffixLs=[".c",".cpp",".cxx"])
     srcFp:str=elm1stNotNone([srcFp1,srcFp2])
     if srcFp1 is None and srcFp2 is not None:
-        INFO_LOG(gLogF, curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{sglGccCmdHm}】")
+        INFO_LOG(gLogF, curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
 
-    assert fac.input_is_std_in and srcFp is not None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？【{sglGccCmdHm}】"
+    assert fac.input_is_std_in and srcFp is not None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？【{gccCmdHum}】"
 
     fac.src_file = srcFp
 
     #是否有选项 -m16
     fac.has_m16=elmExistEqu(sysArgv, "-m16")
 
-    INFO_LOG(gLogF,curFrm,f"'简易'即将解析文本singleGccCmd：【{sglGccCmdHm}】")
+    INFO_LOG(gLogF,curFrm,f"'简易'即将解析文本singleGccCmd：【{gccCmdHum}】")
     INFO_LOG(gLogF,curFrm,f"命令中的源文件相关字段为:{fac.__str__()}")
 
 
