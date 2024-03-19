@@ -22,8 +22,6 @@ binHm=$Hm/bin
 intcpt=$binHm/interceptor_cxx.py
 #intcpt == /fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py
 
-export PATH=$binHm/:$PATH
-
 source $Hm/script/bash-complete--interceptor_cxx.sh
 chmod +x $intcpt
 
@@ -43,5 +41,16 @@ ln -s  $intcpt $binHm/gcc
 ln -s  $intcpt $binHm/g++
 ln -s  $intcpt $binHm/clang
 ln -s  $intcpt $binHm/clang++
+
+export PATH=$binHm:$PATH
+
+which gcc
+# /fridaAnlzAp/cmd-wrap/bin/gcc
+which g++
+# /fridaAnlzAp/cmd-wrap/bin/g++
+which clang
+# /fridaAnlzAp/cmd-wrap/bin/clang
+which clang++
+# /fridaAnlzAp/cmd-wrap/bin/clang++
 
 #interceptor_cxx.py --__help  及其 bash自动完成
