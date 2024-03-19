@@ -61,43 +61,12 @@ class FileAtCmd:
         # -
         self.input_is_std_in: bool  = None
 
-        # -m32
-        self.m_dd_val: str  = None
-        # -march=yyy
-        self.m_arch_val: str = None
-
-        # -std=yy
-        self.std_val: str = None
-
-        # -Dxxx
-        self.d_val_ls:List[ str] = None
-        # -Dxxx=yyy
-        self.d_xx_eq_val_ls: List[str] = None
-
-        # -Wxxx
-        self.w_val_ls:List[ str] = None
-        # -Wxxx=yyy
-        self.w_eq_val_ls: List[str] = None
-
-        # -fxxx
-        self.f_val_ls:List[ str ] = None
-        # -fxxx=yyy
-        self.f_eq_val_ls: List[str] = None
-
-        # -isystem yyy
-        self.isystem_val_ls:List[ str ] = None
-        # -Iyyy
-        self.inc_val_ls:List[ str ] = None
-        # -I yyy
-        self.sep_inc_val_ls:List[ str ] = None
-        # -include yyy
-        self.sep_include_val_ls:List[ str ] = None
-
-        self.src_file: str  = None
 
 
     def __str__(self):
-        return self.__as_clang_cmd_part__()
+        txt= f" srcFpIsDevNull {self.srcFpIsDevNull} ,  has_m16 {self.has_m16} , input_is_std_in {self.input_is_std_in}  "
+
+        return txt
 
     def __as_clang_cmd_part__(self,kvLs_skip:List[str]=None)->str:
 

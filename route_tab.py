@@ -1,42 +1,32 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+fakeBinHm="/fridaAnlzAp/cmd-wrap/bin/"
+fake_clang=f"{fakeBinHm}/clang"
+fake_clangxx=f"{fakeBinHm}/clang++"
+fake_gcc=f"{fakeBinHm}/gcc"
+fake_gxx=f"{fakeBinHm}/g++"
+
 SfxWrpPy=".wrap.py"#SUFFIX_WRAP_PY
 LLVM15Home="/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4"
-# true_gcc="/usr/bin/i686-linux-gnu-gcc-11"
 true_clang=f"{LLVM15Home}/bin/clang"
+true_clangxx=f"{LLVM15Home}/bin/clang++"
+true_gcc=f"/usr/bin/x86_64-linux-gnu-gcc-11"
+true_gxx=f"/usr/bin/x86_64-linux-gnu-g++-11"
+
 progTab=[
-
-("clang",  
- f"{LLVM15Home}/bin/clang" #指向 {LLVM15Home}/bin/clang-15的软连接
- ),
-
-("clang++",
- f"{LLVM15Home}/bin/clang++" #指向 {LLVM15Home}/bin/clang-15的软连接
- ),
-
-#ubuntu 14.04 的gcc、g++路由
-# ("gcc","/usr/bin/gcc-4.4"),
-# ("g++","/usr/bin/g++-4.4"),
-
-#Ubuntu 22.04.3 LTS  的i686-linux-gnu-gcc路由
-# ("i686-linux-gnu-gcc",true_gcc),   # readlink -f `which i686-linux-gnu-gcc`
-#全路径的假gcc 也得在路由表中
-# ("/app_spy/bin/i686-linux-gnu-gcc",true_gcc),
-
-("clang",true_clang),   # readlink -f `which clang`
-#全路径的假clang 也得在路由表中
-("/fridaAnlzAp/cmd-wrap/bin/clang",true_clang),
-
-
-
+(fake_clang,true_clang),
+(fake_clangxx,true_clangxx),
+(fake_gcc,true_gcc),
+(fake_gxx,true_gxx),
 
 ]
 progMap=dict(progTab)
 
-def calcTrueProg(progFake:str)->str:
-    if progFake.endswith(SfxWrpPy):
-        return progFake.replace(SfxWrpPy,"")
+import typing
+def calcTrueProg(SysArgv:typing.List[str])->str:
+    progFake:str=SysArgv[0]
     if progMap.__contains__(progFake):
-        return progMap.__getitem__(progFake)
+        progTrue:str= progMap.__getitem__(progFake)
+        SysArgv[0]=progTrue
     raise f"错误，路由表中不包含 假程序【{progFake}】，请人工补全路由表【route_tab.py:progTab】"
