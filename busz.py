@@ -8,7 +8,7 @@ from interceptor_util import execute_cmd
 import typing
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
 
-#对编译命令做出的自定义动作
+#对编译命令做出的自定义动作(编译命令拦截器)
 def myBusz(gLogF, progFake:str, Argv:typing.List[str], fileAtCmd:FileAtCmd):
         #调用本主机ubuntu22x64上的clang插件修改本地源文件
     assert progFake.endswith("clang")  ,"只有编译器是clang时, 才能直接将clang插件参数塞到clang编译命令中"
