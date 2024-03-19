@@ -36,11 +36,34 @@ def neighborEqu(ls:typing.List[EmT],which:EmT,neighbor:EmT)->bool:
 
 
 #给定数组ls, 获得元素which的邻居
-def neighbor(ls:typing.List[EmT],which:EmT)->EmT:
+def neighbor(ls:typing.List[EmT],target:EmT)->EmT:
+    targetExist,neighbIdx,neighb=neighborBIE(ls=ls,which=target)
+    return neighb
+
+#给定数组ls, 若元素which存则，则删除该元素、其邻居，原始数组ls将被改变 
+#  返回 是否有做删除动作、该元素、其邻居
+def neighborRm2_(ls:typing.List[EmT],target:EmT)->typing.Tuple[bool,EmT,EmT]:
+    
+    LEN=len(ls)
+    targetExist,neighbIdx,neighb=neighborBIE(ls=ls,which=target)
+    if targetExist:
+        targetIdx=neighbIdx-1
+        assert targetIdx < LEN and targetIdx >= 0 , "断言7"
+        tgt=ls[targetIdx]
+        assert tgt == target
+        del ls[targetIdx]
+        del ls[neighbIdx]
+        return (True,tgt,neighb)
+
+    return (False,None,None)
+
+
+#给定数组ls, 获得元素which的邻居, 返回 存在吗(bool)、邻居的下标(int)、该邻居
+def neighborBIE(ls:typing.List[EmT],which:EmT)->typing.Tuple[bool,int,EmT]:
     
     #若空，则否定
     if isEmptyLs(ls) or which is None  :
-        return None
+        return (False,None,None)
     
     
     Len=len(ls)
@@ -48,7 +71,7 @@ def neighbor(ls:typing.List[EmT],which:EmT)->EmT:
 
         #找到末尾了，已经无邻居了，则否定
         if k>=Len-1:
-            return None
+            return (False,None,None)
         
         _cur=ls[k]; _nxt=ls[k+1]
 
@@ -58,10 +81,10 @@ def neighbor(ls:typing.List[EmT],which:EmT)->EmT:
 
         #如果 当前元素为 which   ，则肯定
         if _cur == which  :
-            return _cur
+            return (True,k,_cur)
 
     #找到末尾了， 则否定
-    return None
+    return (False,None,None)
 
 
 #给定数组ls, 删除指定元素，原始数组ls将被改变. 不支持删除空元素

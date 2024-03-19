@@ -22,7 +22,6 @@
             "program": "interceptor_cxx.py",
             "console": "integratedTerminal",
             "args": [  
-"--__enable_develop_mode",
 "--__target", "gcc"
 ],
             "env": {

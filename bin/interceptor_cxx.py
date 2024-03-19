@@ -24,7 +24,7 @@ from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
 from CxxccParser import larkGetSrcFileFromSingleGccCmd
 
-from LsUtil import lsDelNone
+from LsUtil import lsDelNone,elmDelEqu_,neighborEqu,neighbor,neighborRm2_,elmExistEqu
 from busz import myBusz
 from IdUtil import genApproxId
 
@@ -50,6 +50,15 @@ gccCmdHum:str=" ".join(sys.argv)
 # sysArgv:List[str]= sys.argv.copy() ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=lsDelNone(list(sys.argv))
+en_dev_mode:bool=elmDelEqu_(Argv,"--__enable_develop_mode")
+
+if elmExistEqu(Argv,"--__target"):
+    assert progAbsPth == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
+    _,_,target=neighborRm2_(Argv,"--__target","gcc")
+    en_dev_mode:bool=True
+#"--__enable_develop_mode",
+# "--__target", "gcc"
+# ],
 
 #备份假程序名
 #参数中-Werror替换为-Wno-error
