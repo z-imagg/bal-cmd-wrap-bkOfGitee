@@ -7,17 +7,13 @@ alias getCurScriptFullPath='f=$(readlink -f ${BASH_SOURCE[0]})  ; d=$(dirname $f
 getCurScriptFullPath
 #d==/fridaAnlzAp/cmd-wrap/script/
 
-#####
+Hm=$(realpath -s ${d}/../)
+#Hm=/fridaAnlzAp/cmd-wrap
+export PATH=$Hm/:$PATH
+source $Hm/script/bash-complete--interceptor_cxx.sh
+chmod +x $Hm/interceptor_cxx.py
 
-D=${d}
-cd ${D}
-Hm=$(realpath -s "${D}/../") # == /fridaAnlzAp/cmd-wrap/
+bash $Hm/script/env_prepare.sh >/dev/null
+source $Hm/.venv/bin/activate
 
-VENV_HOME=${Hm}/.venv
-ActivVenv=$VENV_HOME/bin/activate
-test -f $ActivVenv || python3 -m venv $VENV_HOME
-
-# set +x
-source $ActivVenv
-# set -x
-pip install -r ${Hm}/requirements.txt
+#interceptor_cxx.py --__help  及其 bash自动完成
