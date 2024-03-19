@@ -24,7 +24,7 @@ from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
 from CxxccParser import larkGetSrcFileFromSingleGccCmd
 
-from LsUtil import lsDelNone,elmDelEqu_,neighborEqu,neighbor,neighborRm2_,elmExistEqu
+from LsUtil import lsDelNone,elmDelEqu_,neibEqu,neighbor,neighborRm2_,elmExistEqu
 from busz import myBusz
 from IdUtil import genApproxId
 

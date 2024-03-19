@@ -8,7 +8,7 @@ from file_at_cmd import FileAtCmd
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
 import inspect
 import types
-from LsUtil import neighborEqu,neighbor,elmEndWith,elmEndWithAny,elm1stNotNone,elmExistEqu
+from LsUtil import neibEqu,neighbor,elmEndWith,elmEndWithAny,elm1stNotNone,elmExistEqu
 import select
 
 def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
@@ -23,7 +23,7 @@ def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     
 
     #判定源文件是否为/dev/null
-    fac.srcFpIsDevNull=neighborEqu(sysArgv, "-c", "/dev/null")
+    fac.srcFpIsDevNull=neibEqu(sysArgv, "-c", "/dev/null")
     
     #获得源文件路径
     srcFp1:str=neighbor(sysArgv,"-c")

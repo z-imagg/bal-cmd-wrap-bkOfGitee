@@ -2,37 +2,55 @@
 # -*- coding: utf-8 -*-
 
 #【术语】 EmT == ElementType == 元素类型
+#【术语】 neib == neighbor
 import typing
-
-#
+from collections.abc import Sized
+from collections import Counter
 EmT=typing.TypeVar("EmT")
 
+def idxOf(ls:typing.List[EmT],x:EmT)->typing.Tuple[bool,int,bool]:
+    try:
+        LEN=len(ls)
+        k=ls.index(x)
+        xIsEnd:bool=(LEN-1==k)
+        return (True,k,xIsEnd)
+    except:
+        return (False,None,None)
+    
+def isNone(x:typing.Any):
+    _isNone:bool= (x is None)
+    return _isNone
+
+def isNotNone(x:typing.Any):
+    _NotNone:bool= (x is not None)
+    return _NotNone
+
 def isEmptyLs(ls:typing.List[EmT]):
+    assert isinstance(ls,list) and isinstance(ls,Sized), "isEmptyLs断言1"
     empty:bool = ls is None or len(ls) == 0
     return empty
 
 #给定数组ls, 判定元素which的邻居是否为 neighbor
-def neighborEqu(ls:typing.List[EmT],which:EmT,neighbor:EmT)->bool:
+def neibEqu(ls:typing.List[EmT],x:EmT,_neib:EmT)->bool:
     
     #若空，则否定
-    if isEmptyLs(ls) or which is None or neighbor is None :
-        return False
+    if isEmptyLs(ls) or isNone(x)  or isNone(_neib)  : return False
+
+    #若无x，则否定
+    if not  Counter(ls).__contains__(x): return False
     
-    Len=len(ls)
-    for  k,eleK in enumerate(ls):
-        #找到末尾了，已经无邻居了，则否定
-        if k>=Len-1:
-            return False
+    #获取x下标
+    _,i,noNeib=idxOf(ls,x)  ; 
+    #若无邻居，则否定
+    if noNeib: return False
 
-        _cur=ls[k]; _nxt=ls[k+1]
+    #获取邻居
+    neib:EmT=ls[i+1]
 
-        #若 当前元素 为 空 或者 下一个元素为空，则跳过
-        if _cur is None or _nxt is None: 
-            continue
+    #邻居等于给定值吗？
+    equ:bool = neib == _neib
 
-        #如果 当前元素为 which 且 下一个元素为 neighbor ，则肯定
-        if _cur == which and _nxt == neighbor:
-            return True
+    return equ
 
 
 #给定数组ls, 获得元素which的邻居
