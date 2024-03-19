@@ -89,7 +89,7 @@ try:#try业务块
     # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG( curFrm, f"收到命令及参数:【{gccCmdHum}】")
     #捕捉编译时的env环境变量和初始环境变量差异
-    execute_script_file(gLogF,f"{curDir}/cmd-wrap/env-diff-show.sh")
+    execute_script_file(gLogF,f"{curDir}/env-diff-show.sh")
     #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(Argv, gLogF)

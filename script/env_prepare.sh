@@ -28,4 +28,6 @@ test -f $ActivVenv || python3 -m venv $VENV_HOME
 source $ActivVenv
 # set -x
 
+touch ${Hm}/.ignore_env_name_list.txt
+
 pip install -r ${Hm}/requirements.txt
