@@ -52,6 +52,12 @@ class FileAtCmd:
         return ' '.join(kv_ls_keep)
 
     def __init__(self):
+        #判定源文件是否为/dev/null
+        self.srcFpIsDevNull:bool = None
+
+        #是否有选项 -m16
+        self.has_m16:bool = None
+
         # -
         self.input_is_std_in: bool  = None
 
