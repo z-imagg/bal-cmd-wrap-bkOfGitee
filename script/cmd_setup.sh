@@ -16,11 +16,29 @@ getCurScriptFullPath
 
 Hm=$(realpath -s ${d}/../)
 #Hm=/fridaAnlzAp/cmd-wrap
-export PATH=$Hm/:$PATH
+
+binHm=$Hm/bin
+#binHm == /fridaAnlzAp/cmd-wrap/bin/
+intcpt=$binHm/interceptor_cxx.py
+#intcpt == /fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py
+
+export PATH=$binHm/:$PATH
+
 source $Hm/script/bash-complete--interceptor_cxx.sh
-chmod +x $Hm/interceptor_cxx.py
+chmod +x $intcpt
 
 bash $Hm/script/env_prepare.sh >/dev/null
 source $Hm/.venv/bin/activate
+
+unlink $binHm/gcc
+unlink $binHm/g++
+unlink $binHm/clang
+unlink $binHm/clang++
+
+ln -s  $intcpt $binHm/gcc
+#ln -s /fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py   /fridaAnlzAp/cmd-wrap/bin/gcc
+ln -s  $intcpt $binHm/g++
+ln -s  $intcpt $binHm/clang
+ln -s  $intcpt $binHm/clang++
 
 #interceptor_cxx.py --__help  及其 bash自动完成
