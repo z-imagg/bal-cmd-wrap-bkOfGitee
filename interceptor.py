@@ -53,41 +53,24 @@ Argv=ArgvReplace_O2As_O1(Argv)
 #换回真程序名（从假程序名算出真程序名，并以真填假）
 Argv[0]=calcTrueProg(progFake)
 
-#尝试锁定日志文件，最多尝试N次
-# 折叠此for循环，可在一页内看明白 此脚本业务逻辑
-gLogF_LockOk:bool=False
-Max_Try_Lock_Times=100
-for k in range(Max_Try_Lock_Times):
-    try:
-        logFK=f"/app_spy/g-{k}.log"
-        gLogF = open(logFK, "a") #append(追加地写入)模式打开文件
-        # 锁定文件的一部分
-        fcntl.flock(gLogF.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+import os
+pid:int=os.getpid()
+import time
+timeNs:int=time.time_ns()
 
-        INFO_LOG(gLogF, curFrm, f"日志文件{logFK}锁定成功,立即退出循环")
-        #一旦 成功 锁定 某个日志文件 后的操作
-        # 获得文件锁后，立即 将 stdio缓存 写出
-        sys.stdout.flush()
-        sys.stderr.flush()
-        sys.stdin.flush()
-        #  标记锁定成功
-        gLogF_LockOk=True
-        #  退出循环
-        break
 
-    except IOError as e:
-        pass
-        # if e.errno == errno.EAGAIN or e.errno == errno.EACCES:
-        #     print(f"日志文件{logFK}锁定失败，异常【{e}】")
-        # else:
-        #     print(f"日志文件{logFK}锁定失败，其他异常【{e}】")
-    finally:
-        if not gLogF_LockOk :#若没拿到锁，但文件已经打开，则要关闭文件
-            if gLogF is not None:
-                gLogF.close()
-                gLogF=None
+from pathlib import Path
+logFK=f"/app_spy/g-{timeNs}-{pid}.log"
+assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
+gLogF = open(logFK, "a") #append(追加地写入)模式打开文件
+INFO_LOG(gLogF, curFrm, f"日志文件{logFK}锁定成功,立即退出循环")
+#一旦 成功 锁定 某个日志文件 后的操作
+# 获得文件锁后，立即 将 stdio缓存 写出
+sys.stdout.flush()
+sys.stderr.flush()
+sys.stdin.flush()
+#  标记锁定成功
 
-assert gLogF is not None,f"断言错误，尝试锁定{k}次不同日志文件，依然锁定失败(此时已经有{k}个进程同时需要独立的日志文件？)。 最后尝试日志文件是【{logFK}】。请检查代码，应该是bug。"
 
 exitCodePlg:int = None
 exitCode:int = None
