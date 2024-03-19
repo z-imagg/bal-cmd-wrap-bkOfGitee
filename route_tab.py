@@ -24,9 +24,11 @@ progTab=[
 progMap=dict(progTab)
 
 import typing
-def calcTrueProg(SysArgv:typing.List[str])->str:
-    progFake:str=SysArgv[0]
-    if progMap.__contains__(progFake):
-        progTrue:str= progMap.__getitem__(progFake)
+def calcTrueProg(curDir:str,SysArgv:typing.List[str])->str:
+    progAbsPth:str=f'{curDir}/{SysArgv[0]}'
+    if progMap.__contains__(progAbsPth):
+        progTrue:str= progMap.__getitem__(progAbsPth)
         SysArgv[0]=progTrue
-    raise f"错误，路由表中不包含 假程序【{progFake}】，请人工补全路由表【route_tab.py:progTab】"
+    
+    errMsg:str=f"错误，路由表中不包含 假程序【{progAbsPth}】，请人工补全路由表【route_tab.py:progTab】"
+    raise Exception(errMsg)

@@ -102,7 +102,7 @@ try:#try业务块
     else:
         INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
-    calcTrueProg(Argv)
+    calcTrueProg(curDir,Argv)
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
     exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
     if not care_srcF:
