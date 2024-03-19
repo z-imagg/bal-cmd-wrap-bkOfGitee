@@ -3,11 +3,13 @@
 import sys
 from typing import List,Tuple
 
+from IoUtil import stdinHasTxt
 from file_at_cmd import FileAtCmd
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
 import inspect
 import types
 from LsUtil import neighborEqu,neighbor,elmEndWith,elmEndWithAny,elm1stNotNone,elmExistEqu
+import select
 
 def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     curFrm:types.FrameType=inspect.currentframe()
@@ -17,7 +19,8 @@ def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     fac:FileAtCmd=FileAtCmd()
 
     #若stdin是可读取的, 则判定为从标准输入读取
-    fac.input_is_std_in=sys.stdin.readable()
+    fac.input_is_std_in=stdinHasTxt()
+    
 
     #判定源文件是否为/dev/null
     fac.srcFpIsDevNull=neighborEqu(sysArgv, "-c", "/dev/null")
@@ -29,7 +32,8 @@ def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     if srcFp1 is None and srcFp2 is not None:
         INFO_LOG( curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
 
-    assert fac.input_is_std_in and srcFp is not None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？【{gccCmdHum}】"
+    if fac.input_is_std_in:
+        assert srcFp is not None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？【{gccCmdHum}】"
 
     fac.src_file = srcFp
 
