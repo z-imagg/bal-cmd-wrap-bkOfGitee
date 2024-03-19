@@ -1,6 +1,8 @@
+//// 修改PYTHONPATH， 需要 重启vscode后 生效
 {
     "version": "0.2.0",
     "configurations": [
+        ////// bash调试
 // vscode安装扩展bash-debug以调试bash脚本
 //      https://marketplace.visualstudio.com/items?itemName=rogalmic.bash-debug
         {
@@ -9,6 +11,25 @@
             "name": "Bash调试当前脚本",
             "program": "${file}",
             // "terminalKind": "integrated", #此行可有可无
-        }
+        },
+        ////// python调试
+        //     opts="--__develop_mode  --__help  --__target"
+
+        {
+            "name": "interceptor_cxx 【固定参数】",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "interceptor_cxx.py",
+            "console": "integratedTerminal",
+            "args": [  
+"--__enable_develop_mode",
+"--__target", "gcc"
+],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
+            },
+        },
+
+        
     ]
 }

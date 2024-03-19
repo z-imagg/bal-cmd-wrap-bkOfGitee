@@ -10,3 +10,5 @@ __pycache__/
 antlr4_gcc_cmd/parser_generated/
 
 .venv/
+
+nohup.out
