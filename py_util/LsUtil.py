@@ -175,25 +175,21 @@ def elmEndWithAny(ls:typing.List[str],suffixLs:typing.List[str])->str:
 
 #给定数组ls, 获得第一个非空元素
 def elm1stNotNone(ls:typing.List[EmT])->EmT:
-    
+    Negative = None
+
     #若空，则否定
-    if isEmptyLs(ls)   :
-        return None
-    
-    for  k,eleK in enumerate(ls):
+    if isEmptyLs(ls)  : return Negative
 
-        _cur=ls[k]
-        
-        #若 当前元素 为 空  ，则跳过
-        if _cur is None  : 
-            continue
+    #执行过滤
+    rLs=list(filter(
+        lambda elm: isNotNone(elm),
+        ls
+    ))
+    #若过滤结果列表为空，则否定
+    if  isEmptyLs(rLs): return Negative
 
-        #如果 当前元素为 非空   ，则肯定
-        if _cur is not None  :
-            return eleK
-
-    #找到末尾了， 则否定
-    return None
+    #否则，返回符合条件的第一个元素
+    return rLs[0]
 
 
 #给定数组ls, 判定是否有元素等于x
