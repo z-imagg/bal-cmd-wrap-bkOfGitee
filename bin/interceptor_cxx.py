@@ -23,20 +23,6 @@ from CxxccParser import larkGetSrcFileFromSingleGccCmd
 from py_util.LsUtil import lsDelNone
 from busz import myBusz
 
-"""本脚本执行时的需要的场景如下:
-/usr/bin/gcc  --> interceptor.py
-    即 /usr/bin/gcc 是指向 拦截器interceptor.py 的 软连接
-"""
-"""本程序中若干用词解释
-progFake: /usr/bin/gcc : 此即 假程序 
-     即 假程序 /usr/bin/gcc 是 指向 拦截器interceptor.py 的 软连接
-     
-/usr/bin/gcc.real : 此即 真程序 是真实的ELF可执行文件 
-    即 真程序 /usr/bin/gcc.real 是 原来真实的gcc可执行ELF文件
-    
-calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
-    即 calcTrueProg 将 假 转换 为 真
-"""
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()

@@ -39,7 +39,6 @@
             "console": "integratedTerminal",
             "args": [  
 "--__enable_develop_mode",
-"--__target", "gcc"
 ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
