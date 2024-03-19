@@ -1,6 +1,9 @@
+from io import TextIOWrapper
 from typing import Any, List
 import types
 import inspect
+
+from global_var import getGlbVarInst
 
 
 def __NoneStr2Empty__(string: str):
@@ -27,7 +30,8 @@ def _prefix(_type:str,curFrm:types.FrameType)->str:
     prefix:str=f"{_type}:{_now_str()}@{curFrm.f_code.co_filename}:{curFrm.f_lineno}:{curFrm.f_code.co_name}"
     return prefix
 
-def INFO_LOG(_LogFile, curFrm:types.FrameType, _MSG:str ):
+def INFO_LOG(curFrm:types.FrameType, _MSG:str ):
+    _LogFile:TextIOWrapper=getGlbVarInst()
     prefix:str=_prefix('INFO',curFrm)
     print(f"{prefix}:{_MSG}",file=_LogFile )
     return

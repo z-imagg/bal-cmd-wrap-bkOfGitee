@@ -3,7 +3,10 @@
 
 #apt install file uuid-runtime
 import errno
+from io import TextIOWrapper
 import sys,os
+
+from global_var import GlbVar, getGlbVarInst
 assert sys.version_info >= (3,6), "错误：需要使用 Python 3.6 或更高版本. 因为 此脚本中大量使用的 字符串格式化语法 f'{变量名}' 是pytho3.6引入的"
 import time
 import subprocess
@@ -29,6 +32,8 @@ import os
 import time
 
 
+
+
 curDir:str=os.getcwd()
 #curDir=='/fridaAnlzAp/cmd-wrap'
 progAbsPth:str=f'{curDir}/{sys.argv[0]}'
@@ -45,6 +50,7 @@ gccCmdHum:str=" ".join(sys.argv)
 # sysArgv:List[str]= sys.argv.copy() ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=lsDelNone(list(sys.argv))
+
 #备份假程序名
 #参数中-Werror替换为-Wno-error
 Argv:List[str] = ArgvRemoveWerror(Argv)
@@ -55,7 +61,9 @@ approxId:str=genApproxId()
 from pathlib import Path
 logFK=f"/tmp/{progName}-{approxId}.log"
 assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
-gLogF = open(logFK, "a") #append(追加地写入)模式打开文件
+gLogF:TextIOWrapper = open(logFK, "a") #append(追加地写入)模式打开文件
+inst=GlbVar(gLogF=gLogF)
+inst2=getGlbVarInst()
 INFO_LOG(gLogF, curFrm, f"生成唯一文件名成功{logFK},作为日志文件")
 #一旦 成功 锁定 某个日志文件 后的操作
 # 获得文件锁后，立即 将 stdio缓存 写出

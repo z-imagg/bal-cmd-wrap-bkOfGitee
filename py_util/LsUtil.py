@@ -64,6 +64,36 @@ def neighbor(ls:typing.List[EmT],which:EmT)->EmT:
     return None
 
 
+#给定数组ls, 删除指定元素，原始数组ls将被改变. 不支持删除空元素
+def elmDelEqu_(ls:typing.List[EmT],target:EmT)->bool:
+    
+    #若空，则否定
+    if isEmptyLs(ls) or target is None  :
+        return False
+    
+    for  k,eleK in enumerate(ls):
+
+        _cur=ls[k]
+        
+        #若 当前元素 为 空  ，则...
+        if _cur is None  : 
+            #若 目标元素也为空，即 相等， 则肯定
+            if target is None :
+                del ls[k]
+                return True
+            #若 目标元素非空， 即 不相等，则跳过
+            else:
+                continue
+
+        #如果 当前元素 等于 目标元素，则肯定
+        if _cur == target :
+            del ls[k]
+            return True
+
+    #找到末尾了， 则否定
+    return False
+
+
 #给定数组ls, 获得元素以suffix结尾的元素
 def elmEndWith(ls:typing.List[str],suffix:str)->str:
     
@@ -143,20 +173,20 @@ def elmExistEqu(ls:typing.List[EmT],target:EmT)->bool:
         
         #若 当前元素 为 空  ，则...
         if _cur is None :#and target is None : 
-            #若 当前元素 为 空 且 目标 为 空 ， 则肯定
+            #若 且 目标 为 空 ， 则肯定
             if target is None:
                 return True
-            #若 当前元素 为 空 且 目标 不为 空 ， 则跳过
+            #若 且 目标 不为 空 ， 则跳过
             else:
                 continue
         #若 当前元素 不为 空  ，则...
         else:
-            #若 当前元素 不为 空 且 目标 为 空 ， 则跳过
+            #若 且 目标 为 空 ， 则跳过
             if target is None:
                 return True
-            #若 当前元素 不为 空 且 目标 不为 空 ， 则跳过
+            #若 且 目标 不为 空 ， 则跳过
             else:
-                #若 当前元素 不为 空 且 目标 不为 空 且 二者相等， 则肯定
+                #若 且 二者相等， 则肯定
                 if _cur == target:
                     return True
 
