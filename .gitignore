@@ -17,3 +17,4 @@ bin/gcc
 bin/g++
 bin/clang
 bin/clang++
+TestCxx01.o
