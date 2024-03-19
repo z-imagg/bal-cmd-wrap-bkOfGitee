@@ -19,4 +19,4 @@ def myBusz(gLogF,   Argv:typing.List[str], fileAtCmd:FileAtCmd):
 
     has_g,ls_g,join_g=lsStartWith(Argv,"-g")
     if has_g:
-        INFO_LOG(gLogF, curFrm,  f"注意，发现-g开头的选项们 【{join_g}】")
+        INFO_LOG( curFrm,  f"注意，发现-g开头的选项们 【{join_g}】")

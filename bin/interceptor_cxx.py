@@ -86,7 +86,7 @@ exitCodePlg:int = None
 exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
-    # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
+    # INFO_LOG( curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG( curFrm, f"收到命令及参数:【{gccCmdHum}】")
     #捕捉编译时的env环境变量和初始环境变量差异
     execute_script_file(gLogF,f"{curDir}/env-diff-show.sh")
