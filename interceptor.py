@@ -20,6 +20,7 @@ from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
 from lark_parser.api_lark_parse_single_cmd import larkGetSrcFileFromSingleGccCmd
 
+from lark_parser.LsUtil import lsDelNone
 """本脚本执行时的需要的场景如下:
 /usr/bin/gcc  --> interceptor.py
     即 /usr/bin/gcc 是指向 拦截器interceptor.py 的 软连接
@@ -39,9 +40,9 @@ calcTrueProg(假程序'/usr/bin/gcc') == 真程序'/usr/bin/gcc.real'
 curFrm:types.FrameType=inspect.currentframe()
 #备份sys.argv
 sysArgvAsStr:str= ' '.join(sys.argv) ;
-sysArgv:List[str]= sys.argv.copy() ;
+# sysArgv:List[str]= sys.argv.copy() ;
 #参数数组复制一份 (不要直接修改sys.argv)
-Argv=__list_filter_NoneEle_emptyStrEle__(list(sys.argv))
+Argv=lsDelNone(list(sys.argv))
 #备份假程序名
 progFake:str=Argv[0] if not Argv[0].endswith("interceptor.py") else os.environ.get("progFake",None)
 #即 测试假clang方法:  progFake=clang /app_spy/cmd-wrap/interceptor.py   ...  
@@ -82,7 +83,7 @@ try:#try业务块
     #捕捉编译时的env环境变量和初始环境变量差异
     execute_script_file(gLogF,"/app_spy/cmd-wrap/env-diff-show.sh")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(sysArgv, gLogF)
+    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(Argv, gLogF)
     #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
     #组装 clang插件命令 不再 需要 lark文法解析结果
     care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16

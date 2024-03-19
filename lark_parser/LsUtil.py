@@ -164,3 +164,15 @@ def elmExistEqu(ls:typing.List[EmT],target:EmT)->bool:
     return False
 
 
+
+
+#给定数组ls, 删除其中的全部空元素，原始数组ls保持不变
+def lsDelNone(ls:typing.List[EmT])->str:
+    
+    newLs:typing.List[EmT]=list(filter(
+        #保留非空元素
+        lambda eleK: eleK is not None,
+        ls        
+        ))
+    return newLs
+
