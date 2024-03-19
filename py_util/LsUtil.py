@@ -144,15 +144,15 @@ def elmEndWith(ls:typing.List[str],suffix:str)->str:
     if isEmptyLs(ls) or isNone(suffix)   : return Negative
 
     #执行过滤
-    rLs=list(filter(
+    newLs=list(filter(
         lambda elm:elm.endswith(suffix),
         ls
     ))
     #若过滤结果列表为空，则否定
-    if  isEmptyLs(rLs): return Negative
+    if  isEmptyLs(newLs): return Negative
 
     #否则，返回符合条件的第一个元素
-    return rLs[0]
+    return newLs[0]
 
 
 #给定数组ls, 获得元素以suffixLs们中任意一个结尾的元素
@@ -181,15 +181,15 @@ def elm1stNotNone(ls:typing.List[EmT])->EmT:
     if isEmptyLs(ls)  : return Negative
 
     #执行过滤
-    rLs=list(filter(
+    newLs=list(filter(
         lambda elm: isNotNone(elm),
         ls
     ))
     #若过滤结果列表为空，则否定
-    if  isEmptyLs(rLs): return Negative
+    if  isEmptyLs(newLs): return Negative
 
     #否则，返回符合条件的第一个元素
-    return rLs[0]
+    return newLs[0]
 
 
 #给定数组ls, 判定是否有元素等于x
@@ -215,7 +215,7 @@ def lsDelNone(ls:typing.List[EmT])->str:
     
     newLs:typing.List[EmT]=list(filter(
         #保留非空元素
-        lambda eleK: isNotNone(eleK),
+        lambda elm: isNotNone(elm),
         ls        
         ))
     return newLs
