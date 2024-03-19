@@ -28,7 +28,10 @@ source $Hm/script/bash-complete--interceptor_cxx.sh
 chmod +x $intcpt
 
 bash $Hm/script/env_prepare.sh >/dev/null
+
+# set +x
 source $Hm/.venv/bin/activate
+# set -x
 
 unlink $binHm/gcc
 unlink $binHm/g++
