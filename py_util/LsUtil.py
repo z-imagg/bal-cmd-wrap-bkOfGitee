@@ -32,19 +32,20 @@ def isEmptyLs(ls:typing.List[EmT]):
 
 #给定数组ls, 判定元素which的邻居是否为 neighbor
 def neibEqu(ls:typing.List[EmT],x:EmT,neibFit:EmT)->bool:
-    
+    Negative = False
+
     #若空，则否定
-    if isEmptyLs(ls) or isNone(x)  or isNone(neibFit)  : return False
+    if isEmptyLs(ls) or isNone(x)  or isNone(neibFit)  : return Negative
 
     #若无x，则否定
-    if not  Counter(ls).__contains__(x): return False
+    if not  Counter(ls).__contains__(x): return Negative
     
     #走到这里, 有x
 
     #获取x下标
     _,i,noNeib=idxOf(ls,x)  ; 
     #若无邻居，则否定
-    if noNeib: return False
+    if noNeib: return Negative
 
     #走到这里, 有邻居
     
@@ -59,19 +60,20 @@ def neibEqu(ls:typing.List[EmT],x:EmT,neibFit:EmT)->bool:
 
 #给定数组ls, 获得元素which的邻居
 def neibGet(ls:typing.List[EmT],x:EmT)->EmT:
+    Negative = None
     
     #若空，则否定
-    if isEmptyLs(ls) or isNone(x)   : return None
+    if isEmptyLs(ls) or isNone(x)   : return Negative
 
     #若无x，则否定
-    if not  Counter(ls).__contains__(x): return None
+    if not  Counter(ls).__contains__(x): return Negative
     
     #走到这里, 有x
 
     #获取x下标
     _,i,noNeib=idxOf(ls,x)  ; 
     #若无邻居，则否定
-    if noNeib: return None
+    if noNeib: return Negative
 
     #走到这里, 有邻居
 
@@ -111,7 +113,7 @@ def neighborRm2_(ls:typing.List[EmT],x:EmT)->typing.Tuple[bool,EmT,EmT]:
 
 
 
-#给定数组ls, 删除指定元素，原始数组ls将被改变. 不支持删除空元素
+#给定数组ls, 删除指定元素，原始数组ls将被改变. 
 def elmRmEqu_(ls:typing.List[EmT],x:EmT)->bool:
     Negative = False
     Positive = True
@@ -136,27 +138,21 @@ def elmRmEqu_(ls:typing.List[EmT],x:EmT)->bool:
 
 #给定数组ls, 获得元素以suffix结尾的元素
 def elmEndWith(ls:typing.List[str],suffix:str)->str:
-    
+    Negative = None
+
     #若空，则否定
-    if isEmptyLs(ls) or suffix is None  :
-        return None
-    
-    for  k,eleK in enumerate(ls):
+    if isEmptyLs(ls) or isNone(suffix)   : return Negative
 
-        _cur=ls[k]
-        
-        #若 当前元素 为 空  ，则跳过
-        if _cur is None  : 
-            continue
+    #执行过滤
+    rLs=list(filter(
+        lambda elm:elm.endswith(suffix),
+        ls
+    ))
+    #若过滤结果列表为空，则否定
+    if  isEmptyLs(rLs): return Negative
 
-        #如果 当前元素为 以 suffix 结尾   ，则肯定
-        if _cur.endswith(suffix)  :
-            return eleK
-
-    #找到末尾了， 则否定
-    return None
-
-
+    #否则，返回符合条件的第一个元素
+    return rLs[0]
 
 
 #给定数组ls, 获得元素以suffixLs们中任意一个结尾的元素
@@ -200,38 +196,20 @@ def elm1stNotNone(ls:typing.List[EmT])->EmT:
     return None
 
 
-#给定数组ls, 判定是否有元素等于target
-def elmExistEqu(ls:typing.List[EmT],target:EmT)->bool:
-    
+#给定数组ls, 判定是否有元素等于x
+def elmExistEqu(ls:typing.List[EmT],x:EmT)->bool:
+    Negative = False
+    Positive = True
+
     #若空，则否定
-    if isEmptyLs(ls)   : #or target is None # 允许target为空
-        return False
+    if isEmptyLs(ls) or isNone(x)   : return Negative
+
+    #若无x，则否定
+    if not  Counter(ls).__contains__(x): return Negative
     
-    for  k,eleK in enumerate(ls):
+    #走到这里, 有x
 
-        _cur=ls[k]
-        
-        #若 当前元素 为 空  ，则...
-        if _cur is None :#and target is None : 
-            #若 且 目标 为 空 ， 则肯定
-            if target is None:
-                return True
-            #若 且 目标 不为 空 ， 则跳过
-            else:
-                continue
-        #若 当前元素 不为 空  ，则...
-        else:
-            #若 且 目标 为 空 ， 则跳过
-            if target is None:
-                return True
-            #若 且 目标 不为 空 ， 则跳过
-            else:
-                #若 且 二者相等， 则肯定
-                if _cur == target:
-                    return True
-
-    #找到末尾了， 则否定
-    return False
+    return Positive
 
 
 
@@ -241,7 +219,7 @@ def lsDelNone(ls:typing.List[EmT])->str:
     
     newLs:typing.List[EmT]=list(filter(
         #保留非空元素
-        lambda eleK: eleK is not None,
+        lambda eleK: isNotNone(eleK),
         ls        
         ))
     return newLs
@@ -251,7 +229,7 @@ def lsDelNone(ls:typing.List[EmT])->str:
 def lsStartWith(ls:typing.List[str],prefix:str)->typing.Tuple[bool, typing.List[str],str]:
     
     #若空，则否定
-    if isEmptyLs(ls) or prefix is None  :
+    if isEmptyLs(ls) or  isNone(prefix)   :
         return (False,None,None)
     
     newLs:typing.List[EmT]=list(filter(
