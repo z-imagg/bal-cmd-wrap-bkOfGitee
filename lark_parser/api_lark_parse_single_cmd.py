@@ -13,7 +13,7 @@ from file_at_cmd import FileAtCmd
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
 import inspect
 import types
-from LsUtil import neighborEqu,neighbor,elmEndWith,elmEndWithAny
+from LsUtil import neighborEqu,neighbor,elmEndWith,elmEndWithAny,elm1stNotNone
 
 def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     curFrm:types.FrameType=inspect.currentframe()
@@ -31,13 +31,15 @@ def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     #获得源文件路径
     srcFp1:str=neighbor(sysArgv,"-c")
     srcFp2:str=elmEndWithAny(sysArgv,suffixLs=[".c",".cpp",".cxx"])
+    srcFp:str=elm1stNotNone([srcFp1,srcFp2])
     if srcFp1 is None and srcFp2 is not None:
         print(f"警告，发现直接从源文件到可执行文件的编译命令【{cmdHuman}】")
+
+    assert fac.input_is_std_in and srcFp is not None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？【{cmdHuman}】"
+
+    fac.src_file = srcFp
     
-
-    # gcc_cmd_line="  gcc -nostdlib -o arch/x86/vdso/vdso32-int80.so.dbg -fPIC -shared  -Wl,--hash-style=sysv -m32 -Wl,-soname=linux-gate.so.1 -Wl,-T,arch/x86/vdso/vdso32/vdso32.lds arch/x86/vdso/vdso32/note.o arch/x86/vdso/vdso32/int80.o"
-    # gcc_cmd_line='gcc -Wp,-MD,arch/x86/kernel/.i8259.o.d  -nostdinc -isystem /usr/lib/gcc/i686-linux-gnu/4.4.7/include -D__KERNEL__ -Iinclude  -I/app_spy/bochs_run-linux2.6/linux-2.6.27.15/arch/x86/include -include include/linux/autoconf.h -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -ffreestanding -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -Iinclude/asm-x86/mach-default -Wframe-larger-than=1024 -fno-stack-protector -fno-omit-frame-pointer -fno-optimize-sibling-calls -g -pg -Wdeclaration-after-statement -Wno-pointer-sign  -D"KBUILD_STR(s)=#s" -D"KBUILD_BASENAME=KBUILD_STR(i8259)"  -D"KBUILD_MODNAME=KBUILD_STR(i8259)" -c -o arch/x86/kernel/.tmp_i8259.o arch/x86/kernel/i8259.c'
-
+    
     # lark.open的参数parser 取值范围 为 ('earley', 'lalr', 'cyk', None)
     parser = Lark.open('linux_cmd.lark', rel_to=__file__, parser="earley")
     # parser取 earley 或 lalr 时， Lark.open运行正常 ;
