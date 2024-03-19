@@ -61,7 +61,7 @@ def neighbor(ls:typing.List[EmT],which:EmT)->EmT:
             return _cur
 
     #找到末尾了， 则否定
-    return False
+    return None
 
 
 #给定数组ls, 获得元素以suffix结尾的元素
@@ -128,4 +128,39 @@ def elm1stNotNone(ls:typing.List[EmT])->EmT:
 
     #找到末尾了， 则否定
     return None
+
+
+#给定数组ls, 判定是否有元素等于target
+def elmExistEqu(ls:typing.List[EmT],target:EmT)->bool:
+    
+    #若空，则否定
+    if isEmptyLs(ls)   : #or target is None # 允许target为空
+        return False
+    
+    for  k,eleK in enumerate(ls):
+
+        _cur=ls[k]
+        
+        #若 当前元素 为 空  ，则...
+        if _cur is None :#and target is None : 
+            #若 当前元素 为 空 且 目标 为 空 ， 则肯定
+            if target is None:
+                return True
+            #若 当前元素 为 空 且 目标 不为 空 ， 则跳过
+            else:
+                continue
+        #若 当前元素 不为 空  ，则...
+        else:
+            #若 当前元素 不为 空 且 目标 为 空 ， 则跳过
+            if target is None:
+                return True
+            #若 当前元素 不为 空 且 目标 不为 空 ， 则跳过
+            else:
+                #若 当前元素 不为 空 且 目标 不为 空 且 二者相等， 则肯定
+                if _cur == target:
+                    return True
+
+    #找到末尾了， 则否定
+    return False
+
 
