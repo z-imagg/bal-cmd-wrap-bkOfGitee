@@ -13,10 +13,18 @@ from file_at_cmd import FileAtCmd
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
 import inspect
 import types
+from LsUtil import neighborEqu
 
-def larkGetSrcFileFromSingleGccCmd(singleGccCmd:str,gLogF)->FileAtCmd:
+def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     curFrm:types.FrameType=inspect.currentframe()
 
+    fac:FileAtCmd=FileAtCmd()
+
+    #若stdin是可读取的, 则判定为从标准输入读取
+    fac.input_is_std_in=sys.stdin.readable()
+
+    #判定源文件是否为/dev/null
+    srcFIsDevNull:bool=neighborEqu(sysArgv, "-c", "/dev/null")
 
     # gcc_cmd_line="  gcc -nostdlib -o arch/x86/vdso/vdso32-int80.so.dbg -fPIC -shared  -Wl,--hash-style=sysv -m32 -Wl,-soname=linux-gate.so.1 -Wl,-T,arch/x86/vdso/vdso32/vdso32.lds arch/x86/vdso/vdso32/note.o arch/x86/vdso/vdso32/int80.o"
     # gcc_cmd_line='gcc -Wp,-MD,arch/x86/kernel/.i8259.o.d  -nostdinc -isystem /usr/lib/gcc/i686-linux-gnu/4.4.7/include -D__KERNEL__ -Iinclude  -I/app_spy/bochs_run-linux2.6/linux-2.6.27.15/arch/x86/include -include include/linux/autoconf.h -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -O2 -m32 -msoft-float -mregparm=3 -freg-struct-return -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -ffreestanding -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -Iinclude/asm-x86/mach-default -Wframe-larger-than=1024 -fno-stack-protector -fno-omit-frame-pointer -fno-optimize-sibling-calls -g -pg -Wdeclaration-after-statement -Wno-pointer-sign  -D"KBUILD_STR(s)=#s" -D"KBUILD_BASENAME=KBUILD_STR(i8259)"  -D"KBUILD_MODNAME=KBUILD_STR(i8259)" -c -o arch/x86/kernel/.tmp_i8259.o arch/x86/kernel/i8259.c'
