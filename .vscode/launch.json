@@ -1,0 +1,17 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+// vscode安装扩展bash-debug以调试bash脚本
+//      https://marketplace.visualstudio.com/items?itemName=rogalmic.bash-debug
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash调试当前脚本",
+            "program": "${file}",
+            // "terminalKind": "integrated", #此行可有可无
+        }
+    ]
+}
