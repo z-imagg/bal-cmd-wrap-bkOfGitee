@@ -15,14 +15,19 @@ from pathlib import Path
 
 
 from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_emptyStrEle__
-from entity.file_at_cmd import FileAtCmd
+from file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
 from CxxccParser import larkGetSrcFileFromSingleGccCmd
 
-from py_util.LsUtil import lsDelNone
+from LsUtil import lsDelNone
 from busz import myBusz
+from IdUtil import genApproxId
+
+import os
+import time
+
 
 curDir:str=os.getcwd()
 progAbsPth:str=f'{curDir}/{sys.argv[0]}'
@@ -45,14 +50,9 @@ Argv:List[str] = ArgvRemoveWerror(Argv)
 #参数中-O2替换为-o1
 Argv=ArgvReplace_O2As_O1(Argv)
 
-import os
-pid:int=os.getpid()
-import time
-timeNs:int=time.time_ns()
-
-
+approxId:str=genApproxId()
 from pathlib import Path
-logFK=f"/app_spy/g-{timeNs}-{pid}.log"
+logFK=f"/app_spy/g-{approxId}.log"
 assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
 gLogF = open(logFK, "a") #append(追加地写入)模式打开文件
 INFO_LOG(gLogF, curFrm, f"日志文件{logFK}锁定成功,立即退出循环")
