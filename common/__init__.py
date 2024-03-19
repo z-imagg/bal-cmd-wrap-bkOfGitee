@@ -2,6 +2,7 @@ from io import TextIOWrapper
 from typing import Any, List
 import types
 import inspect
+import sys
 
 from global_var import getGlbVarInst
 
@@ -31,14 +32,28 @@ def _prefix(_type:str,curFrm:types.FrameType)->str:
     return prefix
 
 def INFO_LOG(curFrm:types.FrameType, _MSG:str ):
-    _LogFile:TextIOWrapper=getGlbVarInst()
+    _LogFile:TextIOWrapper=getGlbVarInst().gLogF
     prefix:str=_prefix('INFO',curFrm)
-    print(f"{prefix}:{_MSG}",file=_LogFile )
+    msg:str=f"{prefix}:{_MSG}"
+
+    print(msg,file=_LogFile )
+    if getGlbVarInst().en_dev_mode:
+        print(msg,file=sys.stdout)
+    
     return
 
-def EXCEPT_LOG(_LogFile, curFrm:types.FrameType, _MSG:str, _except:BaseException):
+import traceback
+def EXCEPT_LOG( curFrm:types.FrameType, _MSG:str, _except:BaseException):
+    _LogFile:TextIOWrapper=getGlbVarInst().gLogF
     prefix:str=_prefix('EXCEPT',curFrm)
-    print(f"{prefix}:{_MSG}",file=_LogFile)
-    import traceback
+    msg:str=f"{prefix}:{_MSG}"
+    
+    print(msg,file=_LogFile)
     traceback.print_exception(_except,file=_LogFile)
+    
+    if getGlbVarInst().en_dev_mode:
+        print(msg,file=sys.stderr)
+        traceback.print_exception(_except,file=sys.stderr)
+    
+
     return

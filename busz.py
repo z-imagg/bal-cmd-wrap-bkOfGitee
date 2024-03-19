@@ -13,7 +13,7 @@ import types
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
 
 #对编译命令做出的自定义动作(编译命令拦截器)
-def myBusz(gLogF, progFake:str, Argv:typing.List[str], fileAtCmd:FileAtCmd):
+def myBusz(gLogF,   Argv:typing.List[str], fileAtCmd:FileAtCmd):
 
     curFrm:types.FrameType=inspect.currentframe()
 

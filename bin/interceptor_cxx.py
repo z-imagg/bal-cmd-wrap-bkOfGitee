@@ -55,7 +55,7 @@ en_dev_mode:bool=elmDelEqu_(Argv,"--__enable_develop_mode")
 if elmExistEqu(Argv,"--__target"):
     assert progAbsPth == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
     _,_,target=neighborRm2_(Argv,"--__target","gcc")
-    en_dev_mode:bool=True
+    en_dev_mode=True
 #"--__enable_develop_mode",
 # "--__target", "gcc"
 # ],
@@ -71,9 +71,9 @@ from pathlib import Path
 logFK=f"/tmp/{progName}-{approxId}.log"
 assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
 gLogF:TextIOWrapper = open(logFK, "a") #append(追加地写入)模式打开文件
-inst=GlbVar(gLogF=gLogF)
-inst2=getGlbVarInst()
-INFO_LOG(gLogF, curFrm, f"生成唯一文件名成功{logFK},作为日志文件")
+inst=GlbVar(gLogF=gLogF,en_dev_mode=en_dev_mode)
+# inst2=getGlbVarInst()
+INFO_LOG(curFrm, f"生成唯一文件名成功{logFK},作为日志文件")
 #一旦 成功 锁定 某个日志文件 后的操作
 # 获得文件锁后，立即 将 stdio缓存 写出
 sys.stdout.flush()
@@ -87,7 +87,7 @@ exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
     # INFO_LOG(gLogF, curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
-    INFO_LOG(gLogF, curFrm, f"收到命令及参数:【{gccCmdHum}】")
+    INFO_LOG( curFrm, f"收到命令及参数:【{gccCmdHum}】")
     #捕捉编译时的env环境变量和初始环境变量差异
     execute_script_file(gLogF,f"{curDir}/cmd-wrap/env-diff-show.sh")
     #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
@@ -98,16 +98,16 @@ try:#try业务块
     care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
     if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
         #对编译命令做出的自定义动作(编译命令拦截器)
-        myBusz(gLogF=gLogF, progFake=progFake, Argv=Argv, fileAtCmd=fileAtCmd)
+        myBusz(gLogF=gLogF, Argv=Argv, fileAtCmd=fileAtCmd)
     else:
-        INFO_LOG(gLogF, curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
+        INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
     exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
     if not care_srcF:
         pass #TODO clang插件修改.c再编译后，检查.o文件中有没有对应的指令序列
 except BaseException  as bexp:
-    EXCEPT_LOG(gLogF, curFrm, f"interceptor.py的try业务块异常",bexp)
+    EXCEPT_LOG( curFrm, f"interceptor.py的try业务块异常",bexp)
     # raise bexp
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
@@ -118,11 +118,11 @@ finally:
         sys.stdin.flush()
         #释放日志文件锁，否则其他进程无法使用本次被锁定的日志文件。
         fcntl.flock(gLogF.fileno(), fcntl.LOCK_UN)
-        INFO_LOG(gLogF,curFrm,f"已释放日志文件{logFK}锁\n")
+        INFO_LOG(curFrm,f"已释放日志文件{logFK}锁\n")
     finally:
         #关闭日志文件
-        gLogF.close()
-        gLogF=None
+        getGlbVarInst().gLogF.close()
+        getGlbVarInst().gLogF=None
         assert exitCode is not None
         #以真实命令的退出码退出（假装自己是真实命令）
         exit(exitCode)
