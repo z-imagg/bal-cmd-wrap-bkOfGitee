@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1
+from basic_cmd import BasicCmd
 from py_util.LsUtil import lsDelNone, lsStartWith
 from entity.file_at_cmd import FileAtCmd
 from interceptor_util import execute_cmd
@@ -32,14 +33,14 @@ def customModify_CompilerArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], origi
     raise f"异常，不可识别的prog{fakeProg}"
 
 #客户对构建工具命令参数向量的修改
-def customModify_MakeToolArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str],originCmdHuman:str, prog:Prog)->typing.List[str]:
+def customModify_MakeToolArgv(  basicCmd:BasicCmd,argv:typing.List[str],originCmdHuman:str, prog:Prog)->typing.List[str]:
     fakeProg:str=prog.fakeProg
 
     if fakeProg==fake_cmake:
-        return customModify_MakeToolArgv_cmake(fileAtCmd=fileAtCmd,argv=argv,originCmdHuman=originCmdHuman)
+        return customModify_MakeToolArgv_cmake(basicCmd=basicCmd,argv=argv,originCmdHuman=originCmdHuman)
     
     if fakeProg==fake_make:
-        return customModify_MakeToolArgv_make(fileAtCmd=fileAtCmd,argv=argv,originCmdHuman=originCmdHuman)
+        return customModify_MakeToolArgv_make(basicCmd=basicCmd,argv=argv,originCmdHuman=originCmdHuman)
     
     raise f"异常，不可识别的prog{fakeProg}"
     
@@ -81,7 +82,7 @@ def customModify_CompilerArgv_clangxx(  fileAtCmd:FileAtCmd,argv:typing.List[str
 
 
 #客户对构建工具命令cmake参数向量的修改
-def customModify_MakeToolArgv_cmake(  fileAtCmd:FileAtCmd,argv:typing.List[str], originCmdHuman:str)->typing.List[str]:
+def customModify_MakeToolArgv_cmake(   basicCmd:BasicCmd,argv:typing.List[str], originCmdHuman:str)->typing.List[str]:
     VerboseOpt="-DCMAKE_VERBOSE_MAKEFILE=True"
     if VerboseOpt not in argv and not originCmdHuman.__contains__("-E copy"):
         argv.append("-DCMAKE_VERBOSE_MAKEFILE=True")
@@ -89,7 +90,7 @@ def customModify_MakeToolArgv_cmake(  fileAtCmd:FileAtCmd,argv:typing.List[str],
     return argv
 
 #客户对构建工具命令make参数向量的修改
-def customModify_MakeToolArgv_make(  fileAtCmd:FileAtCmd,argv:typing.List[str], originCmdHuman:str)->typing.List[str]:
+def customModify_MakeToolArgv_make(   basicCmd:BasicCmd,argv:typing.List[str], originCmdHuman:str)->typing.List[str]:
     newArgv:typing.List[str]=argv
     #请根据需要，自行编写 逻辑，实现 修改 clang++编译命令参数向量argv 
     return newArgv

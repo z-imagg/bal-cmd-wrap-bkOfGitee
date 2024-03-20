@@ -4,11 +4,13 @@
 #apt install file uuid-runtime
 
 import sys
+
 sys.path.append("/fridaAnlzAp/cmd-wrap/py_util")
 sys.path.append("/fridaAnlzAp/cmd-wrap/entity")
 sys.path.append("/fridaAnlzAp/cmd-wrap/bin")
 sys.path.append("/fridaAnlzAp/cmd-wrap")
 
+from basic_cmd import BasicCmd
 import os
 import errno
 from io import TextIOWrapper
@@ -39,6 +41,7 @@ from PathUtil import _getProgAbsPath
 import os
 import time
 import shutil
+from BasicCmdParser import basicCmdParse
 
 
 
@@ -59,20 +62,23 @@ exitCodePlg:int = None
 bzCmdExitCd:int = None
 try:#try业务块
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】, 父进程完成命令行【{pprocess_cmd()}】")
-    #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd()
-    #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
-    #组装 clang插件命令 不再 需要 lark文法解析结果
-    care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
-    if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
-        #客户对编译器命令参数向量的修改
-        if inst.buszProg.kind == Prog.ProgKind.Compiler:
-            inst.Argv=customModify_CompilerArgv( fileAtCmd=fileAtCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
-        elif inst.buszProg.kind == Prog.ProgKind.MakeTool:
-            inst.Argv=customModify_MakeToolArgv( fileAtCmd=fileAtCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+    #构建工具，不管有没有源文件都是要拦截的
+    if inst.buszProg.kind == Prog.ProgKind.MakeTool:
+        basicCmd:BasicCmd=basicCmdParse()
+        inst.Argv=customModify_MakeToolArgv(basicCmd=basicCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
 
-    else:
-        INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
+
+    #编译命令
+    if inst.buszProg.kind == Prog.ProgKind.Compiler:
+        #编译命令解析
+        fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd()
+        #编译命令，无源文件时不拦截.   
+        care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
+        if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
+            #客户对编译器命令参数向量的修改
+            inst.Argv=customModify_CompilerArgv( fileAtCmd=fileAtCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+        else:
+            INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     
     #执行业务命令
