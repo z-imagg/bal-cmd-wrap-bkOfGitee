@@ -4,8 +4,7 @@
 
 import typing
 from PathUtil import pathNorm
-from global_var import getGlbVarInst
-from PathUtil import getProgAbsPath
+from global_var import getGlbVarInst,getProgAbsPath
 
 fakeBinHm="/fridaAnlzAp/cmd-wrap/bin/"
 fake_clang=pathNorm(f"{fakeBinHm}/clang")

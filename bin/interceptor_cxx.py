@@ -43,9 +43,10 @@ import time
 
 
 initCurDir:str=os.getcwd()
+GlbVar(gLogF=None,en_dev_mode=None,initCurDir=initCurDir,sysArgv0=sys.argv[0])
 #curDir=='/fridaAnlzAp/cmd-wrap'
 progPath:str=sys.argv[0]
-progAb=_getProgAbsPath(initCurDir=initCurDir,progPath=progPath)
+progAb=_getProgAbsPath(initCurDir=initCurDir,sysArgv0=progPath)
 progAbsPth:Path=Path(progAb)
 #progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
 #progName 为 真程序名
@@ -87,7 +88,9 @@ from pathlib import Path
 logFK=f"/tmp/{progName}-{approxId}.log"
 assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
 gLogF:TextIOWrapper = open(logFK, "a") #append(追加地写入)模式打开文件
-inst=GlbVar(gLogF=gLogF,en_dev_mode=en_dev_mode,initCurDir=initCurDir,sysArgv0=progPath)
+# inst=GlbVar(gLogF=gLogF,en_dev_mode=en_dev_mode,initCurDir=initCurDir,sysArgv0=progPath)
+getGlbVarInst().gLogF=gLogF
+getGlbVarInst().en_dev_mode=en_dev_mode
 
 # inst2=getGlbVarInst()
 INFO_LOG(curFrm, f"生成唯一文件名成功{logFK},作为日志文件")

@@ -15,9 +15,18 @@ class GlbVar:
 
 #使用函数装饰器 的弊端是  无法获取到 真实类对象 ，从而 无法调用static方法。 只能绕开
 def getGlbVarInst()->GlbVar:
-    inst = GlbVar(None,None,None)#这句话并不是构造对象，而是获取单例对象
-    assert inst.gLogF is not None, "断言失败，必须先手工实例化GlbVar(合理的参数) ，再调用本方法getGlbVarInst获取全局变量"
+    inst = GlbVar(None,None,None,None)#这句话并不是构造对象，而是获取单例对象
+    assert inst.sysArgv0 is not None
+    # assert inst.gLogF is not None, "断言失败，必须先手工实例化GlbVar(合理的参数) ，再调用本方法getGlbVarInst获取全局变量"
     return inst
+
+
+
+def getProgAbsPath()->str:
+     inst = getGlbVarInst()
+     from PathUtil import _getProgAbsPath
+     progAbsPth:str= _getProgAbsPath(initCurDir=inst.initCurDir,sysArgv0=inst.sysArgv0)
+     return progAbsPth
 
 
 #测试

@@ -16,10 +16,7 @@ def pathNorm(pth:str)->str:
      return path_normal
 
 
-def _getProgAbsPath(initCurDir:str,progPath:str)->str:
+def _getProgAbsPath(initCurDir:str,sysArgv0:str)->str:
+     progPath:str=sysArgv0
      progAbsPth:str= progPath if progPath.startswith("/") else  f'{initCurDir}/{progPath}'
-     return progAbsPth
-
-def getProgAbsPath()->str:
-     progAbsPth:str= _getProgAbsPath(initCurDir=getGlbVarInst().initCurDir,progPath=getGlbVarInst().sysArgv0)
      return progAbsPth
