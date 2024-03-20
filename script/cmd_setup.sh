@@ -65,13 +65,13 @@ which clang++
 #测试拦截器化身(gcc)
 rm -frv /tmp/gcc-*.log
 
-echo "测试拦截器化身(gcc)开发者模式"
-gcc --__enable_develop_mode
-echo "请您用人类肉眼，确认gcc拦截器返回代码【$?】应该和上面拦截器日志中说的gcc命令的返回代码一致才对"
+# echo "测试拦截器化身(gcc)开发者模式"
+# gcc --__enable_develop_mode
+# echo "请您用人类肉眼，确认gcc拦截器返回代码【$?】应该和上面拦截器日志中说的gcc命令的返回代码一致才对"
 
 
-echo "先用tail后台显示拦截器日志文件， 测试拦截器化身(gcc)安静模式"
-tail -f /tmp/gcc-*.log &
+# echo "先用tail后台显示拦截器日志文件， 测试拦截器化身(gcc)安静模式"
+# tail -f /tmp/gcc-*.log &
 gcc
 
 c++
