@@ -28,6 +28,9 @@ class GlbVar:
 
         self.initCurDir:str=initCurDir
 
+        #原始命令（人类可读样式）
+        self.originCmdHuman:str=" ".join(sys.argv)
+
         #备份参数列表
         self.ArgvOriginCopy:typing.List[str]=list(sys.argv)
 
@@ -38,16 +41,14 @@ class GlbVar:
             assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
             _,_,target=neighborRm2_(self.ArgvClean,"--__target","gcc")
             self.en_dev_mode=True
-            
-        _Argv:typing.List[str]=list(self.ArgvClean)
+        
+
+        self.Argv:typing.List[str]=list(self.ArgvClean)
         #参数中-Werror替换为-Wno-error
-        _Argv = ArgvRemoveWerror(_Argv)
+        self.Argv = ArgvRemoveWerror(self.Argv)
         #参数中-O2替换为-o1
-        _Argv=ArgvReplace_O2As_O1(_Argv)
-        self.Argv:typing.List[str]=_Argv
+        self.Argv=ArgvReplace_O2As_O1(self.Argv)
 
-
-        self.gccCmdHum:str=" ".join(sys.argv)
 
         self.progAbsPath:str= _getProgAbsPath(initCurDir=initCurDir,sysArgv0=sys.argv[0])
         self.progAbsNormPath:str=pathNorm(self.progAbsPath)

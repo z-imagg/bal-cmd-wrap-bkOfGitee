@@ -86,7 +86,7 @@ exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
     # INFO_LOG( curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
-    INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().gccCmdHum}】")
+    INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】")
     #捕捉编译时的env环境变量和初始环境变量差异
     execute_script_file(f"{getGlbVarInst().prjDir}/env-diff-show.sh")
     #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
