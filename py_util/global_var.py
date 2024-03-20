@@ -38,9 +38,9 @@ class GlbVar:
 
         #构造 路径相关变量
         self.progAbsPath:str= _getProgAbsPath(initCurDir=self.initCurDir,sysArgv0=sys.argv[0])
-        self.progAbsNormPath:str=pathNorm(self.progAbsPath)
+        self.fackProgAbsNormPath:str=pathNorm(self.progAbsPath)
 
-        self.buszProg:Prog=calcTrueProg(self.progAbsNormPath)
+        self.buszProg:Prog=calcTrueProg(self.fackProgAbsNormPath)
 
         progAbsPth:Path=Path(self.progAbsPath)
         # progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'

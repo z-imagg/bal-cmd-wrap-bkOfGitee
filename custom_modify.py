@@ -18,8 +18,8 @@ clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/
 
 #########################以下两个方法，基本固定，不用修改
 #客户对编译器命令参数向量的修改
-def customModify_CompilerArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], buszProg:Prog)->typing.List[str]:
-    fakeProg:str=buszProg.fakeProg
+def customModify_CompilerArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], prog:Prog)->typing.List[str]:
+    fakeProg:str=prog.fakeProg
     if fakeProg==fake_gcc:
         return customModify_CompilerArgv_gcc(fileAtCmd=fileAtCmd, argv=argv)
     if fakeProg==fake_cxx:
@@ -32,8 +32,8 @@ def customModify_CompilerArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], buszP
     raise f"异常，不可识别的prog{fakeProg}"
 
 #客户对构建工具命令参数向量的修改
-def customModify_MakeToolArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], buszProg:Prog)->typing.List[str]:
-    fakeProg:str=buszProg.fakeProg
+def customModify_MakeToolArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], prog:Prog)->typing.List[str]:
+    fakeProg:str=prog.fakeProg
 
     if fakeProg==fake_cmake:
         return customModify_MakeToolArgv_cmake(fileAtCmd=fileAtCmd,argv=argv)
