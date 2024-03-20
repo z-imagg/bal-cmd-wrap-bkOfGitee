@@ -13,7 +13,7 @@ import os
 import errno
 from io import TextIOWrapper
 
-from global_var import GlbVar, flushStdCloseLogF, getGlbVarInst
+from global_var import GlbVar, flushStdCloseLogF, getGlbVarInst,INFO_LOG,EXCEPT_LOG
 assert sys.version_info >= (3,6), "错误：需要使用 Python 3.6 或更高版本. 因为 此脚本中大量使用的 字符串格式化语法 f'{变量名}' 是pytho3.6引入的"
 import time
 import subprocess
@@ -24,7 +24,7 @@ import types
 from pathlib import Path
 
 
-from MiscUtil import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG,__list_filter_NoneEle_emptyStrEle__
+from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__
 from file_at_cmd import FileAtCmd
 from route_tab import calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1

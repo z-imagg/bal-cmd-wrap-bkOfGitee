@@ -68,7 +68,9 @@ class GlbVar:
         assert not Path(self.logFPth).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {self.logFPth}"
         self.gLogF:TextIOWrapper = open(self.logFPth, "a") #append(追加地写入)模式打开文件
 
-        INFO_LOG(curFrm, f"生成唯一文件名成功{getGlbVarInst().logFPth},作为日志文件")
+        #线程安全单例构造方法中 不能间接调用自己，否则会形成环，即死递归
+        #  INFO_LOG中调用了本方法，因此本方法不能调用 INFO_LOG， 否则会形成环（即死递归）。 而 只能调用 _INFO_LOG
+        _INFO_LOG(_LogFile=self.gLogF,en_dev_mode=self.en_dev_mode,curFrm=curFrm,_MSG=f"生成唯一文件名成功{self.logFPth},作为日志文件")
         #一旦 成功 锁定 某个日志文件 后的操作
         # 获得文件锁后，立即 将 stdio缓存 写出
         sys.stdout.flush()
