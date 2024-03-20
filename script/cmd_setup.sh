@@ -32,44 +32,62 @@ source $Hm/.venv/bin/activate
 
 alias _IfELFMvAsOrn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}'
 #移动 业务者
-Fil="/usr/bin/make" ;  _IfELFMvAsOrn
 # sudo mv /usr/bin/make /usr/bin/make.origin
-Fil="/usr/bin/cmake" ;  _IfELFMvAsOrn
 # sudo mv /usr/bin/cmake /usr/bin/cmake.origin
 
 alias _IfNotItcpMvAsOrn='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] || { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}'
-Fil="/usr/bin/gcc" ; _IfNotItcpMvAsOrn
-Fil="/usr/bin/g++" ; _IfNotItcpMvAsOrn
-Fil="/usr/bin/c++" ; _IfNotItcpMvAsOrn
+
 
 alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] && sudo unlink "${Fil}" && echo "销毁现有入口者 $_" '
 
 #销毁现有入口者
-Fil="/usr/bin/gcc" ; _IfIntcptUnlnk
-Fil="/usr/bin/g++" ; _IfIntcptUnlnk
-Fil="/usr/bin/c++" ; _IfIntcptUnlnk
-Fil="/usr/bin/clang" ; _IfIntcptUnlnk
-Fil="/usr/bin/clang++" ; _IfIntcptUnlnk
-Fil="/usr/bin/cmake" ; _IfIntcptUnlnk
-Fil="/usr/bin/make" ; _IfIntcptUnlnk
 
 alias _lnk2Intcpt='sudo ln -s "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" "${Fil}" && echo "重新生成入口者 ${Fil}   " '
-Fil="/usr/bin/gcc" ; _lnk2Intcpt
-Fil="/usr/bin/g++" ; _lnk2Intcpt
-Fil="/usr/bin/c++" ; _lnk2Intcpt
-Fil="/usr/bin/clang" ; _lnk2Intcpt
-Fil="/usr/bin/clang++" ; _lnk2Intcpt
-Fil="/usr/bin/cmake" ; _lnk2Intcpt
-Fil="/usr/bin/make" ; _lnk2Intcpt
 
-alias _echoLnk=' _cmd=$(which "${Cmd}") && echo "${Cmd} --> $(_cmd) " '
+
+alias _echoLnk=' _cmd=$(which "${Cmd}") && echo "显示拦截器 ${Cmd} --> $(_cmd) " '
 echo "列出 拦截器化身 们"
-Cmd="gcc" ; _echoLnk
+
+Fil="/usr/bin/gcc" ;  _IfELFMvAsOrn #备份
+Fil="/usr/bin/gcc" ; _IfNotItcpMvAsOrn #备份
+Fil="/usr/bin/gcc" ; _IfIntcptUnlnk #销毁现有入口者
+Fil="/usr/bin/gcc" ; _lnk2Intcpt #重新生成入口者
+Cmd="gcc"          ; _echoLnk #显示拦截器
+
+Fil="/usr/bin/g++" ;  _IfELFMvAsOrn #备份
+Fil="/usr/bin/g++" ; _IfNotItcpMvAsOrn
+Fil="/usr/bin/g++" ; _IfIntcptUnlnk
+Fil="/usr/bin/g++" ; _lnk2Intcpt
 Cmd="g++" ; _echoLnk
+
+Fil="/usr/bin/c++" ;  _IfELFMvAsOrn #备份
+Fil="/usr/bin/c++" ; _IfNotItcpMvAsOrn
+Fil="/usr/bin/c++" ; _IfIntcptUnlnk
+Fil="/usr/bin/c++" ; _lnk2Intcpt
 Cmd="c++" ; _echoLnk
+
+Fil="/usr/bin/clang" ;  _IfELFMvAsOrn #备份
+Fil="/usr/bin/clang" ; _IfNotItcpMvAsOrn
+Fil="/usr/bin/clang" ; _IfIntcptUnlnk
+Fil="/usr/bin/clang" ; _lnk2Intcpt
 Cmd="clang" ; _echoLnk
+
+Fil="/usr/bin/clang++" ;  _IfELFMvAsOrn #备份
+Fil="/usr/bin/clang++" ; _IfNotItcpMvAsOrn
+Fil="/usr/bin/clang++" ; _IfIntcptUnlnk
+Fil="/usr/bin/clang++" ; _lnk2Intcpt
 Cmd="clang++" ; _echoLnk
+
+Fil="/usr/bin/cmake" ;  _IfELFMvAsOrn
+Fil="/usr/bin/cmake" ; _IfNotItcpMvAsOrn
+Fil="/usr/bin/cmake" ; _IfIntcptUnlnk
+Fil="/usr/bin/cmake" ; _lnk2Intcpt
 Cmd="cmake" ; _echoLnk
+
+Fil="/usr/bin/make" ;  _IfELFMvAsOrn
+Fil="/usr/bin/make" ; _IfNotItcpMvAsOrn
+Fil="/usr/bin/make" ; _IfIntcptUnlnk
+Fil="/usr/bin/make" ; _lnk2Intcpt
 Cmd="make" ; _echoLnk
 
 #测试拦截器化身(gcc)
