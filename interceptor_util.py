@@ -13,6 +13,8 @@ import types
 
 
 from plumbum import local
+from plumbum.machines.local import LocalCommand
+from plumbum.commands.base import BoundCommand
 import plumbum
 from MiscUtil import __NoneOrLenEq0__
 from global_var import calcTrueProg, getBuszCmd, getGlbVarInst,INFO_LOG
@@ -59,9 +61,9 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str)->int:
         exitCode=p.returncode
         INFO_LOG(curFrm,f"标准输入为:【{stdin_str}】")
     else:
-        real_prog:plumbum.machines.local.LocalCommand=local[buszProg]
+        real_prog:LocalCommand=local[buszProg]
         # argLs=Argv[1:] if len(Argv) > 1 else []
-        real_cmd:plumbum.commands.base.BoundCommand=real_prog[buszArgvFrom1]
+        real_cmd:BoundCommand=real_prog[buszArgvFrom1]
         exitCode, std_out, err_out = real_cmd.run(retcode=None)
 
     # import ipdb; ipdb.set_trace()
