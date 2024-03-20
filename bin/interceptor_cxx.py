@@ -59,9 +59,6 @@ exitCodePlg:int = None
 bzCmdExitCd:int = None
 try:#try业务块
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】")
-    #捕捉编译时的env环境变量和初始环境变量差异
-    execute_script_file(f"{getGlbVarInst().prjDir}/env-diff-show.sh")
-    #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd()
     #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.

@@ -24,8 +24,6 @@ intcpt=$binHm/interceptor_cxx.py
 
 chmod +x $intcpt
 
-chmod +x $Hm/env-diff-show.sh
-
 bash $Hm/script/env_prepare.sh >/dev/null
 
 # set +x
