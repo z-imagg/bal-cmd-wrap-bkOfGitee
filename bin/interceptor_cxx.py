@@ -44,7 +44,7 @@ import time
 
 # initCurDir:str=os.getcwd()
 #全局变量初始化步骤1， 此时还有拿不到的字段，暂时用None填充
-GlbVar(gLogF=None,en_dev_mode=None)
+GlbVar( )
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()

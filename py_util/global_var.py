@@ -15,17 +15,14 @@ import os
 
 @funcSngltAnnt
 class GlbVar:
-    def __init__(self,gLogF:TextIOWrapper,en_dev_mode:bool):
+    def __init__(self ):
 
         initCurDir:str=os.getcwd()
 
-        self.gLogF:TextIOWrapper=gLogF
-        self.en_dev_mode:bool=en_dev_mode
         self.initCurDir:str=initCurDir
         # self.sysArgv0:str=sysArgv0
         self.Argv=lsDelNone(list(sys.argv))
         self.gccCmdHum:str=" ".join(sys.argv)
-        self.initComplete:bool=False
 
         self.progAbsPath:str= _getProgAbsPath(initCurDir=initCurDir,sysArgv0=sys.argv[0])
         self.progAbsNormPath:str=pathNorm(self.progAbsPath)
@@ -44,8 +41,15 @@ class GlbVar:
         # os.chdir(scriptDir.as_posix())
 
 
+        #剩余2个字段 在init2中初始化
+        self.gLogF:TextIOWrapper=None
+        self.en_dev_mode:bool=None
+        self.initComplete:bool=False
+
+
 def glbVarInit2(gLogF:TextIOWrapper,en_dev_mode:bool):
     inst = getGlbVarInst()
+
     inst.gLogF=gLogF
     inst.en_dev_mode=en_dev_mode
     inst.initComplete=True
@@ -82,7 +86,21 @@ def getBuszCmd()->typing.Tuple[typing.List[str],str]:
 #测试
 if __name__=="__main__":
         import sys,os
-        inst=GlbVar(gLogF=open("/tmp/ttt", "a"),initCurDir=os.getcwd(),sysArgv0=sys.argv[0])
+        
+        #初始化步骤1
+        inst=GlbVar()
+
         inst2=getGlbVarInst()
+
+        logF=open("/tmp/ttt", "a")
+        en_dev_mode=False
+
+        #初始化步骤2
+        inst2.gLogF=logF 
+        inst2.en_dev_mode=en_dev_mode
+        
+        #初始化步骤2 也可以调用如下方法
+        # glbVarInit2(gLogF=logF,en_dev_mode=False)
+
         inst.gLogF.close()
         end=True
