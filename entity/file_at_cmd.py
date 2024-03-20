@@ -53,7 +53,7 @@ class FileAtCmd(BasicCmd):
         return ' '.join(kv_ls_keep)
 
     def __init__(self):
-        super.__init__() # super.__init__() == BasicCmd.__init__(self=FileAtCmd.self)
+        super().__init__() # super().__init__() == BasicCmd.__init__(self=FileAtCmd.self)
         #判定源文件是否为/dev/null
         self.srcFpIsDevNull:bool = None
 
