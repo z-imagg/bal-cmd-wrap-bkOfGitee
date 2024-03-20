@@ -16,6 +16,8 @@ class Prog:
         self.trueProg:str=trueProg
         self.kind:int=kind
 
+progMap:typing.Dict[str,Prog]=dict()
+
 fakeBinHm="/fridaAnlzAp/cmd-wrap/bin/"
 #编译器 拦截者
 fake_clang=pathNorm(f"{fakeBinHm}/clang")
@@ -38,19 +40,16 @@ busz_cxx=pathNorm(f"/usr/bin/c++.origin") #  $(readlink -f /usr/bin/c++.origin) 
 busz_cmake=pathNorm(f"/usr/bin/cmake.origin")
 busz_make=pathNorm(f"/usr/bin/make.origin")
 
-progTab=[
 #编译器： 拦截者 --> 业务者
-(fake_clang, Prog(fake_clang,busz_clang,Prog.ProgKind.Compiler) ),
-(fake_clangxx, Prog(fake_clangxx,busz_clangxx,Prog.ProgKind.Compiler) ),
-(fake_gcc, Prog(fake_gcc,busz_gcc,Prog.ProgKind.Compiler) ),
-# (fake_gxx, Prog(fake_gxx,true_cxx,Prog.ProgKind.Compiler) ),
-(fake_cxx, Prog(fake_cxx,busz_cxx,Prog.ProgKind.Compiler) ),
+progMap[fake_clang]   = Prog(fake_clang,busz_clang,Prog.ProgKind.Compiler)
+progMap[fake_clangxx] = Prog(fake_clangxx,busz_clangxx,Prog.ProgKind.Compiler)
+progMap[fake_gcc]     = Prog(fake_gcc,busz_gcc,Prog.ProgKind.Compiler)
+# progMap[fake_gxx]   = Prog(fake_gxx,true_cxx,Prog.ProgKind.Compiler)
+progMap[fake_cxx]     = Prog(fake_cxx,busz_cxx,Prog.ProgKind.Compiler)
 #构建工具 拦截者 --> 业务者
-(fake_cmake, Prog(fake_cmake,busz_cmake,Prog.ProgKind.MakeTool) ),
-(fake_make, Prog(fake_make,busz_make,Prog.ProgKind.MakeTool) ),
-]
+progMap[fake_cmake]   = Prog(fake_cmake,busz_cmake,Prog.ProgKind.MakeTool)
+progMap[fake_make]    = Prog(fake_make,busz_make,Prog.ProgKind.MakeTool)
 
-progMap:typing.Dict[str,Prog]=dict(progTab)
 
 
 def calcTrueProg( progAbsNormPath:str )->Prog:
