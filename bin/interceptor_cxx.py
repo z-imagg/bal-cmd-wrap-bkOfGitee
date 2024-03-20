@@ -67,9 +67,9 @@ try:#try业务块
     if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
         #客户对编译器命令参数向量的修改
         if inst.buszProg.kind == Prog.ProgKind.Compiler:
-            inst.Argv=customModify_CompilerArgv( fileAtCmd=fileAtCmd,argv=inst.Argv,prog=inst.buszProg)
+            inst.Argv=customModify_CompilerArgv( fileAtCmd=fileAtCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
         elif inst.buszProg.kind == Prog.ProgKind.MakeTool:
-            inst.Argv=customModify_MakeToolArgv( fileAtCmd=fileAtCmd,argv=inst.Argv,prog=inst.buszProg)
+            inst.Argv=customModify_MakeToolArgv( fileAtCmd=fileAtCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
 
     else:
         INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
