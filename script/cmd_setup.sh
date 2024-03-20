@@ -34,7 +34,7 @@ alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && s
 #重新生成入口者
 alias _lnk2Intcpt='sudo ln -s "${interceptor_cxx}" "${Fil}" && echo "重新生成入口者 ${Fil}   " '
 #显示拦截器
-alias _echoLnk=' _cmd=$(which "${Cmd}") && echo "显示拦截器 ${Cmd} --> $(_cmd) " '
+alias _echoLnk=' _cmd=$(which "${Cmd}") && echo "显示拦截器 ${Cmd} --> ${_cmd} " '
 
 declare -r gccF="/usr/bin/gcc"
 Fil="${gccF}" ;  _IfELFMvAsOrn #备份
