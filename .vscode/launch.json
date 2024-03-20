@@ -13,7 +13,7 @@
             // "terminalKind": "integrated", #此行可有可无
         },
         ////// python调试
-        //     opts="--__develop_mode  --__help  --__target"
+        //     interceptor_cxx.py --__develop_mode  --__help
 
         {
             "name": "interceptor_cxx 【固定参数】",
@@ -22,7 +22,6 @@
             "program": "interceptor_cxx.py",
             "console": "integratedTerminal",
             "args": [  
-"--__target", "gcc"
 ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"

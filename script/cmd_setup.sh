@@ -61,6 +61,4 @@ gcc --__enable_develop_mode
 echo "请您用人类肉眼，确认gcc拦截器返回代码【$?】应该和上面拦截器日志中说的gcc命令的返回代码一致才对"
 
 
-gcc --__enable_develop_mode --__target clang
-
 #interceptor_cxx.py --__help  及其 bash自动完成

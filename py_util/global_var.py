@@ -57,10 +57,6 @@ class GlbVar:
         #ArgvClean ==  原始参数向量 - 传递给本拦截器 的参数  
         self.ArgvClean:typing.List[str]=lsDelNone(list(sys.argv))
         self.en_dev_mode:bool=elmRmEqu_(self.ArgvClean,"--__enable_develop_mode")
-        if elmExistEqu(self.ArgvClean,"--__target"):
-            assert self.progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
-            _,_,target=neighborRm2_(self.ArgvClean,"--__target","gcc")
-            self.en_dev_mode=True
         
         #Argv == ArgvClean -  Wno-error - O2
         self.Argv:typing.List[str]=list(self.ArgvClean)
