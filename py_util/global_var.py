@@ -29,20 +29,23 @@ class GlbVar:
         self.initCurDir:str=initCurDir
 
         #备份参数列表
-        self.ArgvOriginCopy:typing.List[str]=lsDelNone(list(sys.argv))
-        
-        _Argv:typing.List[str]=list(self.ArgvOriginCopy)
+        self.ArgvOriginCopy:typing.List[str]=list(sys.argv)
+
+        #ArgvClean: 原始参数向量 清除掉 传递给本拦截器 的参数 后的 样子
+        self.ArgvClean:typing.List[str]=lsDelNone(list(sys.argv))
+        self.en_dev_mode:bool=elmRmEqu_(self.ArgvClean,"--__enable_develop_mode")
+        if elmExistEqu(self.ArgvClean,"--__target"):
+            assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
+            _,_,target=neighborRm2_(self.ArgvClean,"--__target","gcc")
+            self.en_dev_mode=True
+            
+        _Argv:typing.List[str]=list(self.ArgvClean)
         #参数中-Werror替换为-Wno-error
         _Argv = ArgvRemoveWerror(_Argv)
         #参数中-O2替换为-o1
         _Argv=ArgvReplace_O2As_O1(_Argv)
         self.Argv:typing.List[str]=_Argv
 
-        self.en_dev_mode:bool=elmRmEqu_(self.Argv,"--__enable_develop_mode")
-        if elmExistEqu(self.Argv,"--__target"):
-            assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
-            _,_,target=neighborRm2_(self.Argv,"--__target","gcc")
-            self.en_dev_mode=True
 
         self.gccCmdHum:str=" ".join(sys.argv)
 
