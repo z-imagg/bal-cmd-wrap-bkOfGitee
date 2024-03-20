@@ -15,8 +15,8 @@ fake_gxx=pathNorm(f"{fakeBinHm}/g++")
 LLVM15Home="/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4"
 true_clang=pathNorm(f"{LLVM15Home}/bin/clang")
 true_clangxx=pathNorm(f"{LLVM15Home}/bin/clang++")
-true_gcc=pathNorm(f"/usr/bin/x86_64-linux-gnu-gcc-11")
-true_gxx=pathNorm(f"/usr/bin/x86_64-linux-gnu-g++-11")
+true_gcc=pathNorm(f"/usr/bin/x86_64-linux-gnu-gcc-11") #
+true_gxx=pathNorm(f"/usr/bin/c++.origin") #  $(readlink -f /usr/bin/c++.origin) ==  /usr/bin/x86_64-linux-gnu-g++-11
 
 progTab=[
 (fake_clang,true_clang),
