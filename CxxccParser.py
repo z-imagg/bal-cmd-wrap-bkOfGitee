@@ -15,7 +15,7 @@ from pathlib import Path
 import shutil
 import time
 
-def larkGetSrcFileFromSingleGccCmd()->FileAtCmd:
+def cxxCmdParse()->FileAtCmd:
     inst=getGlbVarInst()
     curFrm:types.FrameType=inspect.currentframe()
     gccCmdHum:str=" ".join(inst.ArgvClean)
