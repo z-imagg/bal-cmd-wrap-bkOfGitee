@@ -69,7 +69,7 @@ try:#try业务块
     care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
     if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
         #客户对编译器命令参数向量的修改
-        inst.Argv=customModify( fileAtCmd=fileAtCmd,Argv=inst.Argv)
+        inst.Argv=customModify( fileAtCmd=fileAtCmd,argv=inst.Argv)
     else:
         INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
