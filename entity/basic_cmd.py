@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+#【文件作用】 基础命令解析后的表示，只有关注的信息
+# 基础命令，比如 cmake命令
 
 
 from IoUtil import stdinRead

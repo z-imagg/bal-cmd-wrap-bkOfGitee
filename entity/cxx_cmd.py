@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+#【文件作用】 c++命令解析后的表示，只有关注的信息
+
 from typing import List
 
 from MiscUtil import __NoneOrLenEq0__,__NoneStr2Empty__
 from basic_cmd import BasicCmd
 
-#在 ubuntu22上 将 ubuntu14的根目录 被 挂载 为 目录  /ubt14x86root
-class FileAtCmd(BasicCmd):
+class CxxCmd(BasicCmd):
 
     def __init__(self):
         super().__init__() # super().__init__() == BasicCmd.__init__(self=FileAtCmd.self)

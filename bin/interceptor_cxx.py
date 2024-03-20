@@ -27,11 +27,11 @@ from pathlib import Path
 
 
 from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__, pprocess_cmd
-from file_at_cmd import FileAtCmd
+from cxx_cmd import CxxCmd
 from route_tab import Prog, calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
-from CxxccParser import cxxCmdParse
+from CxxCmdParser import cxxCmdParse
 
 from LsUtil import lsDelNone,elmRmEqu_,neibEqu,neibGet,neighborRm2_,elmExistEqu
 from custom_modify import customModify_CompilerArgv, customModify_MakeToolArgv
@@ -72,7 +72,7 @@ try:#try业务块
     #编译命令
     if inst.buszProg.kind == Prog.ProgKind.Compiler:
         #编译命令解析
-        fileAtCmd:FileAtCmd=cxxCmdParse()
+        fileAtCmd:CxxCmd=cxxCmdParse()
         basicCmd=fileAtCmd
         #编译命令，无源文件时不拦截.   
         care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16

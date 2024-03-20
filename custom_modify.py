@@ -4,7 +4,7 @@
 from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1
 from basic_cmd import BasicCmd
 from py_util.LsUtil import lsDelNone, lsStartWith
-from entity.file_at_cmd import FileAtCmd
+from cxx_cmd import CxxCmd
 from interceptor_util import execute_cmd
 from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__
 from global_var import INFO_LOG,EXCEPT_LOG
@@ -19,7 +19,7 @@ clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/
 
 #########################以下两个方法，基本固定，不用修改
 #客户对编译器命令参数向量的修改
-def customModify_CompilerArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], originCmdHuman:str, prog:Prog)->typing.List[str]:
+def customModify_CompilerArgv(  fileAtCmd:CxxCmd,argv:typing.List[str], originCmdHuman:str, prog:Prog)->typing.List[str]:
     fakeProg:str=prog.fakeProg
     if fakeProg==fake_gcc:
         return customModify_CompilerArgv_gcc(fileAtCmd=fileAtCmd, argv=argv,originCmdHuman=originCmdHuman)
@@ -47,13 +47,13 @@ def customModify_MakeToolArgv(  basicCmd:BasicCmd,argv:typing.List[str],originCm
 ##############以下是可以自由修改的拦截器逻辑
     
 #客户对编译器命令gcc参数向量的修改
-def customModify_CompilerArgv_gcc(  fileAtCmd:FileAtCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
+def customModify_CompilerArgv_gcc(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
     newArgv:typing.List[str]=argv
     #请根据需要，自行编写 逻辑，实现 修改 gcc编译命令参数向量argv 
     return newArgv
 
 #客户对编译器命令c++参数向量的修改
-def customModify_CompilerArgv_cxx(  fileAtCmd:FileAtCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
+def customModify_CompilerArgv_cxx(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
 
     curFrm:types.FrameType=inspect.currentframe()
 
@@ -69,13 +69,13 @@ def customModify_CompilerArgv_cxx(  fileAtCmd:FileAtCmd,argv:typing.List[str],or
     return Argv
 
 #客户对编译器命令clang参数向量的修改
-def customModify_CompilerArgv_clang(  fileAtCmd:FileAtCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
+def customModify_CompilerArgv_clang(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
     newArgv:typing.List[str]=argv
     #请根据需要，自行编写 逻辑，实现 修改 clang编译命令参数向量argv 
     return newArgv
 
 #客户对编译器命令clang++参数向量的修改
-def customModify_CompilerArgv_clangxx(  fileAtCmd:FileAtCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
+def customModify_CompilerArgv_clangxx(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
     newArgv:typing.List[str]=argv
     #请根据需要，自行编写 逻辑，实现 修改 clang++编译命令参数向量argv 
     return newArgv
