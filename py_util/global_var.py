@@ -24,11 +24,11 @@ class GlbVar:
     def __init__(self ):
         #全局变量构造器 内 禁止 调用 getGlbVarInst ， 
         #  因为 getGlbVarInst 调用了 本 全局变量构造器， 这样会形成环 即 死递归
+
         curFrm:types.FrameType=inspect.currentframe()
 
-        initCurDir:str=os.getcwd()
-
-        self.initCurDir:str=initCurDir
+        #此进程初始工作目录
+        self.initCurDir:str=os.getcwd()
 
         #原始命令（人类可读样式）
         self.originCmdHuman:str=" ".join(sys.argv)
@@ -36,7 +36,25 @@ class GlbVar:
         #备份参数列表
         self.ArgvOriginCopy:typing.List[str]=list(sys.argv)
 
-        #ArgvClean: 原始参数向量 清除掉 传递给本拦截器 的参数 后的 样子
+        #构造 路径相关变量
+        self.progAbsPath:str= _getProgAbsPath(initCurDir=self.initCurDir,sysArgv0=sys.argv[0])
+        self.progAbsNormPath:str=pathNorm(self.progAbsPath)
+
+        self.buszProg:str=calcTrueProg(self.progAbsNormPath)
+
+        progAbsPth:Path=Path(self.progAbsPath)
+        # progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
+        # progName 为 真程序名
+        self.progName:str=progAbsPth.name
+        # progName=='gcc'
+        self.scriptDir:Path=progAbsPth.parent
+        # scriptDir==/fridaAnlzAp/cmd-wrap/bin
+        self.prjDir:str=self.scriptDir.parent.as_posix()
+        # prjDir==/fridaAnlzAp/cmd-wrap/
+        # os.chdir(scriptDir.as_posix())
+
+
+        #ArgvClean ==  原始参数向量 - 传递给本拦截器 的参数  
         self.ArgvClean:typing.List[str]=lsDelNone(list(sys.argv))
         self.en_dev_mode:bool=elmRmEqu_(self.ArgvClean,"--__enable_develop_mode")
         if elmExistEqu(self.ArgvClean,"--__target"):
@@ -44,29 +62,12 @@ class GlbVar:
             _,_,target=neighborRm2_(self.ArgvClean,"--__target","gcc")
             self.en_dev_mode=True
         
-
+        #Argv == ArgvClean -  Wno-error - O2
         self.Argv:typing.List[str]=list(self.ArgvClean)
-        #参数中-Werror替换为-Wno-error
+        # 参数Argv中-Werror替换为-Wno-error
         self.Argv = ArgvRemoveWerror(self.Argv)
-        #参数中-O2替换为-o1
+        # 参数Argv中-O2替换为-o1
         self.Argv=ArgvReplace_O2As_O1(self.Argv)
-
-
-        self.progAbsPath:str= _getProgAbsPath(initCurDir=initCurDir,sysArgv0=sys.argv[0])
-        self.progAbsNormPath:str=pathNorm(self.progAbsPath)
-
-        self.buszProg:str=calcTrueProg(self.progAbsNormPath)
-
-        progAbsPth:Path=Path(self.progAbsPath)
-        #progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
-        #progName 为 真程序名
-        self.progName:str=progAbsPth.name
-        #progName=='gcc'
-        self.scriptDir:Path=progAbsPth.parent
-        #scriptDir==/fridaAnlzAp/cmd-wrap/bin
-        self.prjDir:str=self.scriptDir.parent.as_posix()
-        #prjDir==/fridaAnlzAp/cmd-wrap/
-        # os.chdir(scriptDir.as_posix())
 
         #初始化日志文件
         approxId:str=genApproxId()
@@ -74,16 +75,15 @@ class GlbVar:
         assert not Path(self.logFPth).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {self.logFPth}"
         self.gLogF:TextIOWrapper = open(self.logFPth, "a") #append(追加地写入)模式打开文件
 
-        #线程安全单例构造方法中 不能间接调用自己，否则会形成环，即死递归
-        #  INFO_LOG中调用了本方法，因此本方法不能调用 INFO_LOG， 否则会形成环（即死递归）。 而 只能调用 _INFO_LOG
+        #  INFO_LOG中调用了本构造器，因此本方法不能调用 INFO_LOG， 否则会形成环（即死递归）。 而 只能调用 _INFO_LOG
         _INFO_LOG(_LogFile=self.gLogF,en_dev_mode=self.en_dev_mode,curFrm=curFrm,_MSG=f"生成唯一文件名成功{self.logFPth},作为日志文件")
-        #一旦 成功 锁定 某个日志文件 后的操作
-        # 获得文件锁后，立即 将 stdio缓存 写出
+        
+        #立即 将 stdio缓存 写出
         sys.stdout.flush()
         sys.stderr.flush()
         sys.stdin.flush()
-        #  标记锁定成功
 
+        #标记 全局变量初始化完毕
         self.initComplete:bool=True
 
 
