@@ -38,13 +38,18 @@ from PathUtil import _getProgAbsPath
 
 import os
 import time
-
+import shutil
 
 
 
 # initCurDir:str=os.getcwd()
 #全局变量初始化步骤1， 此时还有拿不到的字段，暂时用None填充
 GlbVar( )
+
+inst=getGlbVarInst()
+#开发用，复制整个当前目录，为了应对 cmake编译完删除临时问题的 行为，出错时候 已经找不到被编译文件了
+initCurDir4Deve= f"/tmp/{inst.initCurDir.replace('/','-')}"
+shutil.copytree(inst.initCurDir, initCurDir4Deve)
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()
