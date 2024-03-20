@@ -34,7 +34,7 @@ def larkGetSrcFileFromSingleGccCmd()->FileAtCmd:
         INFO_LOG( curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
 
     if fac.input_is_std_in:
-        assert srcFp is not None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？gccCmdHum=【{gccCmdHum}】，srcFp1=【{srcFp1}】，srcFp2=【{srcFp2}】，srcFp=【{srcFp}】,只有此断言成立时，为了排除问题，才会读出stdIn=【{sys.stdin.read()}】"
+        assert srcFp is not None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？gccCmdHum=【{gccCmdHum}】，ArgvOriginCopy=【{inst.ArgvOriginCopy}】,srcFp1=【{srcFp1}】，srcFp2=【{srcFp2}】，srcFp=【{srcFp}】,只有此断言成立时，为了排除问题，才会读出stdIn=【{sys.stdin.read()}】"
 
     fac.src_file = srcFp
 
