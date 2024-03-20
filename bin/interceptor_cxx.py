@@ -13,7 +13,7 @@ import os
 import errno
 from io import TextIOWrapper
 
-from global_var import GlbVar, getGlbVarInst,glbVarInit2
+from global_var import GlbVar, flushStdCloseLogF, getGlbVarInst
 assert sys.version_info >= (3,6), "错误：需要使用 Python 3.6 或更高版本. 因为 此脚本中大量使用的 字符串格式化语法 f'{变量名}' 是pytho3.6引入的"
 import time
 import subprocess
@@ -54,37 +54,30 @@ curFrm:types.FrameType=inspect.currentframe()
 # sysArgv:List[str]= sys.argv.copy() ;
 #参数数组复制一份 (不要直接修改sys.argv)
 Argv=lsDelNone(list(sys.argv))
-en_dev_mode:bool=elmRmEqu_(Argv,"--__enable_develop_mode")
+# en_dev_mode:bool=elmRmEqu_(Argv,"--__enable_develop_mode")
 
-if elmExistEqu(Argv,"--__target"):
-    assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
-    _,_,target=neighborRm2_(Argv,"--__target","gcc")
-    en_dev_mode=True
+# if elmExistEqu(Argv,"--__target"):
+#     assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
+#     _,_,target=neighborRm2_(Argv,"--__target","gcc")
+#     en_dev_mode=True
 #"--__enable_develop_mode",
 # "--__target", "gcc"
 # ],
 
 #备份假程序名
 #参数中-Werror替换为-Wno-error
-Argv:List[str] = ArgvRemoveWerror(Argv)
-#参数中-O2替换为-o1
-Argv=ArgvReplace_O2As_O1(Argv)
+# Argv:List[str] = ArgvRemoveWerror(Argv)
+# #参数中-O2替换为-o1
+# Argv=ArgvReplace_O2As_O1(Argv)
 
-approxId:str=genApproxId()
-from pathlib import Path
-logFK=f"/tmp/{getGlbVarInst().progName}-{approxId}.log"
-assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
-gLogF:TextIOWrapper = open(logFK, "a") #append(追加地写入)模式打开文件
-#全局变量初始化步骤2，填充剩余字段
-glbVarInit2(gLogF=gLogF, en_dev_mode=en_dev_mode)
 
 # inst2=getGlbVarInst()
-INFO_LOG(curFrm, f"生成唯一文件名成功{logFK},作为日志文件")
-#一旦 成功 锁定 某个日志文件 后的操作
-# 获得文件锁后，立即 将 stdio缓存 写出
-sys.stdout.flush()
-sys.stderr.flush()
-sys.stdin.flush()
+# INFO_LOG(curFrm, f"生成唯一文件名成功{getGlbVarInst().logFPth},作为日志文件")
+# #一旦 成功 锁定 某个日志文件 后的操作
+# # 获得文件锁后，立即 将 stdio缓存 写出
+# sys.stdout.flush()
+# sys.stderr.flush()
+# sys.stdin.flush()
 #  标记锁定成功
 
 
@@ -118,20 +111,8 @@ except BaseException  as bexp:
     # raise bexp
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
-    try:
-        # 临近释放文件锁前，立即 将 stdio缓存 写出
-        sys.stdout.flush()
-        sys.stderr.flush()
-        sys.stdin.flush()
-        #释放日志文件锁，否则其他进程无法使用本次被锁定的日志文件。
-        fcntl.flock(gLogF.fileno(), fcntl.LOCK_UN)
-        INFO_LOG(curFrm,f"已释放日志文件{logFK}锁\n")
-    finally:
-        #关闭日志文件
-        getGlbVarInst().gLogF.close()
-        getGlbVarInst().gLogF=None
-        # assert exitCode is not None
-        #以真实命令的退出码退出（假装自己是真实命令）
-        exit(exitCode)
+    #立即 将 stdio缓存 写出 ， 关闭日志文件
+    flushStdCloseLogF()
+    exit(exitCode)
 #拦截过程 结束}
 

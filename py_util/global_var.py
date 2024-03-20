@@ -1,27 +1,49 @@
 #!/usr/bin/env python
 # -*- coding: <encoding name> -*-
 
+import inspect
 from io import TextIOWrapper
+import types
 import typing
+from IdUtil import genApproxId
+from MiscUtil import _EXCEPT_LOG, _INFO_LOG
+from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1
 from singleton_annt import funcSngltAnnt
 from PathUtil import _getProgAbsPath
 from pathlib import Path
 import sys
-from LsUtil import lsDelNone, subLsFrom1
+from LsUtil import elmExistEqu, elmRmEqu_, lsDelNone, neighborRm2_, subLsFrom1
 from PathUtil import pathNorm
 from route_tab import calcTrueProg
 import os
+from pathlib import Path
 
 
 @funcSngltAnnt
 class GlbVar:
     def __init__(self ):
+        curFrm:types.FrameType=inspect.currentframe()
 
         initCurDir:str=os.getcwd()
 
         self.initCurDir:str=initCurDir
-        # self.sysArgv0:str=sysArgv0
-        self.Argv=lsDelNone(list(sys.argv))
+
+        #备份参数列表
+        self.ArgvOriginCopy:typing.List[str]=lsDelNone(list(sys.argv))
+        
+        _Argv:typing.List[str]=list(self.ArgvOriginCopy)
+        #参数中-Werror替换为-Wno-error
+        _Argv = ArgvRemoveWerror(_Argv)
+        #参数中-O2替换为-o1
+        _Argv=ArgvReplace_O2As_O1(_Argv)
+        self.Argv:typing.List[str]=_Argv
+
+        self.en_dev_mode:bool=elmRmEqu_(self.Argv,"--__enable_develop_mode")
+        if elmExistEqu(self.Argv,"--__target"):
+            assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
+            _,_,target=neighborRm2_(self.Argv,"--__target","gcc")
+            self.en_dev_mode=True
+
         self.gccCmdHum:str=" ".join(sys.argv)
 
         self.progAbsPath:str= _getProgAbsPath(initCurDir=initCurDir,sysArgv0=sys.argv[0])
@@ -40,19 +62,21 @@ class GlbVar:
         #prjDir==/fridaAnlzAp/cmd-wrap/
         # os.chdir(scriptDir.as_posix())
 
+        #初始化日志文件
+        approxId:str=genApproxId()
+        self.logFPth=f"/tmp/{self.progName}-{approxId}.log"
+        assert not Path(self.logFPth).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {self.logFPth}"
+        self.gLogF:TextIOWrapper = open(self.logFPth, "a") #append(追加地写入)模式打开文件
 
-        #剩余2个字段 在init2中初始化
-        self.gLogF:TextIOWrapper=None
-        self.en_dev_mode:bool=None
-        self.initComplete:bool=False
+        INFO_LOG(curFrm, f"生成唯一文件名成功{getGlbVarInst().logFPth},作为日志文件")
+        #一旦 成功 锁定 某个日志文件 后的操作
+        # 获得文件锁后，立即 将 stdio缓存 写出
+        sys.stdout.flush()
+        sys.stderr.flush()
+        sys.stdin.flush()
+        #  标记锁定成功
 
-
-def glbVarInit2(gLogF:TextIOWrapper,en_dev_mode:bool):
-    inst = getGlbVarInst()
-
-    inst.gLogF=gLogF
-    inst.en_dev_mode=en_dev_mode
-    inst.initComplete=True
+        self.initComplete:bool=True
 
 
 #使用函数装饰器 的弊端是  无法获取到 真实类对象 ，从而 无法调用static方法。 只能绕开
@@ -63,7 +87,32 @@ def getGlbVarInst()->GlbVar:
         assert inst.gLogF is not None, "断言失败，必须先手工实例化GlbVar(合理的参数) ，再调用本方法getGlbVarInst获取全局变量"
     return inst
 
+def flushStdCloseLogF():
+         #不论以上 try业务块 发生什么异常，本finally块一定要执行。
+    try:
+        #  立即 将 stdio缓存 写出
+        sys.stdout.flush()
+        sys.stderr.flush()
+        sys.stdin.flush()
+        #释放日志文件锁，否则其他进程无法使用本次被锁定的日志文件。
+        # fcntl.flock(gLogF.fileno(), fcntl.LOCK_UN)
+        # INFO_LOG(curFrm,f"已释放日志文件{logFK}锁\n")
+    finally:
+        #关闭日志文件
+        getGlbVarInst().gLogF.close()
+        getGlbVarInst().gLogF=None
+        # assert exitCode is not None
+        #以真实命令的退出码退出（假装自己是真实命令）
+        
+def INFO_LOG(curFrm:types.FrameType, _MSG:str ):
+    inst=getGlbVarInst()
+    _INFO_LOG(_LogFile=inst.gLogF,en_dev_mode=inst.en_dev_mode,curFrm=curFrm,_MSG=_MSG)
 
+
+def EXCEPT_LOG( curFrm:types.FrameType, _MSG:str, _except:BaseException):
+    inst=getGlbVarInst()
+    _EXCEPT_LOG(_LogFile=inst.gLogF,en_dev_mode=inst.en_dev_mode,curFrm=curFrm,_MSG=_MSG,_except=_except)
+     
 def getProgAbsPath()->str:
      inst = getGlbVarInst()
      from PathUtil import _getProgAbsPath
