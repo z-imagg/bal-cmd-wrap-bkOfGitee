@@ -51,7 +51,7 @@ curFrm:types.FrameType=inspect.currentframe()
 
 
 exitCodePlg:int = None
-exitCode:int = None
+bzCmdExitCd:int = None
 try:#try业务块
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】")
     #捕捉编译时的env环境变量和初始环境变量差异
@@ -69,8 +69,8 @@ try:#try业务块
         INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     
-    #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
-    exitCode:int=execute_cmd(fileAtCmd.input_is_std_in)
+    #执行业务命令
+    bzCmdExitCd:int=execute_cmd(fileAtCmd.input_is_std_in)
     if not care_srcF:
         pass #TODO clang插件修改.c再编译后，检查.o文件中有没有对应的指令序列
 except BaseException  as bexp:
@@ -79,16 +79,16 @@ except BaseException  as bexp:
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
 
-    if exitCode != 0 :
+    if bzCmdExitCd != 0 :
         #如果异常退出，则以软链接指向日志文件，方便排查错误
         logFPth:str=getGlbVarInst().logFPth
-        Path(logFPth).link_to(f"{logFPth}--errorCode_{exitCode}")
+        Path(logFPth).link_to(f"{logFPth}--errorCode_{bzCmdExitCd}")
         
     #立即 将 stdio缓存 写出 ， 关闭日志文件
     flushStdCloseLogF()
 
     #以业务命令的退出代码退出
-    exit(exitCode)
+    exit(bzCmdExitCd)
 
 #拦截过程 结束}
 
