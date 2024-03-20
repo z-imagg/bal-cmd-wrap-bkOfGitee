@@ -86,7 +86,7 @@ def getBuszCmd()->typing.Tuple[typing.List[str],str]:
 #测试
 if __name__=="__main__":
         import sys,os
-        
+        sys.argv[0]="test_global_var.py"
         #初始化步骤1
         inst=GlbVar()
 

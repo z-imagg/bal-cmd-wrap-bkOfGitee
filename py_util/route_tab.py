@@ -24,6 +24,7 @@ progTab=[
 (fake_gcc,true_gcc),
 (fake_gxx,true_gxx),
 
+
 ]
 progMap=dict(progTab)
 
@@ -34,6 +35,10 @@ def calcTrueProg( progAbsNormPath:str )->str:
         progTrue:str= progMap.__getitem__(prgNmPth)
         # SysArgv[0]=progTrue
         return progTrue
+    
+    if progAbsNormPath=='/fridaAnlzAp/cmd-wrap/test_global_var.py':
+    #开发调试用途
+        return "buszProgForDevelop"
     
     errMsg:str=f"错误，路由表中不包含 假程序【{prgNmPth}】，请人工补全路由表【route_tab.py:progTab】"
     raise Exception(errMsg)
