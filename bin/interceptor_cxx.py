@@ -48,44 +48,11 @@ GlbVar( )
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()
-#人类可读命令字符串
-# gccCmdHum:str=" ".join(sys.argv)
-#备份sys.argv
-# sysArgv:List[str]= sys.argv.copy() ;
-#参数数组复制一份 (不要直接修改sys.argv)
-# Argv=lsDelNone(list(sys.argv))
-# en_dev_mode:bool=elmRmEqu_(Argv,"--__enable_develop_mode")
-
-# if elmExistEqu(Argv,"--__target"):
-#     assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
-#     _,_,target=neighborRm2_(Argv,"--__target","gcc")
-#     en_dev_mode=True
-#"--__enable_develop_mode",
-# "--__target", "gcc"
-# ],
-
-#备份假程序名
-#参数中-Werror替换为-Wno-error
-# Argv:List[str] = ArgvRemoveWerror(Argv)
-# #参数中-O2替换为-o1
-# Argv=ArgvReplace_O2As_O1(Argv)
-
-
-# inst2=getGlbVarInst()
-# INFO_LOG(curFrm, f"生成唯一文件名成功{getGlbVarInst().logFPth},作为日志文件")
-# #一旦 成功 锁定 某个日志文件 后的操作
-# # 获得文件锁后，立即 将 stdio缓存 写出
-# sys.stdout.flush()
-# sys.stderr.flush()
-# sys.stdin.flush()
-#  标记锁定成功
 
 
 exitCodePlg:int = None
 exitCode:int = None
 try:#try业务块
-    #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
-    # INFO_LOG( curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】")
     #捕捉编译时的env环境变量和初始环境变量差异
     execute_script_file(f"{getGlbVarInst().prjDir}/env-diff-show.sh")
