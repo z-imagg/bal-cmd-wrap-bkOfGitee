@@ -72,7 +72,7 @@ class GlbVar:
         self.gLogF:TextIOWrapper = open(self.logFPth, "a") #append(追加地写入)模式打开文件
 
         #  INFO_LOG中调用了本构造器，因此本方法不能调用 INFO_LOG， 否则会形成环（即死递归）。 而 只能调用 _INFO_LOG
-        _INFO_LOG(_LogFile=self.gLogF,en_dev_mode=self.en_dev_mode,curFrm=curFrm,_MSG=f"生成唯一文件名成功{self.logFPth},作为日志文件")
+        _INFO_LOG(_LogFile=self.gLogF,en_dev_mode=self.en_dev_mode,curFrm=curFrm,_MSG=f"生成唯一文件名成功{self.logFPth},作为日志文件. initCurDir=【{self.initCurDir}】")
         
         #立即 将 stdio缓存 写出
         sys.stdout.flush()
