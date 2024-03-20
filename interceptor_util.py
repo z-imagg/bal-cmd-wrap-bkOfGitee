@@ -40,7 +40,7 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str)->int:
     # _cmdReceived:str=' '.join(Argv)
     INFO_LOG( curFrm, f"构造出业务命令:【{buszCmd}】")
 
-
+    #TODO 环境变量实验 执行命令时，带入 当前进程的环境变量 到 被执行的命令中？
     # 调用真实命令，
     retCode: int; std_out: str; err_out: str
     if input_is_std_in:
