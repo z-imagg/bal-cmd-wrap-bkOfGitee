@@ -80,6 +80,11 @@ finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
     #立即 将 stdio缓存 写出 ， 关闭日志文件
     flushStdCloseLogF()
+    if exitCode != 0 :
+        #如果异常退出，则以软链接指向日志文件，方便排查错误
+        logFPth:str=getGlbVarInst().logFPth
+        Path(logFPth).link_to(f"errorCode_{exitCode}--{logFPth}")
     exit(exitCode)
+
 #拦截过程 结束}
 
