@@ -48,6 +48,10 @@ ln -s  $intcpt $binHm/clang
 ln -s  $intcpt $binHm/clang++
 # sudo mv /usr/bin/c++ /usr/bin/c++.origin
 sudo ln -s  $intcpt /usr/bin/c++
+# sudo mv /usr/bin/cmake /usr/bin/cmake.origin
+sudo ln -s  $intcpt /usr/bin/cmake
+# sudo mv /usr/bin/make /usr/bin/make.origin
+sudo ln -s  $intcpt /usr/bin/make
 
 echo "将 拦截器化身 放入 PATH 环境变量 中"
 export PATH=$binHm:$PATH
@@ -61,6 +65,10 @@ which clang
 # /fridaAnlzAp/cmd-wrap/bin/clang
 which clang++
 # /fridaAnlzAp/cmd-wrap/bin/clang++
+which cmake
+# /fridaAnlzAp/cmd-wrap/bin/clang
+which make
+# /fridaAnlzAp/cmd-wrap/bin/clang
 
 #测试拦截器化身(gcc)
 rm -frv /tmp/gcc-*.log
