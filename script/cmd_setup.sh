@@ -72,9 +72,9 @@ which clang
 which clang++
 # /fridaAnlzAp/cmd-wrap/bin/clang++
 which cmake
-# /fridaAnlzAp/cmd-wrap/bin/clang
+# /fridaAnlzAp/cmd-wrap/bin/cmake
 which make
-# /fridaAnlzAp/cmd-wrap/bin/clang
+# /fridaAnlzAp/cmd-wrap/bin/make
 
 #测试拦截器化身(gcc)
 rm -frv /tmp/gcc-*.log
