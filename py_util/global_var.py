@@ -58,12 +58,8 @@ class GlbVar:
         self.ArgvClean:typing.List[str]=lsDelNone(list(sys.argv))
         self.en_dev_mode:bool=elmRmEqu_(self.ArgvClean,"--__enable_develop_mode")
         
-        #Argv == ArgvClean -  Wno-error - O2
+        #Argv 初始值 为 ArgvClean，后续在拦截器中 可能会因 customModify 而被修改
         self.Argv:typing.List[str]=list(self.ArgvClean)
-        # 参数Argv中-Werror替换为-Wno-error
-        self.Argv = ArgvRemoveWerror(self.Argv)
-        # 参数Argv中-O2替换为-o1
-        self.Argv=ArgvReplace_O2As_O1(self.Argv)
 
         #初始化日志文件
         approxId:str=genApproxId()
