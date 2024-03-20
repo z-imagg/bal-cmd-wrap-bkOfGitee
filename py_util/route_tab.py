@@ -21,7 +21,10 @@ fake_clang=pathNorm(f"{fakeBinHm}/clang")
 fake_clangxx=pathNorm(f"{fakeBinHm}/clang++")
 fake_gcc=pathNorm(f"{fakeBinHm}/gcc")
 fake_gxx=pathNorm(f"{fakeBinHm}/g++")
-fack_cxx="/usr/bin/c++"
+fake_cxx="/usr/bin/c++"
+
+fake_cmake=pathNorm(f"{fakeBinHm}/cmake")
+fake_make=pathNorm(f"{fakeBinHm}/make")
 
 LLVM15Home="/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4"
 busz_clang=pathNorm(f"{LLVM15Home}/bin/clang")
@@ -35,7 +38,7 @@ progTab=[
 (fake_clangxx, Prog(fake_clangxx,busz_clangxx,Prog.ProgKind.Compiler) ),
 (fake_gcc, Prog(fake_gcc,busz_gcc,Prog.ProgKind.Compiler) ),
 # (fake_gxx, Prog(fake_gxx,true_cxx,Prog.ProgKind.Compiler) ),
-(fack_cxx, Prog(fack_cxx,busz_cxx,Prog.ProgKind.Compiler) ),
+(fake_cxx, Prog(fake_cxx,busz_cxx,Prog.ProgKind.Compiler) ),
 ]
 
 progMap:typing.Dict[str,Prog]=dict(progTab)
