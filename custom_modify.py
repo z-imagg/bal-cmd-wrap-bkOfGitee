@@ -84,8 +84,8 @@ def customModify_CompilerArgv_clangxx(  fileAtCmd:FileAtCmd,argv:typing.List[str
 #客户对构建工具命令cmake参数向量的修改
 def customModify_MakeToolArgv_cmake(   basicCmd:BasicCmd,argv:typing.List[str], originCmdHuman:str)->typing.List[str]:
     VerboseOpt="-DCMAKE_VERBOSE_MAKEFILE=True"
-    if VerboseOpt not in argv and not originCmdHuman.__contains__("-E copy"):
-        argv.append("-DCMAKE_VERBOSE_MAKEFILE=True")
+    if VerboseOpt not in argv and "-E" not in argv and len(argv) > 1:
+        argv.insert(1,VerboseOpt)
     
     return argv
 
