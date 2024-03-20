@@ -5,7 +5,7 @@ from typing import List,Tuple
 
 from IoUtil import stdinHasTxt
 from file_at_cmd import FileAtCmd
-from common import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
+from MiscUtil import __NoneOrLenEq0__,INFO_LOG,EXCEPT_LOG
 import inspect
 import types
 from LsUtil import neibEqu,neibGet,elmEndWith,elmEndWithAny,elm1stNotNone,elmExistEqu

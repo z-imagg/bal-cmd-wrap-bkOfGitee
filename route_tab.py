@@ -4,6 +4,8 @@
 
 import typing
 from PathUtil import pathNorm
+from global_var import getGlbVarInst
+from PathUtil import getProgAbsPath
 
 fakeBinHm="/fridaAnlzAp/cmd-wrap/bin/"
 fake_clang=pathNorm(f"{fakeBinHm}/clang")
@@ -27,7 +29,7 @@ progTab=[
 progMap=dict(progTab)
 
 def calcTrueProg(curDir:str,SysArgv:typing.List[str])->None:
-    progAbsPth:str=f'{curDir}/{SysArgv[0]}'
+    progAbsPth:str=getProgAbsPath()
     progAbsPth=pathNorm(progAbsPth)
     if progMap.__contains__(progAbsPth):
         progTrue:str= progMap.__getitem__(progAbsPth)

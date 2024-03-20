@@ -13,7 +13,7 @@ import types
 
 from plumbum import local
 import plumbum
-from common import __NoneOrLenEq0__,INFO_LOG
+from MiscUtil import __NoneOrLenEq0__,INFO_LOG
 
 def execute_script_file(gLogF,scriptFile:Path)->None:
     curFrm:types.FrameType=inspect.currentframe()

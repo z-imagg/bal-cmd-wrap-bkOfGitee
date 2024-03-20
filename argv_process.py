@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from typing import List
-from common import __list_filter_NoneEle_emptyStrEle__
+from MiscUtil import __list_filter_NoneEle_emptyStrEle__
 
 #如果参数中含有-Werror , 将删除之.
 def ArgvRemoveWerror(Argv:List)->List:

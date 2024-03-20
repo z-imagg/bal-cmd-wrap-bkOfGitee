@@ -9,7 +9,17 @@
 
 
 import os
+from global_var import getGlbVarInst
 #去掉路径中多余的 斜线/ 、 等待计算的 上级目录..   ， 但是不解析软链接
 def pathNorm(pth:str)->str:
      path_normal:str=os.path.normpath(pth)
      return path_normal
+
+
+def _getProgAbsPath(initCurDir:str,progPath:str)->str:
+     progAbsPth:str= progPath if progPath.startswith("/") else  f'{initCurDir}/{progPath}'
+     return progAbsPth
+
+def getProgAbsPath()->str:
+     progAbsPth:str= _getProgAbsPath(initCurDir=getGlbVarInst().initCurDir,progPath=getGlbVarInst().sysArgv0)
+     return progAbsPth
