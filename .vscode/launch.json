@@ -16,7 +16,7 @@
         //     interceptor_cxx.py --__develop_mode  --__help
 
         {
-            "name": "interceptor_cxx 【固定参数】",
+            "name": "interceptor_cxx 【固定参数】【废弃，因为不能直接运行拦截器】",
             "type": "debugpy",
             "request": "launch",
             "program": "interceptor_cxx.py",
@@ -38,6 +38,7 @@
             "args": [  
 "-c", "/fridaAnlzAp/cmd-wrap/test_cxx_src/TestCxx01.cpp",
 "--__enable_develop_mode",
+"-g1"
 ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
