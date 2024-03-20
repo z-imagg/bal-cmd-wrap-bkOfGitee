@@ -3,7 +3,7 @@
 
 from typing import List
 
-from common import __NoneOrLenEq0__,__NoneStr2Empty__
+from MiscUtil import __NoneOrLenEq0__,__NoneStr2Empty__
 
 #在 ubuntu22上 将 ubuntu14的根目录 被 挂载 为 目录  /ubt14x86root
 class FileAtCmd:
@@ -60,6 +60,7 @@ class FileAtCmd:
 
         # -
         self.input_is_std_in: bool  = None
+        self.stdInTxt:str=None
 
 
 

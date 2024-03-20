@@ -4,7 +4,6 @@ import types
 import inspect
 import sys
 
-from global_var import getGlbVarInst
 
 
 def __NoneStr2Empty__(string: str):
@@ -31,27 +30,27 @@ def _prefix(_type:str,curFrm:types.FrameType)->str:
     prefix:str=f"{_type}:{_now_str()}@{curFrm.f_code.co_filename}:{curFrm.f_lineno}:{curFrm.f_code.co_name}"
     return prefix
 
-def INFO_LOG(curFrm:types.FrameType, _MSG:str ):
-    _LogFile:TextIOWrapper=getGlbVarInst().gLogF
+
+def _INFO_LOG(_LogFile:TextIOWrapper,en_dev_mode:bool, curFrm:types.FrameType, _MSG:str ):
     prefix:str=_prefix('INFO',curFrm)
     msg:str=f"{prefix}:{_MSG}"
 
     print(msg,file=_LogFile )
-    if getGlbVarInst().en_dev_mode:
+    if en_dev_mode:
         print(msg,file=sys.stdout)
     
     return
 
+
 import traceback
-def EXCEPT_LOG( curFrm:types.FrameType, _MSG:str, _except:BaseException):
-    _LogFile:TextIOWrapper=getGlbVarInst().gLogF
+def _EXCEPT_LOG(_LogFile:TextIOWrapper,en_dev_mode:bool, curFrm:types.FrameType, _MSG:str, _except:BaseException):
     prefix:str=_prefix('EXCEPT',curFrm)
     msg:str=f"{prefix}:{_MSG}"
     
     print(msg,file=_LogFile)
     traceback.print_exception(_except,file=_LogFile)
     
-    if getGlbVarInst().en_dev_mode:
+    if en_dev_mode:
         print(msg,file=sys.stderr)
         traceback.print_exception(_except,file=sys.stderr)
     

@@ -13,16 +13,15 @@
             // "terminalKind": "integrated", #此行可有可无
         },
         ////// python调试
-        //     opts="--__develop_mode  --__help  --__target"
+        //     interceptor_cxx.py --__develop_mode  --__help
 
         {
-            "name": "interceptor_cxx 【固定参数】",
+            "name": "interceptor_cxx 【固定参数】【废弃，因为不能直接运行拦截器】",
             "type": "debugpy",
             "request": "launch",
             "program": "interceptor_cxx.py",
             "console": "integratedTerminal",
             "args": [  
-"--__target", "gcc"
 ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
@@ -39,6 +38,22 @@
             "args": [  
 "-c", "/fridaAnlzAp/cmd-wrap/test_cxx_src/TestCxx01.cpp",
 "--__enable_develop_mode",
+"-g1"
+],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
+            },
+        },
+        
+        {
+            "name": "修bug【拦截器化身c++】",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "bin/gcc",
+            "console": "integratedTerminal",
+            "args": [  
+"-Wl,-rpath", "/fridaAnlzAp/cmd-wrap/test_cxx_src/TestCxx01.cpp",
+"-o", "TestCxx01.0"
 ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"

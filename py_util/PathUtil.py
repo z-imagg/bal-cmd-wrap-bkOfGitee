@@ -13,3 +13,9 @@ import os
 def pathNorm(pth:str)->str:
      path_normal:str=os.path.normpath(pth)
      return path_normal
+
+
+def _getProgAbsPath(initCurDir:str,sysArgv0:str)->str:
+     progPath:str=sysArgv0
+     progAbsPth:str= progPath if progPath.startswith("/") else  f'{initCurDir}/{progPath}'
+     return progAbsPth

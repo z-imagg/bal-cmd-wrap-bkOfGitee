@@ -30,6 +30,12 @@ def isEmptyLs(ls:typing.List[EmT]):
     empty:bool = ls is None or len(ls) == 0
     return empty
 
+
+#给定数组ls, 获得从下标1开始的子数组，若空则返回空数组
+def subLsFrom1(ls:typing.List[EmT])->typing.List[EmT]:
+    subLs:typing.List[EmT]=ls[1:] if len(ls) > 1 else []
+    return subLs
+
 #给定数组ls, 判定元素which的邻居是否为 neighbor
 def neibEqu(ls:typing.List[EmT],x:EmT,neibFit:EmT)->bool:
     Negative = False
