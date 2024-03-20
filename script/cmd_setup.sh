@@ -30,72 +30,54 @@ bash $Hm/script/env_prepare.sh >/dev/null
 source $Hm/.venv/bin/activate
 # set -x
 
-alias _IfElfMv2Orn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && sudo mv -v "${Fil}" "${Fil}.origin" '
+alias _IfELFMvAsOrn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}'
 #移动 业务者
-Fil="/usr/bin/make" ;  _IfElfMv2Orn
+Fil="/usr/bin/make" ;  _IfELFMvAsOrn
 # sudo mv /usr/bin/make /usr/bin/make.origin
-Fil="/usr/bin/cmake" ;  _IfElfMv2Orn
+Fil="/usr/bin/cmake" ;  _IfELFMvAsOrn
 # sudo mv /usr/bin/cmake /usr/bin/cmake.origin
 
-alias _IfNotIntcptMv2Orn='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] || sudo mv -v "${Fil}" "${Fil}.origin" '
-Fil="/usr/bin/gcc" ; _IfNotIntcptMv2Orn
-Fil="/usr/bin/g++" ; _IfNotIntcptMv2Orn
-Fil="/usr/bin/c++" ; _IfNotIntcptMv2Orn
+alias _IfNotItcpMvAsOrn='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] || { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}'
+Fil="/usr/bin/gcc" ; _IfNotItcpMvAsOrn
+Fil="/usr/bin/g++" ; _IfNotItcpMvAsOrn
+Fil="/usr/bin/c++" ; _IfNotItcpMvAsOrn
 
-alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] && sudo unlink "${Fil}" && echo "UNLINK $_" '
+alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] && sudo unlink "${Fil}" && echo "销毁现有入口者 $_" '
 
-#生成 拦截器化身
-echo "清理 拦截器化身"
-Fil="/fridaAnlzAp/cmd-wrap/bin/gcc" ; _IfIntcptUnlnk
-Fil="/fridaAnlzAp/cmd-wrap/bin/g++" ; _IfIntcptUnlnk
-Fil="/fridaAnlzAp/cmd-wrap/bin/c++" ; _IfIntcptUnlnk
-Fil="/fridaAnlzAp/cmd-wrap/bin/clang" ; _IfIntcptUnlnk
-Fil="/fridaAnlzAp/cmd-wrap/bin/clang++" ; _IfIntcptUnlnk
-rm -fv $binHm/cmake $binHm/make #这里不能有，否则在PATH中更优先，会阻碍/usr/bin/cmake、/usr/bin/make
-sudo unlink /usr/bin/c++
-sudo unlink /usr/bin/cmake
-sudo unlink /usr/bin/make
+#销毁现有入口者
+Fil="/usr/bin/gcc" ; _IfIntcptUnlnk
+Fil="/usr/bin/g++" ; _IfIntcptUnlnk
+Fil="/usr/bin/c++" ; _IfIntcptUnlnk
+Fil="/usr/bin/clang" ; _IfIntcptUnlnk
+Fil="/usr/bin/clang++" ; _IfIntcptUnlnk
+Fil="/usr/bin/cmake" ; _IfIntcptUnlnk
+Fil="/usr/bin/make" ; _IfIntcptUnlnk
 
-echo "重新生成 拦截器化身"
-ln -s  $intcpt $binHm/gcc
-#ln -s /fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py   /fridaAnlzAp/cmd-wrap/bin/gcc
-ln -s  $intcpt $binHm/g++
-ln -s  $intcpt $binHm/clang
-ln -s  $intcpt $binHm/clang++
-sudo ln -s  $intcpt /usr/bin/c++
-sudo ln -s  $intcpt /usr/bin/cmake
-sudo ln -s  $intcpt /usr/bin/make
+alias _lnk2Intcpt='sudo ln -s "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" "${Fil}" && echo "重新生成入口者 ${Fil}   " '
+Fil="/usr/bin/gcc" ; _lnk2Intcpt
+Fil="/usr/bin/g++" ; _lnk2Intcpt
+Fil="/usr/bin/c++" ; _lnk2Intcpt
+Fil="/usr/bin/clang" ; _lnk2Intcpt
+Fil="/usr/bin/clang++" ; _lnk2Intcpt
+Fil="/usr/bin/cmake" ; _lnk2Intcpt
+Fil="/usr/bin/make" ; _lnk2Intcpt
 
-echo "将 拦截器化身 放入 PATH 环境变量 中"
-export PATH=$binHm:$PATH
-
+alias _echoLnk=' _cmd=$(which "${Cmd}") && echo "${Cmd} --> $(_cmd) " '
 echo "列出 拦截器化身 们"
-which gcc
-# /fridaAnlzAp/cmd-wrap/bin/gcc
-which g++
-# /fridaAnlzAp/cmd-wrap/bin/g++
-which c++
-# /usr/bin/c++
-which clang
-# /fridaAnlzAp/cmd-wrap/bin/clang
-which clang++
-# /fridaAnlzAp/cmd-wrap/bin/clang++
-which cmake
-# /fridaAnlzAp/cmd-wrap/bin/cmake
-which make
-# /fridaAnlzAp/cmd-wrap/bin/make
+Cmd="gcc" ; _echoLnk
+Cmd="g++" ; _echoLnk
+Cmd="c++" ; _echoLnk
+Cmd="clang" ; _echoLnk
+Cmd="clang++" ; _echoLnk
+Cmd="cmake" ; _echoLnk
+Cmd="make" ; _echoLnk
 
 #测试拦截器化身(gcc)
-rm -frv /tmp/gcc-*.log
-
-# echo "测试拦截器化身(gcc)开发者模式"
-# gcc --__enable_develop_mode
-# echo "请您用人类肉眼，确认gcc拦截器返回代码【$?】应该和上面拦截器日志中说的gcc命令的返回代码一致才对"
-
-
-# echo "先用tail后台显示拦截器日志文件， 测试拦截器化身(gcc)安静模式"
-# tail -f /tmp/gcc-*.log &
+cd /tmp/
 gcc
-
+g++
 c++
-#interceptor_cxx.py --__help  及其 bash自动完成
+clang
+clang++
+cmake
+make
