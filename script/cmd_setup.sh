@@ -15,10 +15,10 @@ getCurScriptFullPath
 
 ######脚本正文开始
 
-bash /fridaAnlzAp/cmd-wrap/script/env_prepare.sh >/dev/null
+# bash /fridaAnlzAp/cmd-wrap/script/env_prepare.sh >/dev/null
 
 # set +x
-source /fridaAnlzAp/cmd-wrap/.venv/bin/activate
+# source /fridaAnlzAp/cmd-wrap/.venv/bin/activate
 # set -x
 
 #拦截器
@@ -34,7 +34,7 @@ alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && s
 #重新生成入口者
 alias _lnk2Intcpt='sudo ln -s "${interceptor_cxx}" "${Fil}" && echo "重新生成入口者 ${Fil}   " '
 #显示拦截器
-alias _echoLnk=' _cmd=$(which "${Cmd}") && echo "显示拦截器 ${Cmd} --> ${_cmd} " '
+alias _echoLnk=' _cmdFull=$(which "${Cmd}") && echo -n "显示拦截器 ${Cmd} --> ${_cmdFull} " && _cmdReal=$( readlink -f ${_cmdFull} ) && echo "  -----> ${_cmdReal} "   '
 
 declare -r gccF="/usr/bin/gcc"
 Fil="${gccF}" ;  _IfELFMvAsOrn #备份
