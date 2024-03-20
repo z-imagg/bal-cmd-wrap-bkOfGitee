@@ -42,28 +42,14 @@ import time
 
 
 
-initCurDir:str=os.getcwd()
+# initCurDir:str=os.getcwd()
 #全局变量初始化步骤1， 此时还有拿不到的字段，暂时用None填充
-GlbVar(gLogF=None,en_dev_mode=None,initCurDir=initCurDir,sysArgv0=sys.argv[0])
-#curDir=='/fridaAnlzAp/cmd-wrap'
-progPath:str=sys.argv[0]
-progAb=_getProgAbsPath(initCurDir=initCurDir,sysArgv0=progPath)
-progAbsPth:Path=Path(progAb)
-#progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
-#progName 为 真程序名
-progName:str=progAbsPth.name
-#progName=='gcc'
-scriptDir:Path=progAbsPth.parent
-#scriptDir==/fridaAnlzAp/cmd-wrap/bin
-prjDir:str=scriptDir.parent.as_posix()
-#prjDir==/fridaAnlzAp/cmd-wrap/
-# print(f"curDir:{initCurDir},sys.argv[0]:{sys.argv[0]},  progAbsPth:{progAbsPth}, scriptDir:{scriptDir}")
-# os.chdir(scriptDir.as_posix())
+GlbVar(gLogF=None,en_dev_mode=None)
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()
 #人类可读命令字符串
-gccCmdHum:str=" ".join(sys.argv)
+# gccCmdHum:str=" ".join(sys.argv)
 #备份sys.argv
 # sysArgv:List[str]= sys.argv.copy() ;
 #参数数组复制一份 (不要直接修改sys.argv)
@@ -71,7 +57,7 @@ Argv=lsDelNone(list(sys.argv))
 en_dev_mode:bool=elmRmEqu_(Argv,"--__enable_develop_mode")
 
 if elmExistEqu(Argv,"--__target"):
-    assert progAb == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
+    assert progAbs == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
     _,_,target=neighborRm2_(Argv,"--__target","gcc")
     en_dev_mode=True
 #"--__enable_develop_mode",
@@ -107,7 +93,7 @@ exitCode:int = None
 try:#try业务块
     #日志不能打印到标准输出、错误输出，因为有些调用者假定了标准输出就是他想要的返回内容。
     # INFO_LOG( curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
-    INFO_LOG( curFrm, f"收到命令及参数:【{gccCmdHum}】")
+    INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().gccCmdHum}】")
     #捕捉编译时的env环境变量和初始环境变量差异
     execute_script_file(gLogF,f"{prjDir}/env-diff-show.sh")
     #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
@@ -122,9 +108,9 @@ try:#try业务块
     else:
         INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
-    calcTrueProg(initCurDir,Argv)
+    
     #执行真命令(真gcc命令编译已经被clang-add-funcIdAsm修改过的源文件）
-    exitCode:int=execute_cmd(Argv, gLogF,fileAtCmd.input_is_std_in)
+    exitCode:int=execute_cmd(fileAtCmd.input_is_std_in)
     if not care_srcF:
         pass #TODO clang插件修改.c再编译后，检查.o文件中有没有对应的指令序列
 except BaseException  as bexp:

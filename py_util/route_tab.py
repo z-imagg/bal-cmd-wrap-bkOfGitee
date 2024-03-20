@@ -4,7 +4,7 @@
 
 import typing
 from PathUtil import pathNorm
-from global_var import getGlbVarInst,getProgAbsPath
+# from global_var import getGlbVarInst,getProgAbsPath
 
 fakeBinHm="/fridaAnlzAp/cmd-wrap/bin/"
 fake_clang=pathNorm(f"{fakeBinHm}/clang")
@@ -27,13 +27,13 @@ progTab=[
 ]
 progMap=dict(progTab)
 
-def calcTrueProg(curDir:str,SysArgv:typing.List[str])->None:
-    progAbsPth:str=getProgAbsPath()
-    progAbsPth=pathNorm(progAbsPth)
-    if progMap.__contains__(progAbsPth):
-        progTrue:str= progMap.__getitem__(progAbsPth)
-        SysArgv[0]=progTrue
-        return
+
+def calcTrueProg( progAbsNormPath:str )->str:
+    prgNmPth= progAbsNormPath
+    if progMap.__contains__(prgNmPth):
+        progTrue:str= progMap.__getitem__(prgNmPth)
+        # SysArgv[0]=progTrue
+        return progTrue
     
-    errMsg:str=f"错误，路由表中不包含 假程序【{progAbsPth}】，请人工补全路由表【route_tab.py:progTab】"
+    errMsg:str=f"错误，路由表中不包含 假程序【{prgNmPth}】，请人工补全路由表【route_tab.py:progTab】"
     raise Exception(errMsg)

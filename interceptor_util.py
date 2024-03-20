@@ -3,6 +3,7 @@
 
 import subprocess,sys
 from typing import List,Tuple
+import typing
 
 from datetime_util import getCurrNanoSeconds
 from pathlib import Path
@@ -14,6 +15,7 @@ import types
 from plumbum import local
 import plumbum
 from MiscUtil import __NoneOrLenEq0__,INFO_LOG
+from global_var import calcTrueProg, getBuszCmd, getGlbVarInst
 
 def execute_script_file(gLogF,scriptFile:Path)->None:
     curFrm:types.FrameType=inspect.currentframe()
@@ -26,20 +28,22 @@ def execute_script_file(gLogF,scriptFile:Path)->None:
     return
 
 
-def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
+def execute_cmd( input_is_std_in:bool)->int:
+    # inst=getGlbVarInst()
+    buszArgv,buszCmd,buszProg,buszArgvFrom1=getBuszCmd()
     curFrm:types.FrameType=inspect.currentframe()
     exitCode:int=None
     # INFO_LOG( curFrm, f"真实命令（数组Argv）:【{Argv}】")
     #命令内容写入文件，方便问题查找.
-    _cmdReceived:str=' '.join(Argv)
-    INFO_LOG( curFrm, f"真实命令（字符串_cmdReceived）:【{_cmdReceived}】")
+    # _cmdReceived:str=' '.join(Argv)
+    INFO_LOG( curFrm, f"构造出业务命令:【{buszCmd}】")
 
 
     # 调用真实命令，
     retCode: int; std_out: str; err_out: str
     if input_is_std_in:
         #本python进程的标准输入 给到 真实命令进程 的 标准输入
-        p:subprocess.Popen = subprocess.Popen(Argv,
+        p:subprocess.Popen = subprocess.Popen(buszArgv,
           stdin=subprocess.PIPE,  #这里的stdin填写PIPE， 则进程p的标准输入 通过p.communicate的入参input传入
           stdout=subprocess.PIPE, #若这里的stdout不填，  则进程p的标准输出 直接打印到 控制台
                                   #若这里的stdout填PIPE，则进程p的标准输出 通过 p.communicate 返回
@@ -53,9 +57,9 @@ def execute_cmd(Argv, gLogF,input_is_std_in:bool)->int:
         exitCode=p.returncode
         INFO_LOG(curFrm,f"标准输入为:【{stdin_str}】")
     else:
-        real_prog:plumbum.machines.local.LocalCommand=local[Argv[0]]
-        argLs=Argv[1:] if len(Argv) > 1 else []
-        real_cmd:plumbum.commands.base.BoundCommand=real_prog[argLs]
+        real_prog:plumbum.machines.local.LocalCommand=local[buszProg]
+        # argLs=Argv[1:] if len(Argv) > 1 else []
+        real_cmd:plumbum.commands.base.BoundCommand=real_prog[buszArgvFrom1]
         exitCode, std_out, err_out = real_cmd.run(retcode=None)
 
     # import ipdb; ipdb.set_trace()
