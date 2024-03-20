@@ -24,7 +24,7 @@ import types
 from pathlib import Path
 
 
-from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__
+from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__, pprocess_cmd
 from file_at_cmd import FileAtCmd
 from route_tab import Prog, calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
@@ -58,7 +58,7 @@ curFrm:types.FrameType=inspect.currentframe()
 exitCodePlg:int = None
 bzCmdExitCd:int = None
 try:#try业务块
-    INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】")
+    INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】, 父进程完成命令行【{pprocess_cmd()}】")
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd()
     #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.

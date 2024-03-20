@@ -56,3 +56,12 @@ def _EXCEPT_LOG(_LogFile:TextIOWrapper,en_dev_mode:bool, curFrm:types.FrameType,
     
 
     return
+
+
+#父进程完成命令行
+def pprocess_cmd()->str:
+    import os
+    from pathlib import Path
+    ppid=os.getppid()
+    pp_cmd=Path(f"/proc/{ppid}/cmdline").read_text()
+    return pp_cmd
