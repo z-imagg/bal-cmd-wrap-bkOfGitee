@@ -25,16 +25,18 @@ getCurScriptFullPath
 declare -r interceptor_cxx="/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py"
 chmod +x $interceptor_cxx
 
+alias _echoWhich='  _F=$( which ${_C} ) &&  echo -n " ${_C} -----> ${_F} "   '
+alias _echoReadlinkF_Ln='   echo  "  -----> $( readlink -f ${_F} ) "   '
 #若是ELF文件，则备份
 alias _IfELFMvAsOrn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}'
 #若不是拦截入口者，则备份
 alias _IfNotItcpMvAsOrn='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] || { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}'
 #销毁现有入口者
-alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}" && echo "销毁现有入口者 $_" '
+alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}" && echo "销毁现有入口者  ${Fil} ,  " '
 #重新生成入口者
 alias _lnk2Intcpt='sudo ln -s "${interceptor_cxx}" "${Fil}" && echo "重新生成入口者 ${Fil}   " '
 #显示拦截器
-alias _echoLnk=' _cmdFull=$(which "${Cmd}") && echo -n "显示拦截器 ${Cmd} --> ${_cmdFull} " && _cmdReal=$( readlink -f ${_cmdFull} ) && echo "  -----> ${_cmdReal} "   '
+alias _echoLnk=' _C="${Cmd}" && echo -n "显示拦截器" &&  _echoWhich  && _echoReadlinkF_Ln   '
 
 declare -r gccF="/usr/bin/gcc"
 Fil="${gccF}" ;  _IfELFMvAsOrn #备份
