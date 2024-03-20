@@ -4,7 +4,7 @@ import sys
 from typing import List,Tuple
 
 from IoUtil import stdinRead
-from file_at_cmd import FileAtCmd
+from cxx_cmd import CxxCmd
 from MiscUtil import __NoneOrLenEq0__
 import inspect
 import types
@@ -15,15 +15,12 @@ from pathlib import Path
 import shutil
 import time
 
-def larkGetSrcFileFromSingleGccCmd()->FileAtCmd:
+def cxxCmdParse()->CxxCmd:
     inst=getGlbVarInst()
     curFrm:types.FrameType=inspect.currentframe()
     gccCmdHum:str=" ".join(inst.ArgvClean)
 
-    fac:FileAtCmd=FileAtCmd()
-
-    #若stdin是可读取的, 则判定为从标准输入读取
-    fac.input_is_std_in,fac.stdInTxt=stdinRead()
+    fac:CxxCmd=CxxCmd()
 
     #判定源文件是否为/dev/null
     fac.srcFpIsDevNull=neibEqu(inst.ArgvClean, "-c", "/dev/null")

@@ -4,11 +4,13 @@
 #apt install file uuid-runtime
 
 import sys
+
 sys.path.append("/fridaAnlzAp/cmd-wrap/py_util")
 sys.path.append("/fridaAnlzAp/cmd-wrap/entity")
 sys.path.append("/fridaAnlzAp/cmd-wrap/bin")
 sys.path.append("/fridaAnlzAp/cmd-wrap")
 
+from basic_cmd import BasicCmd
 import os
 import errno
 from io import TextIOWrapper
@@ -24,21 +26,22 @@ import types
 from pathlib import Path
 
 
-from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__
-from file_at_cmd import FileAtCmd
-from route_tab import calcTrueProg
+from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__, pprocess_cmd
+from cxx_cmd import CxxCmd
+from route_tab import Prog, calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd,execute_script_file
-from CxxccParser import larkGetSrcFileFromSingleGccCmd
+from CxxCmdParser import cxxCmdParse
 
 from LsUtil import lsDelNone,elmRmEqu_,neibEqu,neibGet,neighborRm2_,elmExistEqu
-from custom_modify import customModify
+from custom_modify import customModify_CompilerArgv, customModify_MakeToolArgv
 from IdUtil import genApproxId
 from PathUtil import _getProgAbsPath
 
 import os
 import time
 import shutil
+from BasicCmdParser import basicCmdParse
 
 
 
@@ -49,7 +52,7 @@ GlbVar( )
 inst=getGlbVarInst()
 #开发用，复制整个当前目录，为了应对 cmake编译完删除临时问题的 行为，出错时候 已经找不到被编译文件了
 # initCurDir4Deve= f"/tmp/{inst.initCurDir.replace('/','-')}"
-# shutil.copytree(inst.initCurDir, initCurDir4Deve)
+# shutil.copytree(inst.initCurDir, initCurDir4Deve,dirs_exist_ok=True)
 
 #{拦截过程 开始
 curFrm:types.FrameType=inspect.currentframe()
@@ -58,36 +61,43 @@ curFrm:types.FrameType=inspect.currentframe()
 exitCodePlg:int = None
 bzCmdExitCd:int = None
 try:#try业务块
-    INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】")
-    #捕捉编译时的env环境变量和初始环境变量差异
-    execute_script_file(f"{getGlbVarInst().prjDir}/env-diff-show.sh")
-    #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
-    #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd()
-    #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
-    #组装 clang插件命令 不再 需要 lark文法解析结果
-    care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
-    if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
-        #客户对编译器命令参数向量的修改
-        inst.Argv=customModify( fileAtCmd=fileAtCmd,argv=inst.Argv)
-    else:
-        INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
+    INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】, 父进程完成命令行【{pprocess_cmd()}】")
+    #构建工具，不管有没有源文件都是要拦截的
+    basicCmd:BasicCmd=None
+    if inst.buszProg.kind == Prog.ProgKind.MakeTool:
+        basicCmd=basicCmdParse()
+        inst.Argv=customModify_MakeToolArgv(basicCmd=basicCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+
+
+    #编译命令
+    if inst.buszProg.kind == Prog.ProgKind.Compiler:
+        #编译命令解析
+        fileAtCmd:CxxCmd=cxxCmdParse()
+        basicCmd=fileAtCmd
+        #编译命令，无源文件时不拦截.   
+        care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
+        if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
+            #客户对编译器命令参数向量的修改
+            inst.Argv=customModify_CompilerArgv( fileAtCmd=fileAtCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+        else:
+            INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     
     #执行业务命令
-    bzCmdExitCd:int=execute_cmd(fileAtCmd.input_is_std_in,fileAtCmd.stdInTxt)
-    if not care_srcF:
-        pass #TODO clang插件修改.c再编译后，检查.o文件中有没有对应的指令序列
-except BaseException  as bexp:
+    bzCmdExitCd:int=execute_cmd(basicCmd.input_is_std_in,basicCmd.stdInTxt)
+except (BaseException|TypeError)  as bexp:
     EXCEPT_LOG( curFrm, f"interceptor.py的try业务块异常",bexp)
     # raise bexp
+    if bzCmdExitCd is None:
+        bzCmdExitCd=-100
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
 
     if bzCmdExitCd is not None and bzCmdExitCd != 0 :
         #如果异常退出，则以软链接指向日志文件，方便排查错误
         logFPth:str=getGlbVarInst().logFPth
-        Path(logFPth).hardlink_to(f"{logFPth}--errorCode_{bzCmdExitCd}")
+        link_logFPth:str=f"{logFPth}--errorCode_{bzCmdExitCd}"
+        Path(link_logFPth).hardlink_to(logFPth)
         
     #立即 将 stdio缓存 写出 ， 关闭日志文件
     flushStdCloseLogF()

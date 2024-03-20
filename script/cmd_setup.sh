@@ -9,70 +9,98 @@
 shopt -s expand_aliases
 alias getCurScriptFullPath='f=$(readlink -f ${BASH_SOURCE[0]})  ; d=$(dirname $f) '
 
-
 #取当前脚本完整路径
 getCurScriptFullPath
 #d==/fridaAnlzAp/cmd-wrap/script/
 
-Hm=$(realpath -s ${d}/../)
-#Hm=/fridaAnlzAp/cmd-wrap
+######脚本正文开始
 
-binHm=$Hm/bin
-#binHm == /fridaAnlzAp/cmd-wrap/bin/
-intcpt=$binHm/interceptor_cxx.py
-#intcpt == /fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py
-
-chmod +x $intcpt
-
-chmod +x $Hm/env-diff-show.sh
-
-bash $Hm/script/env_prepare.sh >/dev/null
+bash /fridaAnlzAp/cmd-wrap/script/env_prepare.sh >/dev/null
 
 # set +x
-source $Hm/.venv/bin/activate
+source /fridaAnlzAp/cmd-wrap/.venv/bin/activate
 # set -x
 
-#生成 拦截器化身
-echo "清理 拦截器化身"
-unlink $binHm/gcc
-unlink $binHm/g++
-unlink $binHm/clang
-unlink $binHm/clang++
-sudo unlink /usr/bin/c++
+#拦截器
+declare -r interceptor_cxx="/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py"
+chmod +x $interceptor_cxx
 
-echo "重新生成 拦截器化身"
-ln -s  $intcpt $binHm/gcc
-#ln -s /fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py   /fridaAnlzAp/cmd-wrap/bin/gcc
-ln -s  $intcpt $binHm/g++
-ln -s  $intcpt $binHm/clang
-ln -s  $intcpt $binHm/clang++
-# sudo mv /usr/bin/c++ /usr/bin/c++.origin
-sudo ln -s  $intcpt /usr/bin/c++
+alias _1echoWhich='  _F=$( which ${_C} ) &&  echo -n " ${_C} -----> ${_F} "   '
+alias _2echoReadlinkF_Ln='   echo  "  -----> $( readlink -f ${_F} ) "   '
+alias _echoReadlinkF_Ln='   echo  " ${_F} -----> $( readlink -f ${_F} ) "   '
+#若是ELF文件，则备份
+alias _IfELFMvAsOrn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}'
+#若不是拦截入口者，则备份
+alias _IfNotItcpMvAsOrn='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] || { [[ -f ${Fil} ]] && sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}'
+#销毁现有入口者
+alias _IfIntcptUnlnk='{ echo -n "销毁现有入口者" &&  _F=${Fil} &&  _echoReadlinkF_Ln  ;} ; {  [[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}"  ;} '
+#重新生成入口者
+alias _lnk2Intcpt='sudo ln -s "${interceptor_cxx}" "${Fil}" && echo -n "重新生成入口者  "  &&  _F=${Fil} &&  _echoReadlinkF_Ln  '
+#显示拦截器
+alias _echoLnk=' _C="${Cmd}" && echo -n "显示拦截器" &&  _1echoWhich  && _2echoReadlinkF_Ln   '
 
-echo "将 拦截器化身 放入 PATH 环境变量 中"
-export PATH=$binHm:$PATH
+declare -r gccF="/usr/bin/gcc"
+Fil="${gccF}" ;  _IfELFMvAsOrn #备份
+Fil="${gccF}" ; _IfNotItcpMvAsOrn #备份
+Fil="${gccF}" ; _IfIntcptUnlnk #销毁现有入口者
+Fil="${gccF}" ; _lnk2Intcpt #重新生成入口者
+Cmd="gcc"     ; _echoLnk #显示拦截器
+echo ""
 
-echo "列出 拦截器化身 们"
-which gcc
-# /fridaAnlzAp/cmd-wrap/bin/gcc
-which g++
-# /fridaAnlzAp/cmd-wrap/bin/g++
-which clang
-# /fridaAnlzAp/cmd-wrap/bin/clang
-which clang++
-# /fridaAnlzAp/cmd-wrap/bin/clang++
+declare -r gxxF="/usr/bin/g++"
+Fil="${gxxF}" ;  _IfELFMvAsOrn #备份
+Fil="${gxxF}" ; _IfNotItcpMvAsOrn
+Fil="${gxxF}" ; _IfIntcptUnlnk
+Fil="${gxxF}" ; _lnk2Intcpt
+Cmd="g++"     ; _echoLnk
+echo ""
+
+declare -r cxxF="/usr/bin/c++"
+Fil="${cxxF}" ;  _IfELFMvAsOrn #备份
+Fil="${cxxF}" ; _IfNotItcpMvAsOrn
+Fil="${cxxF}" ; _IfIntcptUnlnk
+Fil="${cxxF}" ; _lnk2Intcpt
+Cmd="c++"     ; _echoLnk
+echo ""
+
+declare -r clangF="/usr/bin/clang"
+Fil="${clangF}" ;  _IfELFMvAsOrn #备份
+Fil="${clangF}" ; _IfNotItcpMvAsOrn
+Fil="${clangF}" ; _IfIntcptUnlnk
+Fil="${clangF}" ; _lnk2Intcpt
+Cmd="clang"     ; _echoLnk
+echo ""
+
+declare -r clangxxF="/usr/bin/clang++"
+Fil="${clangxxF}" ;  _IfELFMvAsOrn #备份
+Fil="${clangxxF}" ; _IfNotItcpMvAsOrn
+Fil="${clangxxF}" ; _IfIntcptUnlnk
+Fil="${clangxxF}" ; _lnk2Intcpt
+Cmd="clang++"     ; _echoLnk
+echo ""
+
+declare -r cmakeF="/usr/bin/cmake"
+Fil="${cmakeF}" ;  _IfELFMvAsOrn
+Fil="${cmakeF}" ; _IfNotItcpMvAsOrn
+Fil="${cmakeF}" ; _IfIntcptUnlnk
+Fil="${cmakeF}" ; _lnk2Intcpt
+Cmd="cmake"     ; _echoLnk
+echo ""
+
+declare -r makeF="/usr/bin/make"
+Fil="${makeF}" ;  _IfELFMvAsOrn
+Fil="${makeF}" ; _IfNotItcpMvAsOrn
+Fil="${makeF}" ; _IfIntcptUnlnk
+Fil="${makeF}" ; _lnk2Intcpt
+Cmd="make"     ; _echoLnk
+echo ""
 
 #测试拦截器化身(gcc)
-rm -frv /tmp/gcc-*.log
-
-echo "测试拦截器化身(gcc)开发者模式"
-gcc --__enable_develop_mode
-echo "请您用人类肉眼，确认gcc拦截器返回代码【$?】应该和上面拦截器日志中说的gcc命令的返回代码一致才对"
-
-
-echo "先用tail后台显示拦截器日志文件， 测试拦截器化身(gcc)安静模式"
-tail -f /tmp/gcc-*.log &
+cd /tmp/
 gcc
-
+g++
 c++
-#interceptor_cxx.py --__help  及其 bash自动完成
+clang
+clang++
+cmake 2&>1 >/dev/null
+make  2&>1 >/dev/null

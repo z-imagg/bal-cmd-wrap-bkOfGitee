@@ -9,10 +9,12 @@ from datetime_util import getCurrNanoSeconds
 from pathlib import Path
 import inspect
 import types
-
+import os
 
 
 from plumbum import local
+from plumbum.machines.local import LocalCommand
+from plumbum.commands.base import BoundCommand
 import plumbum
 from MiscUtil import __NoneOrLenEq0__
 from global_var import calcTrueProg, getBuszCmd, getGlbVarInst,INFO_LOG
@@ -40,7 +42,7 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str)->int:
     # _cmdReceived:str=' '.join(Argv)
     INFO_LOG( curFrm, f"构造出业务命令:【{buszCmd}】")
 
-
+    #TODO 环境变量实验 执行命令时，带入 当前进程的环境变量 到 被执行的命令中？
     # 调用真实命令，
     retCode: int; std_out: str; err_out: str
     if input_is_std_in:
@@ -51,17 +53,18 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str)->int:
                                   #若这里的stdout填PIPE，则进程p的标准输出 通过 p.communicate 返回
           stderr=subprocess.PIPE, #这里的stderr 同上一行的 参数 stdout
 
-          text=True  #若这里的text为true,  则 p.communicate的【入参input、出参std_out、出参err_out】 类型为str;
+          text=True,  #若这里的text为true,  则 p.communicate的【入参input、出参std_out、出参err_out】 类型为str;
                      #若这里的text为false, 则 p.communicate的【入参input、出参std_out、出参err_out】 类型为bytes;
+           env=os.environ
           )
         stdin_str:str=stdInTxt #已经读过stdIn, 不能再读sys.stdin.read()
         std_out, err_out=p.communicate(input=stdin_str)
         exitCode=p.returncode
         INFO_LOG(curFrm,f"标准输入为:【{stdin_str}】")
     else:
-        real_prog:plumbum.machines.local.LocalCommand=local[buszProg]
+        real_prog:LocalCommand=local[buszProg]
         # argLs=Argv[1:] if len(Argv) > 1 else []
-        real_cmd:plumbum.commands.base.BoundCommand=real_prog[buszArgvFrom1]
+        real_cmd:BoundCommand=real_prog[buszArgvFrom1]
         exitCode, std_out, err_out = real_cmd.run(retcode=None)
 
     # import ipdb; ipdb.set_trace()

@@ -14,7 +14,7 @@ from pathlib import Path
 import sys
 from LsUtil import elmExistEqu, elmRmEqu_, lsDelNone, neighborRm2_, subLsFrom1
 from PathUtil import pathNorm
-from route_tab import calcTrueProg
+from route_tab import Prog, calcTrueProg
 import os
 from pathlib import Path
 
@@ -38,9 +38,9 @@ class GlbVar:
 
         #构造 路径相关变量
         self.progAbsPath:str= _getProgAbsPath(initCurDir=self.initCurDir,sysArgv0=sys.argv[0])
-        self.progAbsNormPath:str=pathNorm(self.progAbsPath)
+        self.fackProgAbsNormPath:str=pathNorm(self.progAbsPath)
 
-        self.buszProg:str=calcTrueProg(self.progAbsNormPath)
+        self.buszProg:Prog=calcTrueProg(self.fackProgAbsNormPath)
 
         progAbsPth:Path=Path(self.progAbsPath)
         # progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
@@ -81,8 +81,8 @@ class GlbVar:
 
 #使用函数装饰器 的弊端是  无法获取到 真实类对象 ，从而 无法调用static方法。 只能绕开
 def getGlbVarInst()->GlbVar:
-    inst = GlbVar(None,None,None,None)#这句话并不是构造对象，而是获取单例对象
-    assert inst.Argv is not None
+    inst = GlbVar( )#这句话并不是构造对象，而是获取单例对象
+    assert inst.initComplete , "难道没构造全局变量？"
     if inst.initComplete:
         assert inst.gLogF is not None, "断言失败，必须先手工实例化GlbVar(合理的参数) ，再调用本方法getGlbVarInst获取全局变量"
     return inst
@@ -124,13 +124,13 @@ def getBuszCmd()->typing.Tuple[typing.List[str],str]:
     
     buszArgv:typing.List[str]=list(inst.Argv)
     
-    buszArgv[0]=inst.buszProg
+    buszArgv[0]=inst.buszProg.trueProg
 
     buszCmd:str=' '.join(buszArgv)
     
     buszArgvFrom1=subLsFrom1(buszArgv)
     
-    return (buszArgv,buszCmd,inst.buszProg,buszArgvFrom1)
+    return (buszArgv,buszCmd,inst.buszProg.trueProg,buszArgvFrom1)
 
 #测试
 if __name__=="__main__":
