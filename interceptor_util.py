@@ -9,7 +9,7 @@ from datetime_util import getCurrNanoSeconds
 from pathlib import Path
 import inspect
 import types
-
+import os
 
 
 from plumbum import local
@@ -53,8 +53,9 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str)->int:
                                   #若这里的stdout填PIPE，则进程p的标准输出 通过 p.communicate 返回
           stderr=subprocess.PIPE, #这里的stderr 同上一行的 参数 stdout
 
-          text=True  #若这里的text为true,  则 p.communicate的【入参input、出参std_out、出参err_out】 类型为str;
+          text=True,  #若这里的text为true,  则 p.communicate的【入参input、出参std_out、出参err_out】 类型为str;
                      #若这里的text为false, 则 p.communicate的【入参input、出参std_out、出参err_out】 类型为bytes;
+           env=os.environ
           )
         stdin_str:str=stdInTxt #已经读过stdIn, 不能再读sys.stdin.read()
         std_out, err_out=p.communicate(input=stdin_str)
