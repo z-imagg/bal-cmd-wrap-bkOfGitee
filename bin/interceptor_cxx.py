@@ -13,7 +13,7 @@ import os
 import errno
 from io import TextIOWrapper
 
-from global_var import GlbVar, getGlbVarInst
+from global_var import GlbVar, getGlbVarInst,glbVarInit2
 assert sys.version_info >= (3,6), "错误：需要使用 Python 3.6 或更高版本. 因为 此脚本中大量使用的 字符串格式化语法 f'{变量名}' 是pytho3.6引入的"
 import time
 import subprocess
@@ -43,6 +43,7 @@ import time
 
 
 initCurDir:str=os.getcwd()
+#全局变量初始化步骤1， 此时还有拿不到的字段，暂时用None填充
 GlbVar(gLogF=None,en_dev_mode=None,initCurDir=initCurDir,sysArgv0=sys.argv[0])
 #curDir=='/fridaAnlzAp/cmd-wrap'
 progPath:str=sys.argv[0]
@@ -88,9 +89,8 @@ from pathlib import Path
 logFK=f"/tmp/{progName}-{approxId}.log"
 assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
 gLogF:TextIOWrapper = open(logFK, "a") #append(追加地写入)模式打开文件
-# inst=GlbVar(gLogF=gLogF,en_dev_mode=en_dev_mode,initCurDir=initCurDir,sysArgv0=progPath)
-getGlbVarInst().gLogF=gLogF
-getGlbVarInst().en_dev_mode=en_dev_mode
+#全局变量初始化步骤2，填充剩余字段
+glbVarInit2(gLogF=gLogF, en_dev_mode=en_dev_mode)
 
 # inst2=getGlbVarInst()
 INFO_LOG(curFrm, f"生成唯一文件名成功{logFK},作为日志文件")
