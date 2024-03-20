@@ -19,24 +19,29 @@ clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/
 #########################以下两个方法，基本固定，不用修改
 #客户对编译器命令参数向量的修改
 def customModify_CompilerArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], buszProg:Prog)->typing.List[str]:
-
-    if buszProg==fake_gcc:
+    fakeProg:str=buszProg.fakeProg
+    if fakeProg==fake_gcc:
         return customModify_CompilerArgv_gcc(fileAtCmd=fileAtCmd, argv=argv)
-    if buszProg==fake_cxx:
+    if fakeProg==fake_cxx:
         return customModify_CompilerArgv_cxx(fileAtCmd=fileAtCmd, argv=argv)
-    if buszProg==fake_clang:
+    if fakeProg==fake_clang:
         return customModify_CompilerArgv_clang(fileAtCmd=fileAtCmd, argv=argv)
-    if buszProg==fake_clangxx:
+    if fakeProg==fake_clangxx:
         return customModify_CompilerArgv_clangxx(fileAtCmd=fileAtCmd, argv=argv)
+    
+    raise f"异常，不可识别的prog{fakeProg}"
 
 #客户对构建工具命令参数向量的修改
 def customModify_MakeToolArgv(  fileAtCmd:FileAtCmd,argv:typing.List[str], buszProg:Prog)->typing.List[str]:
+    fakeProg:str=buszProg.fakeProg
 
-    if buszProg==fake_cmake:
+    if fakeProg==fake_cmake:
         return customModify_MakeToolArgv_cmake(fileAtCmd=fileAtCmd,argv=argv)
     
-    if buszProg==fake_make:
+    if fakeProg==fake_make:
         return customModify_MakeToolArgv_make(fileAtCmd=fileAtCmd,argv=argv)
+    
+    raise f"异常，不可识别的prog{fakeProg}"
     
 ##############以下是可以自由修改的拦截器逻辑
     

@@ -56,8 +56,8 @@ ln -s  $intcpt $binHm/g++
 ln -s  $intcpt $binHm/clang
 ln -s  $intcpt $binHm/clang++
 sudo ln -s  $intcpt /usr/bin/c++
-sudo ln -s  $intcpt /usr/bin/cmake
-sudo ln -s  $intcpt /usr/bin/make
+sudo ln -s  $intcpt $binHm/cmake
+sudo ln -s  $intcpt $binHm/make
 
 echo "将 拦截器化身 放入 PATH 环境变量 中"
 export PATH=$binHm:$PATH
