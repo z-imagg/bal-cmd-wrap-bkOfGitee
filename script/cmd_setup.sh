@@ -30,19 +30,27 @@ bash $Hm/script/env_prepare.sh >/dev/null
 source $Hm/.venv/bin/activate
 # set -x
 
+alias _IfElfMv2Orn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && sudo mv -v "${Fil}" "${Fil}.origin" '
 #移动 业务者
-[[ "$( file --brief --mime-type /usr/bin/make )" == "application/x-pie-executable" ]] && sudo mv '/usr/bin/make' '/usr/bin/make.origin'
+Fil="/usr/bin/make" ;  _IfElfMv2Orn
 # sudo mv /usr/bin/make /usr/bin/make.origin
-[[ "$( file --brief --mime-type /usr/bin/cmake )" == "application/x-pie-executable" ]] && sudo mv '/usr/bin/cmake' '/usr/bin/cmake.origin'
+Fil="/usr/bin/cmake" ;  _IfElfMv2Orn
 # sudo mv /usr/bin/cmake /usr/bin/cmake.origin
-[[ $(readlink -f /usr/bin/c++) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] || sudo mv /usr/bin/c++ /usr/bin/c++.origin
+
+alias _IfNotIntcptMv2Orn='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] || sudo mv -v "${Fil}" "${Fil}.origin" '
+Fil="/usr/bin/gcc" ; _IfNotIntcptMv2Orn
+Fil="/usr/bin/g++" ; _IfNotIntcptMv2Orn
+Fil="/usr/bin/c++" ; _IfNotIntcptMv2Orn
+
+alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] && sudo unlink "${Fil}" && echo "UNLINK $_" '
 
 #生成 拦截器化身
 echo "清理 拦截器化身"
-unlink $binHm/gcc
-unlink $binHm/g++
-unlink $binHm/clang
-unlink $binHm/clang++
+Fil="/fridaAnlzAp/cmd-wrap/bin/gcc" ; _IfIntcptUnlnk
+Fil="/fridaAnlzAp/cmd-wrap/bin/g++" ; _IfIntcptUnlnk
+Fil="/fridaAnlzAp/cmd-wrap/bin/c++" ; _IfIntcptUnlnk
+Fil="/fridaAnlzAp/cmd-wrap/bin/clang" ; _IfIntcptUnlnk
+Fil="/fridaAnlzAp/cmd-wrap/bin/clang++" ; _IfIntcptUnlnk
 rm -fv $binHm/cmake $binHm/make #这里不能有，否则在PATH中更优先，会阻碍/usr/bin/cmake、/usr/bin/make
 sudo unlink /usr/bin/c++
 sudo unlink /usr/bin/cmake
@@ -66,6 +74,8 @@ which gcc
 # /fridaAnlzAp/cmd-wrap/bin/gcc
 which g++
 # /fridaAnlzAp/cmd-wrap/bin/g++
+which c++
+# /usr/bin/c++
 which clang
 # /fridaAnlzAp/cmd-wrap/bin/clang
 which clang++
