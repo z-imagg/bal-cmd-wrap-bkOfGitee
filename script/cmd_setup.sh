@@ -38,6 +38,7 @@ unlink $binHm/gcc
 unlink $binHm/g++
 unlink $binHm/clang
 unlink $binHm/clang++
+sudo unlink /usr/bin/c++
 
 echo "重新生成 拦截器化身"
 ln -s  $intcpt $binHm/gcc
@@ -45,6 +46,8 @@ ln -s  $intcpt $binHm/gcc
 ln -s  $intcpt $binHm/g++
 ln -s  $intcpt $binHm/clang
 ln -s  $intcpt $binHm/clang++
+# sudo mv /usr/bin/c++ /usr/bin/c++.origin
+sudo ln -s  $intcpt /usr/bin/c++
 
 echo "将 拦截器化身 放入 PATH 环境变量 中"
 export PATH=$binHm:$PATH
@@ -71,4 +74,5 @@ echo "先用tail后台显示拦截器日志文件， 测试拦截器化身(gcc)�
 tail -f /tmp/gcc-*.log &
 gcc
 
+c++
 #interceptor_cxx.py --__help  及其 bash自动完成

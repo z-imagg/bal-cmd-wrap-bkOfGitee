@@ -49,7 +49,7 @@ class GlbVar:
         # progName=='gcc'
         self.scriptDir:Path=progAbsPth.parent
         # scriptDir==/fridaAnlzAp/cmd-wrap/bin
-        self.prjDir:str=self.scriptDir.parent.as_posix()
+        self.prjDir:str="/fridaAnlzAp/cmd-wrap"
         # prjDir==/fridaAnlzAp/cmd-wrap/
         # os.chdir(scriptDir.as_posix())
 

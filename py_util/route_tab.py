@@ -23,6 +23,7 @@ progTab=[
 (fake_clangxx,true_clangxx),
 (fake_gcc,true_gcc),
 (fake_gxx,true_gxx),
+("/usr/bin/c++",true_gxx),
 
 
 ]
