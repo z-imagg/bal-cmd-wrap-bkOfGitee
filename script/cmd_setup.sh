@@ -33,9 +33,9 @@ source $Hm/.venv/bin/activate
 # set -x
 
 #移动 业务者
-[[ "$( file --brief --mime-type /usr/bin/make )" == "application/x-pie-executable" ]] && sudo mv '/usr/bin/make' '/usr/bin/make.origin'
-# sudo mv /usr/bin/make /usr/bin/make.origin
-[[ "$( file --brief --mime-type /usr/bin/cmake )" == "application/x-pie-executable" ]] && sudo mv '/usr/bin/cmake' '/usr/bin/cmake.origin'
+# [[ "$( file --brief --mime-type /usr/bin/make )" == "application/x-pie-executable" ]] && sudo mv '/usr/bin/make' '/usr/bin/make.origin'
+# # sudo mv /usr/bin/make /usr/bin/make.origin
+# [[ "$( file --brief --mime-type /usr/bin/cmake )" == "application/x-pie-executable" ]] && sudo mv '/usr/bin/cmake' '/usr/bin/cmake.origin'
 # sudo mv /usr/bin/cmake /usr/bin/cmake.origin
 [[ $(readlink -f /usr/bin/c++) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] || sudo mv /usr/bin/c++ /usr/bin/c++.origin
 
@@ -46,8 +46,8 @@ unlink $binHm/g++
 unlink $binHm/clang
 unlink $binHm/clang++
 sudo unlink /usr/bin/c++
-sudo unlink /usr/bin/cmake
-sudo unlink /usr/bin/make
+# sudo unlink /usr/bin/cmake
+# sudo unlink /usr/bin/make
 
 echo "重新生成 拦截器化身"
 ln -s  $intcpt $binHm/gcc
@@ -56,8 +56,8 @@ ln -s  $intcpt $binHm/g++
 ln -s  $intcpt $binHm/clang
 ln -s  $intcpt $binHm/clang++
 sudo ln -s  $intcpt /usr/bin/c++
-sudo ln -s  $intcpt $binHm/cmake
-sudo ln -s  $intcpt $binHm/make
+# sudo ln -s  $intcpt $binHm/cmake
+# sudo ln -s  $intcpt $binHm/make
 
 echo "将 拦截器化身 放入 PATH 环境变量 中"
 export PATH=$binHm:$PATH
@@ -71,10 +71,10 @@ which clang
 # /fridaAnlzAp/cmd-wrap/bin/clang
 which clang++
 # /fridaAnlzAp/cmd-wrap/bin/clang++
-which cmake
-# /fridaAnlzAp/cmd-wrap/bin/cmake
-which make
-# /fridaAnlzAp/cmd-wrap/bin/make
+# which cmake
+# # /fridaAnlzAp/cmd-wrap/bin/cmake
+# which make
+# # /fridaAnlzAp/cmd-wrap/bin/make
 
 #测试拦截器化身(gcc)
 rm -frv /tmp/gcc-*.log

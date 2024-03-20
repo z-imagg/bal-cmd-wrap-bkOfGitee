@@ -24,8 +24,8 @@ fake_gcc=pathNorm(f"{fakeBinHm}/gcc")
 fake_gxx=pathNorm(f"{fakeBinHm}/g++")
 fake_cxx="/usr/bin/c++"
 #构建工具 拦截者
-fake_cmake=pathNorm(f"{fakeBinHm}/cmake")
-fake_make=pathNorm(f"{fakeBinHm}/make")
+# fake_cmake=pathNorm(f"{fakeBinHm}/cmake")
+# fake_make=pathNorm(f"{fakeBinHm}/make")
 
 LLVM15Home="/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4"
 #编译器 业务者
@@ -35,8 +35,8 @@ busz_gcc=pathNorm(f"/usr/bin/x86_64-linux-gnu-gcc-11")
 # busz_gxx=pathNorm(f"/usr/bin/x86_64-linux-gnu-g++-11")
 busz_cxx=pathNorm(f"/usr/bin/c++.origin") #  $(readlink -f /usr/bin/c++.origin) ==  /usr/bin/x86_64-linux-gnu-g++-11
 #构建工具 业务者
-busz_cmake=pathNorm(f"/usr/bin/cmake.origin")
-busz_make=pathNorm(f"/usr/bin/make.origin")
+# busz_cmake=pathNorm(f"/usr/bin/cmake.origin")
+# busz_make=pathNorm(f"/usr/bin/make.origin")
 
 progTab=[
 #编译器： 拦截者 --> 业务者
@@ -46,8 +46,8 @@ progTab=[
 # (fake_gxx, Prog(fake_gxx,true_cxx,Prog.ProgKind.Compiler) ),
 (fake_cxx, Prog(fake_cxx,busz_cxx,Prog.ProgKind.Compiler) ),
 #构建工具 拦截者 --> 业务者
-(fake_cmake, Prog(fake_cmake,busz_cmake,Prog.ProgKind.MakeTool) ),
-(fake_make, Prog(fake_make,busz_make,Prog.ProgKind.MakeTool) ),
+# (fake_cmake, Prog(fake_cmake,busz_cmake,Prog.ProgKind.MakeTool) ),
+# (fake_make, Prog(fake_make,busz_make,Prog.ProgKind.MakeTool) ),
 ]
 
 progMap:typing.Dict[str,Prog]=dict(progTab)
