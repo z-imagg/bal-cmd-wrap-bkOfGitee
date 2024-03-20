@@ -44,5 +44,21 @@
                 "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
             },
         },
+        
+        {
+            "name": "修bug【拦截器化身c++】",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "bin/gcc",
+            "console": "integratedTerminal",
+//AssertionError: 断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？【/usr/bin/c++ -Wl,-rpath, CMakeFiles/cmTC_fa3bc.dir/testCXXCompiler.cxx.o -o cmTC_fa3bc】
+            "args": [  
+"-Wl,-rpath", "/fridaAnlzAp/cmd-wrap/test_cxx_src/TestCxx01.cpp",
+"-o", "TestCxx01.0"
+],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
+            },
+        },
     ]
 }
