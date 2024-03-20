@@ -9,7 +9,9 @@ from pathlib import Path
 import sys
 from LsUtil import lsDelNone, subLsFrom1
 from PathUtil import pathNorm
-from route_tab import calcTrueProg, progMap
+from route_tab import calcTrueProg
+import os
+
 
 @funcSngltAnnt
 class GlbVar:
@@ -52,7 +54,7 @@ def glbVarInit2(gLogF:TextIOWrapper,en_dev_mode:bool):
 #使用函数装饰器 的弊端是  无法获取到 真实类对象 ，从而 无法调用static方法。 只能绕开
 def getGlbVarInst()->GlbVar:
     inst = GlbVar(None,None,None,None)#这句话并不是构造对象，而是获取单例对象
-    assert inst.sysArgv0 is not None
+    assert inst.Argv is not None
     if inst.initComplete:
         assert inst.gLogF is not None, "断言失败，必须先手工实例化GlbVar(合理的参数) ，再调用本方法getGlbVarInst获取全局变量"
     return inst

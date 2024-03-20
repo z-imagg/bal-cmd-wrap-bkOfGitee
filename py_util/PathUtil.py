@@ -9,7 +9,6 @@
 
 
 import os
-from global_var import getGlbVarInst
 #去掉路径中多余的 斜线/ 、 等待计算的 上级目录..   ， 但是不解析软链接
 def pathNorm(pth:str)->str:
      path_normal:str=os.path.normpath(pth)

@@ -57,7 +57,7 @@ Argv=lsDelNone(list(sys.argv))
 en_dev_mode:bool=elmRmEqu_(Argv,"--__enable_develop_mode")
 
 if elmExistEqu(Argv,"--__target"):
-    assert progAbs == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
+    assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
     _,_,target=neighborRm2_(Argv,"--__target","gcc")
     en_dev_mode=True
 #"--__enable_develop_mode",
@@ -72,7 +72,7 @@ Argv=ArgvReplace_O2As_O1(Argv)
 
 approxId:str=genApproxId()
 from pathlib import Path
-logFK=f"/tmp/{progName}-{approxId}.log"
+logFK=f"/tmp/{getGlbVarInst().progName}-{approxId}.log"
 assert not Path(logFK).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {logFK}"
 gLogF:TextIOWrapper = open(logFK, "a") #append(追加地写入)模式打开文件
 #全局变量初始化步骤2，填充剩余字段
@@ -95,7 +95,7 @@ try:#try业务块
     # INFO_LOG( curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().gccCmdHum}】")
     #捕捉编译时的env环境变量和初始环境变量差异
-    execute_script_file(gLogF,f"{prjDir}/env-diff-show.sh")
+    execute_script_file(gLogF,f"{getGlbVarInst().prjDir}/env-diff-show.sh")
     #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
     fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(Argv, gLogF)
