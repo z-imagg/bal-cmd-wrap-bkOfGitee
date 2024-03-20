@@ -10,5 +10,10 @@ grep XXX $(XXX=zzz python test-env.py )
 grep XXX $(XXX=zzz python test-env-call.py )
 #XXX=zzz
 
+#给进程的子进程传递环境变量看起来也正常
+#  用plumbum创建的子进程
+grep XXX $(XXX=zzz python test/test-env-call-by-plumbum.py )
+XXX=zzz
+
 
 ```
