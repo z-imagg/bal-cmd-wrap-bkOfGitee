@@ -28,7 +28,9 @@ def execute_script_file(scriptFile:Path)->None:
     return
 
 
-def execute_cmd( input_is_std_in:bool)->int:
+def execute_cmd( input_is_std_in:bool,stdInTxt:str)->int:
+    if input_is_std_in :
+        assert stdInTxt is not None, "断言76"
     # inst=getGlbVarInst()
     buszArgv,buszCmd,buszProg,buszArgvFrom1=getBuszCmd()
     curFrm:types.FrameType=inspect.currentframe()
@@ -52,7 +54,7 @@ def execute_cmd( input_is_std_in:bool)->int:
           text=True  #若这里的text为true,  则 p.communicate的【入参input、出参std_out、出参err_out】 类型为str;
                      #若这里的text为false, 则 p.communicate的【入参input、出参std_out、出参err_out】 类型为bytes;
           )
-        stdin_str:str=sys.stdin.read()
+        stdin_str:str=stdInTxt #已经读过stdIn, 不能再读sys.stdin.read()
         std_out, err_out=p.communicate(input=stdin_str)
         exitCode=p.returncode
         INFO_LOG(curFrm,f"标准输入为:【{stdin_str}】")

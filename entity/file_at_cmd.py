@@ -60,6 +60,7 @@ class FileAtCmd:
 
         # -
         self.input_is_std_in: bool  = None
+        self.stdInTxt:str=None
 
 
 

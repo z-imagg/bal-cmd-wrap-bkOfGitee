@@ -70,7 +70,7 @@ try:#try业务块
 
     
     #执行业务命令
-    bzCmdExitCd:int=execute_cmd(fileAtCmd.input_is_std_in)
+    bzCmdExitCd:int=execute_cmd(fileAtCmd.input_is_std_in,fileAtCmd.stdInTxt)
     if not care_srcF:
         pass #TODO clang插件修改.c再编译后，检查.o文件中有没有对应的指令序列
 except BaseException  as bexp:

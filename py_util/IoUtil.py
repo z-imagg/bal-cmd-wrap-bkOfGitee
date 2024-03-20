@@ -2,7 +2,8 @@
 
 import select
 import sys
-def stdinHasTxt()->bool:
+import typing
+def stdinRead()->typing.Tuple[bool,str]:
     __rlist,__wlist,__xlist=select.select(
     [sys.stdin,], # __rlist
     [],  #__wlist
@@ -11,5 +12,13 @@ def stdinHasTxt()->bool:
     )
 
     _stdinHasTxt:bool= ( __rlist is not None and len(__rlist) > 0 )
-    return _stdinHasTxt
+    stdInTxt:str=None
+    if _stdinHasTxt is True:
+        stdInTxt=sys.stdin.read()
+    
+    #如果实际读出stdIn是空串，还是认为没输入
+    if stdInTxt is None or len(stdInTxt) == 0:
+        _stdinHasTxt=False
+
+    return (_stdinHasTxt,stdInTxt)
 
