@@ -14,7 +14,7 @@ from pathlib import Path
 import sys
 from LsUtil import elmExistEqu, elmRmEqu_, lsDelNone, neighborRm2_, subLsFrom1
 from PathUtil import pathNorm
-from route_tab import calcTrueProg
+from route_tab import Prog, calcTrueProg
 import os
 from pathlib import Path
 
@@ -40,7 +40,7 @@ class GlbVar:
         self.progAbsPath:str= _getProgAbsPath(initCurDir=self.initCurDir,sysArgv0=sys.argv[0])
         self.progAbsNormPath:str=pathNorm(self.progAbsPath)
 
-        self.buszProg:str=calcTrueProg(self.progAbsNormPath)
+        self.buszProg:Prog=calcTrueProg(self.progAbsNormPath)
 
         progAbsPth:Path=Path(self.progAbsPath)
         # progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
@@ -124,13 +124,13 @@ def getBuszCmd()->typing.Tuple[typing.List[str],str]:
     
     buszArgv:typing.List[str]=list(inst.Argv)
     
-    buszArgv[0]=inst.buszProg
+    buszArgv[0]=inst.buszProg.trueProg
 
     buszCmd:str=' '.join(buszArgv)
     
     buszArgvFrom1=subLsFrom1(buszArgv)
     
-    return (buszArgv,buszCmd,inst.buszProg,buszArgvFrom1)
+    return (buszArgv,buszCmd,inst.buszProg.trueProg,buszArgvFrom1)
 
 #测试
 if __name__=="__main__":

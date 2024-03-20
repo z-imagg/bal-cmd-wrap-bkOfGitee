@@ -6,34 +6,45 @@ import typing
 from PathUtil import pathNorm
 # from global_var import getGlbVarInst,getProgAbsPath
 
+class Prog:
+    class ProgKind:
+        Compiler:int=1
+        MakeTool:int=2
+
+    def __init__(self,fakeProg:str,trueProg:str,kind:int) -> 'Prog':
+        self.fakeProg:str=fakeProg
+        self.trueProg:str=trueProg
+        self.kind:int=kind
+
 fakeBinHm="/fridaAnlzAp/cmd-wrap/bin/"
 fake_clang=pathNorm(f"{fakeBinHm}/clang")
 fake_clangxx=pathNorm(f"{fakeBinHm}/clang++")
 fake_gcc=pathNorm(f"{fakeBinHm}/gcc")
 fake_gxx=pathNorm(f"{fakeBinHm}/g++")
+fack_cxx="/usr/bin/c++"
 
 LLVM15Home="/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4"
 true_clang=pathNorm(f"{LLVM15Home}/bin/clang")
 true_clangxx=pathNorm(f"{LLVM15Home}/bin/clang++")
-true_gcc=pathNorm(f"/usr/bin/x86_64-linux-gnu-gcc-11") #
-true_gxx=pathNorm(f"/usr/bin/c++.origin") #  $(readlink -f /usr/bin/c++.origin) ==  /usr/bin/x86_64-linux-gnu-g++-11
+true_gcc=pathNorm(f"/usr/bin/x86_64-linux-gnu-gcc-11")
+# true_gxx=pathNorm(f"/usr/bin/x86_64-linux-gnu-g++-11")
+true_cxx=pathNorm(f"/usr/bin/c++.origin") #  $(readlink -f /usr/bin/c++.origin) ==  /usr/bin/x86_64-linux-gnu-g++-11
 
 progTab=[
-(fake_clang,true_clang),
-(fake_clangxx,true_clangxx),
-(fake_gcc,true_gcc),
-(fake_gxx,true_gxx),
-("/usr/bin/c++",true_gxx),
-
-
+(fake_clang,Prog(fake_clang,true_clang,Prog.ProgKind.Compiler) ),
+(fake_clangxx,Prog(fake_clangxx,true_clangxx,Prog.ProgKind.Compiler) ),
+(fake_gcc,Prog(fake_gcc,true_gcc,Prog.ProgKind.Compiler) ),
+# (fake_gxx,Prog(fake_gxx,true_cxx,Prog.ProgKind.Compiler) ),
+(fack_cxx,Prog(fack_cxx,true_cxx,Prog.ProgKind.Compiler) ),
 ]
-progMap=dict(progTab)
+
+progMap:typing.Dict[str,Prog]=dict(progTab)
 
 
-def calcTrueProg( progAbsNormPath:str )->str:
+def calcTrueProg( progAbsNormPath:str )->Prog:
     prgNmPth= progAbsNormPath
     if progMap.__contains__(prgNmPth):
-        progTrue:str= progMap.__getitem__(prgNmPth)
+        progTrue:Prog= progMap.__getitem__(prgNmPth)
         # SysArgv[0]=progTrue
         return progTrue
     
