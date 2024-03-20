@@ -17,7 +17,7 @@ import plumbum
 from MiscUtil import __NoneOrLenEq0__
 from global_var import calcTrueProg, getBuszCmd, getGlbVarInst,INFO_LOG
 
-def execute_script_file(gLogF,scriptFile:Path)->None:
+def execute_script_file(scriptFile:Path)->None:
     curFrm:types.FrameType=inspect.currentframe()
 
     scriptF: plumbum.machines.LocalCommand = local.get(scriptFile)

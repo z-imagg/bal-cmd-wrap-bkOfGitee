@@ -9,13 +9,13 @@ from MiscUtil import __NoneOrLenEq0__
 import inspect
 import types
 from LsUtil import neibEqu,neibGet,elmEndWith,elmEndWithAny,elm1stNotNone,elmExistEqu
-from global_var import INFO_LOG,EXCEPT_LOG
+from global_var import INFO_LOG,EXCEPT_LOG,getGlbVarInst
 import select
 
-def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
+def larkGetSrcFileFromSingleGccCmd()->FileAtCmd:
+    inst=getGlbVarInst()
     curFrm:types.FrameType=inspect.currentframe()
-
-    gccCmdHum:str=" ".join(sysArgv)
+    gccCmdHum:str=" ".join(inst.ArgvOriginCopy)
 
     fac:FileAtCmd=FileAtCmd()
 
@@ -24,11 +24,11 @@ def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     
 
     #判定源文件是否为/dev/null
-    fac.srcFpIsDevNull=neibEqu(sysArgv, "-c", "/dev/null")
+    fac.srcFpIsDevNull=neibEqu(inst.ArgvOriginCopy, "-c", "/dev/null")
     
     #获得源文件路径
-    srcFp1:str=neibGet(sysArgv,"-c")
-    srcFp2:str=elmEndWithAny(sysArgv,suffixLs=[".c",".cpp",".cxx"])
+    srcFp1:str=neibGet(inst.ArgvOriginCopy,"-c")
+    srcFp2:str=elmEndWithAny(inst.ArgvOriginCopy,suffixLs=[".c",".cpp",".cxx"])
     srcFp:str=elm1stNotNone([srcFp1,srcFp2])
     if srcFp1 is None and srcFp2 is not None:
         INFO_LOG( curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
@@ -39,7 +39,7 @@ def larkGetSrcFileFromSingleGccCmd(sysArgv:List[str],gLogF)->FileAtCmd:
     fac.src_file = srcFp
 
     #是否有选项 -m16
-    fac.has_m16=elmExistEqu(sysArgv, "-m16")
+    fac.has_m16=elmExistEqu(inst.ArgvOriginCopy, "-m16")
 
     INFO_LOG(curFrm,f"'简易'即将解析文本singleGccCmd：【{gccCmdHum}】")
     INFO_LOG(curFrm,f"命令中的源文件相关字段为:{fac.__str__()}")

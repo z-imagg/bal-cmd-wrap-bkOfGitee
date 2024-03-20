@@ -53,7 +53,7 @@ curFrm:types.FrameType=inspect.currentframe()
 #备份sys.argv
 # sysArgv:List[str]= sys.argv.copy() ;
 #参数数组复制一份 (不要直接修改sys.argv)
-Argv=lsDelNone(list(sys.argv))
+# Argv=lsDelNone(list(sys.argv))
 # en_dev_mode:bool=elmRmEqu_(Argv,"--__enable_develop_mode")
 
 # if elmExistEqu(Argv,"--__target"):
@@ -88,16 +88,16 @@ try:#try业务块
     # INFO_LOG( curFrm, f"收到命令及参数（数组Argv）:【{Argv}】")
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().gccCmdHum}】")
     #捕捉编译时的env环境变量和初始环境变量差异
-    execute_script_file(gLogF,f"{getGlbVarInst().prjDir}/env-diff-show.sh")
+    execute_script_file(f"{getGlbVarInst().prjDir}/env-diff-show.sh")
     #'/fridaAnlzAp/cmd-wrap/env-diff-show.sh'
     #用lark解析单gcc命令 并取出 命令 中的 源文件、头文件目录列表
-    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd(Argv, gLogF)
+    fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd()
     #lark文法解析的作用只是 为了 避开 作为探测用的clang命令.
     #组装 clang插件命令 不再 需要 lark文法解析结果
     care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
     if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
         #对编译命令做出的自定义动作(编译命令拦截器)
-        myBusz(gLogF=gLogF, Argv=Argv, fileAtCmd=fileAtCmd)
+        myBusz( fileAtCmd=fileAtCmd)
     else:
         INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
