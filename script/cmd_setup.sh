@@ -15,10 +15,10 @@ getCurScriptFullPath
 
 ######脚本正文开始
 
-# bash /fridaAnlzAp/cmd-wrap/script/env_prepare.sh >/dev/null
+bash /fridaAnlzAp/cmd-wrap/script/env_prepare.sh >/dev/null
 
 # set +x
-# source /fridaAnlzAp/cmd-wrap/.venv/bin/activate
+source /fridaAnlzAp/cmd-wrap/.venv/bin/activate
 # set -x
 
 #拦截器
