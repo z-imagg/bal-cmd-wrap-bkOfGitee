@@ -30,23 +30,23 @@ bash $Hm/script/env_prepare.sh >/dev/null
 source $Hm/.venv/bin/activate
 # set -x
 
+#拦截器
+declare -r interceptor_cxx="/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py"
+
+#若是ELF文件，则备份
 alias _IfELFMvAsOrn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}'
-#移动 业务者
-# sudo mv /usr/bin/make /usr/bin/make.origin
-# sudo mv /usr/bin/cmake /usr/bin/cmake.origin
 
-alias _IfNotItcpMvAsOrn='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] || { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}'
-
-
-alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" ]] && sudo unlink "${Fil}" && echo "销毁现有入口者 $_" '
+#若不是拦截入口者，则备份
+alias _IfNotItcpMvAsOrn='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] || { sudo mv -v "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}'
 
 #销毁现有入口者
+alias _IfIntcptUnlnk='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}" && echo "销毁现有入口者 $_" '
 
-alias _lnk2Intcpt='sudo ln -s "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py" "${Fil}" && echo "重新生成入口者 ${Fil}   " '
+#重新生成入口者
+alias _lnk2Intcpt='sudo ln -s "${interceptor_cxx}" "${Fil}" && echo "重新生成入口者 ${Fil}   " '
 
-
+#显示拦截器
 alias _echoLnk=' _cmd=$(which "${Cmd}") && echo "显示拦截器 ${Cmd} --> $(_cmd) " '
-echo "列出 拦截器化身 们"
 
 Fil="/usr/bin/gcc" ;  _IfELFMvAsOrn #备份
 Fil="/usr/bin/gcc" ; _IfNotItcpMvAsOrn #备份
