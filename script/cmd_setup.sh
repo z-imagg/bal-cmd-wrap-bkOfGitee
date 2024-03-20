@@ -43,6 +43,7 @@ unlink $binHm/gcc
 unlink $binHm/g++
 unlink $binHm/clang
 unlink $binHm/clang++
+rm -fv $binHm/cmake $binHm/make #这里不能有，否则在PATH中更优先，会阻碍/usr/bin/cmake、/usr/bin/make
 sudo unlink /usr/bin/c++
 sudo unlink /usr/bin/cmake
 sudo unlink /usr/bin/make
@@ -54,8 +55,8 @@ ln -s  $intcpt $binHm/g++
 ln -s  $intcpt $binHm/clang
 ln -s  $intcpt $binHm/clang++
 sudo ln -s  $intcpt /usr/bin/c++
-sudo ln -s  $intcpt $binHm/cmake
-sudo ln -s  $intcpt $binHm/make
+sudo ln -s  $intcpt /usr/bin/cmake
+sudo ln -s  $intcpt /usr/bin/make
 
 echo "将 拦截器化身 放入 PATH 环境变量 中"
 export PATH=$binHm:$PATH

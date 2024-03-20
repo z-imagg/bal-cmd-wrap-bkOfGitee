@@ -24,8 +24,8 @@ fake_gcc=pathNorm(f"{fakeBinHm}/gcc")
 fake_gxx=pathNorm(f"{fakeBinHm}/g++")
 fake_cxx="/usr/bin/c++"
 #构建工具 拦截者
-fake_cmake=pathNorm(f"{fakeBinHm}/cmake")
-fake_make=pathNorm(f"{fakeBinHm}/make")
+fake_cmake="/usr/bin/cmake"
+fake_make="/usr/bin/make"
 
 LLVM15Home="/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4"
 #编译器 业务者
