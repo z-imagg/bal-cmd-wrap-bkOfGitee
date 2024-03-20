@@ -79,7 +79,7 @@ except BaseException  as bexp:
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
 
-    if bzCmdExitCd != 0 :
+    if bzCmdExitCd is not None and bzCmdExitCd != 0 :
         #如果异常退出，则以软链接指向日志文件，方便排查错误
         logFPth:str=getGlbVarInst().logFPth
         Path(logFPth).link_to(f"{logFPth}--errorCode_{bzCmdExitCd}")
