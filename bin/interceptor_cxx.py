@@ -63,8 +63,9 @@ bzCmdExitCd:int = None
 try:#try业务块
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】, 父进程完成命令行【{pprocess_cmd()}】")
     #构建工具，不管有没有源文件都是要拦截的
+    basicCmd:BasicCmd=None
     if inst.buszProg.kind == Prog.ProgKind.MakeTool:
-        basicCmd:BasicCmd=basicCmdParse()
+        basicCmd=basicCmdParse()
         inst.Argv=customModify_MakeToolArgv(basicCmd=basicCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
 
 
@@ -72,6 +73,7 @@ try:#try业务块
     if inst.buszProg.kind == Prog.ProgKind.Compiler:
         #编译命令解析
         fileAtCmd:FileAtCmd=larkGetSrcFileFromSingleGccCmd()
+        basicCmd=fileAtCmd
         #编译命令，无源文件时不拦截.   
         care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
         if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
@@ -82,9 +84,7 @@ try:#try业务块
 
     
     #执行业务命令
-    bzCmdExitCd:int=execute_cmd(fileAtCmd.input_is_std_in,fileAtCmd.stdInTxt)
-    if not care_srcF:
-        pass #TODO clang插件修改.c再编译后，检查.o文件中有没有对应的指令序列
+    bzCmdExitCd:int=execute_cmd(basicCmd.input_is_std_in,basicCmd.stdInTxt)
 except BaseException  as bexp:
     EXCEPT_LOG( curFrm, f"interceptor.py的try业务块异常",bexp)
     # raise bexp

@@ -3,6 +3,9 @@
 
 
 
+from IoUtil import stdinRead
+
+
 class BasicCmd:
 
 
@@ -13,6 +16,8 @@ class BasicCmd:
         self.stdInTxt:str=None
 
 
+        #若stdin是可读取的, 则判定为从标准输入读取
+        self.input_is_std_in,self.stdInTxt=stdinRead()
 
     def __str__(self):
         txt= f"  input_is_std_in {self.input_is_std_in}  "

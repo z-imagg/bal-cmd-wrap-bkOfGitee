@@ -22,9 +22,6 @@ def larkGetSrcFileFromSingleGccCmd()->FileAtCmd:
 
     fac:FileAtCmd=FileAtCmd()
 
-    #若stdin是可读取的, 则判定为从标准输入读取
-    fac.input_is_std_in,fac.stdInTxt=stdinRead()
-
     #判定源文件是否为/dev/null
     fac.srcFpIsDevNull=neibEqu(inst.ArgvClean, "-c", "/dev/null")
     
