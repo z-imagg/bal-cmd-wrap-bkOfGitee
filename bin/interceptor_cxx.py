@@ -32,7 +32,7 @@ from interceptor_util import execute_cmd,execute_script_file
 from CxxccParser import larkGetSrcFileFromSingleGccCmd
 
 from LsUtil import lsDelNone,elmRmEqu_,neibEqu,neibGet,neighborRm2_,elmExistEqu
-from busz import myBusz
+from custom_modify import customModify
 from IdUtil import genApproxId
 from PathUtil import _getProgAbsPath
 
@@ -69,7 +69,7 @@ try:#try业务块
     care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
     if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
         #对编译命令做出的自定义动作(编译命令拦截器)
-        myBusz( fileAtCmd=fileAtCmd)
+        customModify( fileAtCmd=fileAtCmd)
     else:
         INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
