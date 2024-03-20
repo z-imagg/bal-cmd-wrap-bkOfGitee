@@ -22,6 +22,8 @@ from pathlib import Path
 @funcSngltAnnt
 class GlbVar:
     def __init__(self ):
+        #全局变量构造器 内 禁止 调用 getGlbVarInst ， 
+        #  因为 getGlbVarInst 调用了 本 全局变量构造器， 这样会形成环 即 死递归
         curFrm:types.FrameType=inspect.currentframe()
 
         initCurDir:str=os.getcwd()
@@ -38,7 +40,7 @@ class GlbVar:
         self.ArgvClean:typing.List[str]=lsDelNone(list(sys.argv))
         self.en_dev_mode:bool=elmRmEqu_(self.ArgvClean,"--__enable_develop_mode")
         if elmExistEqu(self.ArgvClean,"--__target"):
-            assert getGlbVarInst().progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
+            assert self.progAbsNormPath  == "/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py", "本色出演时才指定target"
             _,_,target=neighborRm2_(self.ArgvClean,"--__target","gcc")
             self.en_dev_mode=True
         
