@@ -85,9 +85,11 @@ try:#try业务块
     
     #执行业务命令
     bzCmdExitCd:int=execute_cmd(basicCmd.input_is_std_in,basicCmd.stdInTxt)
-except BaseException  as bexp:
+except (BaseException|TypeError)  as bexp:
     EXCEPT_LOG( curFrm, f"interceptor.py的try业务块异常",bexp)
     # raise bexp
+    if bzCmdExitCd is None:
+        bzCmdExitCd=-100
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
 
