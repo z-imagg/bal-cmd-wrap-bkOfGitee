@@ -22,7 +22,7 @@ pip install -r /app/bash-simplify/bash-complete-gen-from-help/requirements.txt
 export PATH=$PATH:/app/cmd-wrap/tool_bin
 source /app/cmd-wrap/tool_bin/bash-complete--queryBuszByFakeCmd.sh
 #以自安装miniconda环境中的python运行 此脚本，不影响系统自带python
-alias helpTxt2bashComplete.py='/app/Miniconda3-py310_22.11.1-1/bin/python /app/cmd-wrap/tool_bin/queryBuszByFakeCmd.py'
+alias queryBuszByFakeCmd.py='/app/Miniconda3-py310_22.11.1-1/bin/python /app/cmd-wrap/tool_bin/queryBuszByFakeCmd.py'
 
 ```
 
