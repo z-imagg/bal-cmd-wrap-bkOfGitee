@@ -18,14 +18,14 @@ pip install -r /app/bash-simplify/bash-complete-gen-from-help/requirements.txt
 
 将以下这段代码 放入 ```~/.bash_profile``` 或 ```~/.bashrc``` 或 ```~/.profile``` 等 登录时 执行的脚本中 
 ```shell
-#bash-complete-gen-from-help
-export PATH=$PATH:/app/bash-simplify/bash-complete-gen-from-help/bin/
-source /app/bash-simplify/bash-complete-gen-from-help/script/bash-complte--helpTxt2bashComplete.sh
+#【编译命令拦截器】根据入口者查询业务者
+export PATH=$PATH:/app/cmd-wrap/tool_bin
+source /app/cmd-wrap/tool_bin/bash-complete--queryBuszByFakeCmd.sh
 #以自安装miniconda环境中的python运行 此脚本，不影响系统自带python
-alias helpTxt2bashComplete.py='/app/Miniconda3-py310_22.11.1-1/bin/python /app/bash-simplify/bash-complete-gen-from-help/bin/helpTxt2bashComplete.py'
+alias helpTxt2bashComplete.py='/app/Miniconda3-py310_22.11.1-1/bin/python /app/cmd-wrap/tool_bin/queryBuszByFakeCmd.py'
 
 ```
 
 
-之后 打开bash终端, 输入 ```helpT<tab><tab>``` 即可获得补全为 helpTxt2bashComplete.py，  再输入 ```--<tab><tab>``` 再次获得提示
+之后 打开bash终端,  命令 ```queryBuszByFakeCmd.py``` 具有名字补全、参数输入```--```后补全能力
 
