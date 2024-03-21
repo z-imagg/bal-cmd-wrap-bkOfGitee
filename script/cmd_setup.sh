@@ -28,19 +28,37 @@ source /app/cmd-wrap/.venv/bin/activate
 declare -r interceptor_cxx="/app/cmd-wrap/bin/interceptor_cxx.py"
 chmod +x $interceptor_cxx
 
-alias _1echoWhich='  _F=$( which ${_C} ) &&  echo -n " ${_C} ---> ${_F} "   '
-alias _2echoReadlinkF_Ln='   echo  "  ---> $( readlink -f ${_F} ) ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) "   '
-alias _echoReadlinkF_Ln='   echo  " ${_F} ---> $( readlink -f ${_F} )  ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) " '
+function _1echoWhich() {
+ _F=$( which ${_C} ) &&  echo -n " ${_C} ---> ${_F} " 
+}
+
+function _2echoReadlinkF_Ln() {
+ echo  "  ---> $( readlink -f ${_F} ) ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) "  
+}
+
+function _echoReadlinkF_Ln() {
+  echo  " ${_F} ---> $( readlink -f ${_F} )  ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) "
+}
 #若是ELF文件，则备份
-alias _IfELFMvAsOrn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}'
+function _IfELFMvAsOrn() {
+[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}
+}
 #若不是拦截入口者，则备份
-alias _IfNotItcpMvAsOrn='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] || { [[ -f ${Fil} ]] && sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}'
+function _IfNotItcpMvAsOrn() {
+[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] || { [[ -f ${Fil} ]] && sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}
+}
 #销毁现有入口者
-alias _IfIntcptUnlnk='{ echo -n "销毁现有入口者" &&  _F=${Fil} &&  _echoReadlinkF_Ln  ;} ; {  [[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}"  ;} '
+function _IfIntcptUnlnk() {
+{ echo -n "销毁现有入口者" &&  _F=${Fil} &&  _echoReadlinkF_Ln  ;} ; {  [[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}"  ;} 
+}
 #重新生成入口者
-alias _lnk2Intcpt='sudo ln -s "${interceptor_cxx}" "${Fil}" && echo -n "重新生成入口者  "  &&  _F=${Fil} &&  _echoReadlinkF_Ln  '
+function _lnk2Intcpt() {
+sudo ln -s "${interceptor_cxx}" "${Fil}" && echo -n "重新生成入口者  "  &&  _F=${Fil} &&  _echoReadlinkF_Ln
+}
 #显示拦截器
-alias _echoLnk=' _C="${Cmd}" && echo -n "显示拦截器" &&  _1echoWhich  && _2echoReadlinkF_Ln   '
+function _echoLnk() {
+_C="${Cmd}" && echo -n "显示拦截器" &&  _1echoWhich  && _2echoReadlinkF_Ln  
+}
 
 declare -r gccF="/usr/bin/gcc"
 Fil="${gccF}" ;  _IfELFMvAsOrn #备份
