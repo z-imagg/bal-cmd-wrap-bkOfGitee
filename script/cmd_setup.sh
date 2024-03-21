@@ -101,7 +101,7 @@ echo ""
 echo "显示目前的备份们"
 ls -lh /usr/bin/*origin*
 
-#测试拦截器化身(gcc)
+echo "测试拦截器化身(入口者)"
 cd /tmp/
 gcc
 g++
