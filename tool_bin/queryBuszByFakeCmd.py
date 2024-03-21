@@ -8,6 +8,7 @@ import argparse
 import sys
 sys.path.append("/fridaAnlzAp/cmd-wrap/py_util")
 from route_tab import progMap,Prog
+from pathlib import Path
 
 def main_cmd():
     parser = argparse.ArgumentParser(
@@ -18,9 +19,17 @@ def main_cmd():
     args=parser.parse_args()
     args.fake_prog
 
-    busz_prog:Prog=progMap.get(args.fake_prog,None)
+    prog:Prog=progMap.get(args.fake_prog,None)
 
-    buszProgName= busz_prog.trueProg if  busz_prog is not None else "无该入口者"
+    buszProgName= None
+    if  prog is not None :
+        trueProgAbsPth:str=prog.trueProg
+        existed= Path(trueProgAbsPth).exists()
+        existedMsg="『存』" if existed else "『无』"
+        buszProgName=f"【{trueProgAbsPth}{existedMsg}】"
+    else:
+        buszProgName="查无该入口者"
+
     print(buszProgName)
 
 
