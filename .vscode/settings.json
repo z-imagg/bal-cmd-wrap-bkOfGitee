@@ -8,10 +8,10 @@
 
 {
     "python.analysis.extraPaths": [
-        "/fridaAnlzAp/cmd-wrap/entity/",
-        "/fridaAnlzAp/cmd-wrap/py_util/"
+        "/app/cmd-wrap/entity/",
+        "/app/cmd-wrap/py_util/"
     ],
     "terminal.integrated.env.windows": {
-        "PYTHONPATH": "${env:PYTHONPATH};${workspaceFolder};/fridaAnlzAp/cmd-wrap/entity/:/fridaAnlzAp/cmd-wrap/py_util/",
+        "PYTHONPATH": "${env:PYTHONPATH};${workspaceFolder};/app/cmd-wrap/entity/:/app/cmd-wrap/py_util/",
     }
 }
