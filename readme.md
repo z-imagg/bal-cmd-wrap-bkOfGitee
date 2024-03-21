@@ -22,3 +22,9 @@ if __name__ == '__main__':
     if len(sys.argv)>=1: sys.argv.insert(1,"--verbose") #增加此行, 即可使得ninja在编译时显示所用编译命令
     #...
 ```
+
+
+####  根据入口者查询业务者
+
+
+http://giteaz:3000/bal/cmd-wrap/src/tag/v2.1.simpl/tool_bin/readme.md
