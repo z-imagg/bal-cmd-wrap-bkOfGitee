@@ -15,6 +15,9 @@ getCurScriptFullPath
 
 ######脚本正文开始
 
+export PATH=$PATH:/fridaAnlzAp/cmd-wrap/tool_bin/
+source /fridaAnlzAp/cmd-wrap/script/bash-complete--queryBuszByFackCmd.py.sh
+
 bash /fridaAnlzAp/cmd-wrap/script/env_prepare.sh >/dev/null
 
 # set +x
@@ -25,9 +28,9 @@ source /fridaAnlzAp/cmd-wrap/.venv/bin/activate
 declare -r interceptor_cxx="/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py"
 chmod +x $interceptor_cxx
 
-alias _1echoWhich='  _F=$( which ${_C} ) &&  echo -n " ${_C} -----> ${_F} "   '
-alias _2echoReadlinkF_Ln='   echo  "  -----> $( readlink -f ${_F} ) "   '
-alias _echoReadlinkF_Ln='   echo  " ${_F} -----> $( readlink -f ${_F} ) "   '
+alias _1echoWhich='  _F=$( which ${_C} ) &&  echo -n " ${_C} ---> ${_F} "   '
+alias _2echoReadlinkF_Ln='   echo  "  ---> $( readlink -f ${_F} ) ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) "   '
+alias _echoReadlinkF_Ln='   echo  " ${_F} ---> $( readlink -f ${_F} )  ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) " '
 #若是ELF文件，则备份
 alias _IfELFMvAsOrn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}'
 #若不是拦截入口者，则备份

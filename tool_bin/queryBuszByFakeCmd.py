@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#【文件作用】【辅助工具】根据入口者查询业务者
+
+import argparse
+
+import sys
+sys.path.append("/fridaAnlzAp/cmd-wrap/py_util")
+from route_tab import progMap,Prog
+
+def main_cmd():
+    parser = argparse.ArgumentParser(
+    prog=f'queryBuszByFackCmd.py',
+    description='【根据入口者查询业务者】')
+
+    parser.add_argument('-f', '--fake_prog',required=True,type=str,help="【入口者】",metavar='')
+    args=parser.parse_args()
+    args.fake_prog
+
+    busz_prog:Prog=progMap.get(args.fake_prog,None)
+
+    buszProgName= busz_prog.trueProg if  busz_prog is not None else "无该入口者"
+    print(buszProgName)
+
+
+if __name__=="__main__": main_cmd()
