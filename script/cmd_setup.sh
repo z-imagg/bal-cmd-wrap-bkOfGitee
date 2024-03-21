@@ -16,7 +16,7 @@ getCurScriptFullPath
 ######脚本正文开始
 
 export PATH=$PATH:/app/cmd-wrap/tool_bin/
-source /app/cmd-wrap/script/bash-complete--queryBuszByFackCmd.py.sh
+source /app/cmd-wrap/tool_bin/bash-complete--queryBuszByFakeCmd.sh
 
 bash /app/cmd-wrap/script/env_prepare.sh >/dev/null
 
