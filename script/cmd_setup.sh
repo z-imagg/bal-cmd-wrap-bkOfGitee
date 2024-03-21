@@ -98,6 +98,9 @@ Fil="${makeF}" ; _lnk2Intcpt
 Cmd="make"     ; _echoLnk
 echo ""
 
+echo "显示目前的入口者们"
+ls -lh /usr/bin/{gcc,g++,c++,cmake,make}
+
 echo "显示目前的备份们"
 ls -lh /usr/bin/*origin*
 
