@@ -98,6 +98,9 @@ Fil="${makeF}" ; _lnk2Intcpt
 Cmd="make"     ; _echoLnk
 echo ""
 
+echo "显示目前的备份们"
+ls -lh /usr/bin/*origin*
+
 #测试拦截器化身(gcc)
 cd /tmp/
 gcc
