@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+#【术语】 trueProg == 真程序 == buszProg == 业务程序
+#【术语】 fakeProg == 假程序 == 入口者 == 拦截器的入口 == 拦截器的化身
 import typing
 from PathUtil import pathNorm
 # from global_var import getGlbVarInst,getProgAbsPath
