@@ -11,21 +11,21 @@ alias getCurScriptFullPath='f=$(readlink -f ${BASH_SOURCE[0]})  ; d=$(dirname $f
 
 #取当前脚本完整路径
 getCurScriptFullPath
-#d==/fridaAnlzAp/cmd-wrap/script/
+#d==/app/cmd-wrap/script/
 
 ######脚本正文开始
 
-export PATH=$PATH:/fridaAnlzAp/cmd-wrap/tool_bin/
-source /fridaAnlzAp/cmd-wrap/script/bash-complete--queryBuszByFackCmd.py.sh
+export PATH=$PATH:/app/cmd-wrap/tool_bin/
+source /app/cmd-wrap/script/bash-complete--queryBuszByFackCmd.py.sh
 
-bash /fridaAnlzAp/cmd-wrap/script/env_prepare.sh >/dev/null
+bash /app/cmd-wrap/script/env_prepare.sh >/dev/null
 
 # set +x
-source /fridaAnlzAp/cmd-wrap/.venv/bin/activate
+source /app/cmd-wrap/.venv/bin/activate
 # set -x
 
 #拦截器
-declare -r interceptor_cxx="/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py"
+declare -r interceptor_cxx="/app/cmd-wrap/bin/interceptor_cxx.py"
 chmod +x $interceptor_cxx
 
 alias _1echoWhich='  _F=$( which ${_C} ) &&  echo -n " ${_C} ---> ${_F} "   '

@@ -12,13 +12,13 @@ alias getCurScriptFullPath='f=$(readlink -f ${BASH_SOURCE[0]})  ; d=$(dirname $f
 
 #取当前脚本完整路径
 getCurScriptFullPath
-#d==/fridaAnlzAp/cmd-wrap/script/
+#d==/app/cmd-wrap/script/
 
 #####
 
 D=${d}
 cd ${D}
-Hm=$(realpath -s "${D}/../") # == /fridaAnlzAp/cmd-wrap/
+Hm=$(realpath -s "${D}/../") # == /app/cmd-wrap/
 
 VENV_HOME=${Hm}/.venv
 ActivVenv=$VENV_HOME/bin/activate

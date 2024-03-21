@@ -64,7 +64,7 @@ def calcTrueProg( progAbsNormPath:str )->Prog:
         # SysArgv[0]=progTrue
         return progTrue
     
-    if progAbsNormPath=='/fridaAnlzAp/cmd-wrap/test_global_var.py':
+    if progAbsNormPath=='/app/cmd-wrap/test_global_var.py':
     #开发调试用途
         return "buszProgForDevelop"
     

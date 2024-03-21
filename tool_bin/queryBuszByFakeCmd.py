@@ -6,7 +6,7 @@
 import argparse
 
 import sys
-sys.path.append("/fridaAnlzAp/cmd-wrap/py_util")
+sys.path.append("/app/cmd-wrap/py_util")
 from route_tab import progMap,Prog
 from pathlib import Path
 

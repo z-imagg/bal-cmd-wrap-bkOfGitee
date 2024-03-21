@@ -24,7 +24,7 @@
             "args": [  
 ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
+                "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
             },
         },
 
@@ -36,12 +36,12 @@
             "program": "bin/gcc",
             "console": "integratedTerminal",
             "args": [  
-"-c", "/fridaAnlzAp/cmd-wrap/test_cxx_src/TestCxx01.cpp",
+"-c", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
 "--__enable_develop_mode",
 "-g1"
 ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
+                "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
             },
         },
         
@@ -52,11 +52,11 @@
             "program": "bin/gcc",
             "console": "integratedTerminal",
             "args": [  
-"-Wl,-rpath", "/fridaAnlzAp/cmd-wrap/test_cxx_src/TestCxx01.cpp",
+"-Wl,-rpath", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
 "-o", "TestCxx01.0"
 ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}:/fridaAnlzAp/cmd-wrap/py_util/:/fridaAnlzAp/cmd-wrap/entity/:"
+                "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
             },
         },
     ]
