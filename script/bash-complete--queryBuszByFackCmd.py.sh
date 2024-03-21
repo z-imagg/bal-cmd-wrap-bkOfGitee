@@ -2,7 +2,7 @@
 
 #source me.sh
 
-_queryBuszByFackCmd() {
+_queryBuszByFakeCmd() {
     local pre cur opts
 
     COMPREPLY=()
@@ -14,4 +14,4 @@ _queryBuszByFackCmd() {
         COMPREPLY=( $( compgen -W "$opts" -- $cur ) )
     esac
 }
-complete -F _queryBuszByFackCmd   queryBuszByFackCmd.py
+complete -F _queryBuszByFakeCmd   queryBuszByFakeCmd.py
