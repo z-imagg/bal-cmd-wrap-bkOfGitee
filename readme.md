@@ -1,5 +1,19 @@
 
+#### 项目描述
+本cmd-wrap项目的拦截器interceptor_xx.py理论上可以拦截任何命令， 
 
+最初命令叫 interceptor_cxx.py 因为 只拦截 gcc、g++、c++、clang、clang++等编译命令，
+
+现状是 interceptor_xx.py 可以拦截 编译命令 、make 、cmake， 但是 目前只配置了 拦截 编译命令
+
+#### 存在的问题
+
+#####  调用环
+且 如果拦截 make 可以会形成自我调用的环， 没有仔细想有没有问题
+
+拦截make形成的调用环： make ---> interceptor_xx.py  -->  make.origin --->  gcc --->  interceptor_xx.py  --> gcc.origin
+
+很明显 interceptor_xx.py 以 进程的方式 自己调用自己了
 
 #### 建议docker下使用，否则可能破坏宿主机编译环境
 
