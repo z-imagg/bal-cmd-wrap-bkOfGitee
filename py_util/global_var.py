@@ -43,14 +43,14 @@ class GlbVar:
         self.buszProg:Prog=calcTrueProg(self.fackProgAbsNormPath)
 
         progAbsPth:Path=Path(self.progAbsPath)
-        # progAbsPth=='/fridaAnlzAp/cmd-wrap/bin/gcc'
+        # progAbsPth=='/app/cmd-wrap/bin/gcc'
         # progName 为 真程序名
         self.progName:str=progAbsPth.name
         # progName=='gcc'
         self.scriptDir:Path=progAbsPth.parent
-        # scriptDir==/fridaAnlzAp/cmd-wrap/bin
-        self.prjDir:str="/fridaAnlzAp/cmd-wrap"
-        # prjDir==/fridaAnlzAp/cmd-wrap/
+        # scriptDir==/app/cmd-wrap/bin
+        self.prjDir:str="/app/cmd-wrap"
+        # prjDir==/app/cmd-wrap/
         # os.chdir(scriptDir.as_posix())
 
 

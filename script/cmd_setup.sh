@@ -11,33 +11,53 @@ alias getCurScriptFullPath='f=$(readlink -f ${BASH_SOURCE[0]})  ; d=$(dirname $f
 
 #取当前脚本完整路径
 getCurScriptFullPath
-#d==/fridaAnlzAp/cmd-wrap/script/
+#d==/app/cmd-wrap/script/
 
 ######脚本正文开始
+export PATH=$PATH:/app/cmd-wrap/tool_bin/
+source /app/cmd-wrap/tool_bin/bash-complete--queryBuszByFakeCmd.sh
 
-bash /fridaAnlzAp/cmd-wrap/script/env_prepare.sh >/dev/null
+bash /app/cmd-wrap/script/env_prepare.sh >/dev/null
 
 # set +x
-source /fridaAnlzAp/cmd-wrap/.venv/bin/activate
+source /app/cmd-wrap/.venv/bin/activate
 # set -x
 
 #拦截器
-declare -r interceptor_cxx="/fridaAnlzAp/cmd-wrap/bin/interceptor_cxx.py"
+declare -r interceptor_cxx="/app/cmd-wrap/bin/interceptor_cxx.py"
 chmod +x $interceptor_cxx
 
-alias _1echoWhich='  _F=$( which ${_C} ) &&  echo -n " ${_C} -----> ${_F} "   '
-alias _2echoReadlinkF_Ln='   echo  "  -----> $( readlink -f ${_F} ) "   '
-alias _echoReadlinkF_Ln='   echo  " ${_F} -----> $( readlink -f ${_F} ) "   '
+function _1echoWhich() {
+ _F=$( which ${_C} ) &&  echo -n " ${_C} ---> ${_F} " 
+}
+
+function _2echoReadlinkF_Ln() {
+ echo  "  ---> $( readlink -f ${_F} ) ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) "  
+}
+
+function _echoReadlinkF_Ln() {
+  echo  " ${_F} ---> $( readlink -f ${_F} )  ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) "
+}
 #若是ELF文件，则备份
-alias _IfELFMvAsOrn='[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}'
+function _IfELFMvAsOrn() {
+[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}
+}
 #若不是拦截入口者，则备份
-alias _IfNotItcpMvAsOrn='[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] || { [[ -f ${Fil} ]] && sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}'
+function _IfNotItcpMvAsOrn() {
+[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] || { [[ -f ${Fil} ]] && sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}
+}
 #销毁现有入口者
-alias _IfIntcptUnlnk='{ echo -n "销毁现有入口者" &&  _F=${Fil} &&  _echoReadlinkF_Ln  ;} ; {  [[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}"  ;} '
+function _IfIntcptUnlnk() {
+{ echo -n "销毁现有入口者" &&  _F=${Fil} &&  _echoReadlinkF_Ln  ;} ; {  [[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}"  ;} 
+}
 #重新生成入口者
-alias _lnk2Intcpt='sudo ln -s "${interceptor_cxx}" "${Fil}" && echo -n "重新生成入口者  "  &&  _F=${Fil} &&  _echoReadlinkF_Ln  '
+function _lnk2Intcpt() {
+sudo ln -s "${interceptor_cxx}" "${Fil}" && echo -n "重新生成入口者  "  &&  _F=${Fil} &&  _echoReadlinkF_Ln
+}
 #显示拦截器
-alias _echoLnk=' _C="${Cmd}" && echo -n "显示拦截器" &&  _1echoWhich  && _2echoReadlinkF_Ln   '
+function _echoLnk() {
+_C="${Cmd}" && echo -n "显示拦截器" &&  _1echoWhich  && _2echoReadlinkF_Ln  
+}
 
 declare -r gccF="/usr/bin/gcc"
 Fil="${gccF}" ;  _IfELFMvAsOrn #备份
@@ -95,8 +115,18 @@ Fil="${makeF}" ; _lnk2Intcpt
 Cmd="make"     ; _echoLnk
 echo ""
 
-#测试拦截器化身(gcc)
+echo "显示目前的入口者们"
+ls -lh /usr/bin/{gcc,g++,c++,cmake,make}
+
+echo "显示目前的备份们"
+ls -lh /usr/bin/*origin*
+
+echo "测试拦截器化身(入口者)"
 cd /tmp/
+
+export PYTHONPATH=/app/cmd-wrap/:/app/cmd-wrap/bin/:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/
+
+
 gcc
 g++
 c++
