@@ -41,7 +41,6 @@ git clone https://gitee.com/disk_recovery/cgsecurity--testdisk.git
 
 bash /app/cmd-wrap/script/env_prepare.sh
 bash -x /app/cmd-wrap/script/cmd_setup.sh
-#确保 最行末尾 是 '存' 而不是 '无'
 
 which c++ #/usr/bin/c++
 
