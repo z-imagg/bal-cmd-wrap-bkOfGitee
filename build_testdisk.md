@@ -33,6 +33,8 @@ git clone https://gitee.com/disk_recovery/cgsecurity--testdisk.git
 
 ```
 
+基于提交   https://gitee.com/disk_recovery/cgsecurity--testdisk/commit/43f9e24596cafa34241384dad191c1ac7ad47cec
+
 ##### 2. 编译器的拦截器（可选）（对分析业务来说是必须的）
 
 基于拦截器版本， http://giteaz:3000/bal/cmd-wrap/commit/3cdb3ddb6e30803cbe1ca105d85453190e61b4be
@@ -157,11 +159,10 @@ mkdir hd_mnt/
 #制作磁盘映像文件，返回分区的第一个字节下标
 #                                                 CHS参数
 #               mkdiskimage  -F  -o   $HdImgF $HdImg_C $HdImg_H $HdImg_S 
-Part1stByteIdx=$(mkdiskimage   -o   hd.img   10        8        32)
+Part1stByteIdx=$(mkdiskimage  -F  -o   hd.img   5        255        63)
 #这里 Part1stByteIdx == 16384
 
-#FAT32 最小如下:
-#mkdiskimage  -F  -o   hd.img   512        8        32
+#不要乱用CHS参数，否则testdisk认不出来
 
 
 #mount形成链条:  $HdImgF --> /dev/loopX --> $hd_img_dir/
@@ -202,10 +203,67 @@ fdisk -l  hd.img
 
 ##### 将磁盘映像文件hd.img喂给testdisk
 ```shell
-
-./src/testdisk    hd.img 
+#列出分区
 ./src/testdisk /list   hd.img 
+```
 
-gdb --args   ./src/testdisk    hd.img 
+###### testdisk恢复已删除文件步骤举例
+
+
+
+```shell
+./src/testdisk    hd.img 
+#操作步骤:
+# Processed
+# Intel
+# Geometry ， 检查 CHS是否匹配
+# Analyze
+#  'Quick Search'
+#   按回车'Continue'
+#   'Deeper Search'
+#    按'P' 即'list files'  ， 此时 列出了两个刚刚删除的文件 test.txt 、log.txt
+```
+
+
+###### gdb观看__loop_step__执行次数
+
+
+
+###### gdb脚本
+```shell
+
+echo '''
+set logging file __loop_step__.gdb.log
+set logging enabled on
+set print pretty on
+set pagination off
+set breakpoint pending on
+
+break ___loop_step__
+commands 1
+ #backtrace
+ #frame 1
+ #info locals
+ continue
+end
+
+run
+quit
+''' > ./__loop_step__.gdb_script 
 
 ```
+
+
+###### gdb执行testdisk
+
+testdisk执行步骤 参考上一步  'testdisk恢复已删除文件步骤举例'
+
+```shell
+
+rm -fr  __loop_step__.gdb.log 
+gdb -q  --command ./__loop_step__.gdb_script --args  ./src/testdisk    hd.img 
+grep "Breakpoint 1" __loop_step__.gdb.log |  wc -l  
+#9  #即 调用函数__loop_step__次数为9
+
+```
+
