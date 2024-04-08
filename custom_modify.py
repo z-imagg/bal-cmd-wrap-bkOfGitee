@@ -48,9 +48,21 @@ def customModify_MakeToolArgv(  basicCmd:BasicCmd,argv:typing.List[str],originCm
     
 #客户对编译器命令gcc参数向量的修改
 def customModify_CompilerArgv_gcc(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
-    newArgv:typing.List[str]=argv
-    #请根据需要，自行编写 逻辑，实现 修改 gcc编译命令参数向量argv 
-    return newArgv
+    curFrm:types.FrameType=inspect.currentframe()
+    
+    Argv:typing.List[str]=argv
+
+    # 参数Argv中-Werror替换为-Wno-error
+    Argv = ArgvRemoveWerror(argv)
+
+    # 参数Argv中-O2替换为-o1
+    Argv=ArgvReplace_O2As_O1(Argv)
+
+    # 参数Argv中-g替换为-g1
+    Argv=ArgvReplace_gAs_g1(Argv)
+
+
+    return Argv
 
 #客户对编译器命令c++参数向量的修改
 def customModify_CompilerArgv_cxx(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
