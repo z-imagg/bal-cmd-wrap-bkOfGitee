@@ -14,7 +14,6 @@ getCurScriptFullPath
 #d==/app/cmd-wrap/script/
 
 ######脚本正文开始
-
 export PATH=$PATH:/app/cmd-wrap/tool_bin/
 source /app/cmd-wrap/tool_bin/bash-complete--queryBuszByFakeCmd.sh
 
@@ -124,6 +123,10 @@ ls -lh /usr/bin/*origin*
 
 echo "测试拦截器化身(入口者)"
 cd /tmp/
+
+export PYTHONPATH=/app/cmd-wrap/:/app/cmd-wrap/bin/:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/
+
+
 gcc
 g++
 c++
