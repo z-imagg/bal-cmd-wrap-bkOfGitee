@@ -74,6 +74,8 @@ source /app/cmd-wrap/script/pythonpath.sh
 env | grep PYTHONPATH
 
 rm -frv /tmp/*
+
+#以下4行是原始编译步骤
 make clean ; 
 rm -fr config ;  
 bash autogen.sh ;
@@ -95,6 +97,7 @@ grep --text  "\-g1" /tmp/*.log   | wc -l
 
 #撤销拦截器
 bash /app/cmd-wrap/script/remove_interceptor.sh
+deactivate
 ```
 
 ##### 4. 编译产物
@@ -135,5 +138,74 @@ ls -lh  ./src/testdisk ./src/photorec
 # -rwxrwxrwx 1 1000 1000 602K Apr  8 07:39 ./src/testdisk
 
 
+
+```
+
+
+#### 使用testdisk
+
+此时回到宿主机, docker 实例 和 宿主机 操作系统 都是 ubuntu 22.04
+
+
+##### 制作磁盘映像文件
+```shell
+sudo apt install -y syslinux syslinux-common syslinux-efi syslinux-utils
+
+rm -fr hd.img hd_mnt/
+mkdir hd_mnt/
+
+#制作磁盘映像文件，返回分区的第一个字节下标
+#                                                 CHS参数
+#               mkdiskimage  -F  -o   $HdImgF $HdImg_C $HdImg_H $HdImg_S 
+Part1stByteIdx=$(mkdiskimage   -o   hd.img   10        8        32)
+#这里 Part1stByteIdx == 16384
+
+#FAT32 最小如下:
+#mkdiskimage  -F  -o   hd.img   512        8        32
+
+
+#mount形成链条:  $HdImgF --> /dev/loopX --> $hd_img_dir/
+sudo mount --verbose --options loop,offset=$Part1stByteIdx hd.img ./hd_mnt 
+loopX=$(sudo losetup   --raw   --associated hd.img  | cut -d: -f1)
+# loopX == /dev/loop12
+lsblk $loopX 
+# NAME   MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+# loop12   7:12   0   5M  0 loop /fridaAnlzAp/cgsecurity--testdisk/hd_mnt
+
+echo aaabbbcccddeff1200000 | sudo tee   hd_mnt/test.txt
+echo ===================== | sudo tee   hd_mnt/log.txt
+sudo rm -frv hd_mnt/*
+
+#卸载:
+sudo losetup --detach $loopX
+sudo umount hd.img; sudo umount ./hd_mnt
+
+```
+
+```shell
+
+ls -lh hd.img 
+# -rwxrwxrwx 1 z z 1.3M  4月  8 16:13 hd.img
+
+fdisk -l  hd.img 
+# Disk hd.img: 1.25 MiB, 1310720 bytes, 2560 sectors
+# Units: sectors of 1 * 512 = 512 bytes
+# Sector size (logical/physical): 512 bytes / 512 bytes
+# I/O size (minimum/optimal): 512 bytes / 512 bytes
+# Disklabel type: dos
+# Disk identifier: 0x876401f5
+
+# Device     Boot Start   End Sectors  Size Id Type
+# hd.img1    *       32  2559    2528  1.2M  1 FAT12
+
+```
+
+##### 将磁盘映像文件hd.img喂给testdisk
+```shell
+
+./src/testdisk    hd.img 
+./src/testdisk /list   hd.img 
+
+gdb --args   ./src/testdisk    hd.img 
 
 ```
