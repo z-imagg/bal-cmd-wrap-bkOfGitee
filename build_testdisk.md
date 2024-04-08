@@ -66,6 +66,9 @@ apt install -y pkg-config
 # testdisk已经禁止了qt ，不再需要安装qt
 # apt install -y qtbase5-dev-tools qtbase5-dev libpolkit-qt5-1-* libqt53dcore5
 
+source /app/cmd-wrap/script/pythonpath.sh
+env | grep PYTHONPATH
+
 rm -frv /tmp/*
 make clean ; 
 rm -fr config ;  

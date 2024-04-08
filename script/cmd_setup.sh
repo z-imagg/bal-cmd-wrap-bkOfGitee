@@ -100,8 +100,8 @@ echo "测试拦截器化身(入口者)"
 cd /tmp/
 
 #PYTHONPATH是必不可少的，否则拦截器无法运行
-export PYTHONPATH=/app/cmd-wrap/:/app/cmd-wrap/bin/:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/
-
+source /app/cmd-wrap/script/pythonpath.sh
+env | grep PYTHONPATH
 
 gcc
 g++
