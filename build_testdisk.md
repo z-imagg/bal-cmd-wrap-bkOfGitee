@@ -39,7 +39,10 @@ git clone https://gitee.com/disk_recovery/cgsecurity--testdisk.git
 
 ```shell
 
+#建立python虚拟环境 /app/cmd-wrap/.venv/
 bash /app/cmd-wrap/script/env_prepare.sh
+
+#编写 原始命令、入口命令
 bash -x /app/cmd-wrap/script/cmd_setup.sh
 
 which c++ #/usr/bin/c++
@@ -66,6 +69,7 @@ apt install -y pkg-config
 # testdisk已经禁止了qt ，不再需要安装qt
 # apt install -y qtbase5-dev-tools qtbase5-dev libpolkit-qt5-1-* libqt53dcore5
 
+source /app/cmd-wrap/.venv/bin/activate
 source /app/cmd-wrap/script/pythonpath.sh
 env | grep PYTHONPATH
 
@@ -80,13 +84,13 @@ bash compile.sh ;
 
 #cmd-wrap的日志都在/tmp/下
 ls -lh /tmp/*.log | wc  -l 
-# 417
+# 506
 
 grep --text  "\-O1" /tmp/*.log   | wc -l 
-# 414
+# 503
 
 grep --text  "\-g1" /tmp/*.log   | wc -l 
-#414
+# 503
 
 
 #撤销拦截器
@@ -122,12 +126,14 @@ ls -lh  ./src/testdisk ./src/photorec
 编译结果, 
 ```shell
 file ./src/testdisk ./src/photorec
-#./src/testdisk: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=09cac28ceaef70aa48f8d4030eb8d114dcbc0fee, for GNU/Linux 3.2.0, with debug_info, not stripped
-#./src/photorec: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=52209b4c306a080cdd13707a8b98398a893f3c45, for GNU/Linux 3.2.0, with debug_info, not stripped
+# ./src/testdisk: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=f207f570f122a860028627dfcebaca34aa036c84, for GNU/Linux 3.2.0, with debug_info, not stripped
+# ./src/photorec: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=c54a912514fe8b178bdedb7fa5383dfe06fd4ca4, for GNU/Linux 3.2.0, with debug_info, not stripped
+
 
 ls -lh  ./src/testdisk ./src/photorec
-# -rwxrwxrwx 1 1000 1000 1.2M Apr  8 14:46 ./src/photorec
-# -rwxrwxrwx 1 1000 1000 602K Apr  8 14:46 ./src/testdisk
+# -rwxrwxrwx 1 1000 1000 1.2M Apr  8 07:39 ./src/photorec
+# -rwxrwxrwx 1 1000 1000 602K Apr  8 07:39 ./src/testdisk
+
 
 
 ```
