@@ -99,21 +99,21 @@ Fil="${clangxxF}" ; _lnk2Intcpt
 Cmd="clang++"     ; _echoLnk
 echo ""
 
-declare -r cmakeF="/usr/bin/cmake"
-Fil="${cmakeF}" ;  _IfELFMvAsOrn
-Fil="${cmakeF}" ; _IfNotItcpMvAsOrn
-Fil="${cmakeF}" ; _IfIntcptUnlnk
-Fil="${cmakeF}" ; _lnk2Intcpt
-Cmd="cmake"     ; _echoLnk
-echo ""
+# declare -r cmakeF="/usr/bin/cmake"
+# Fil="${cmakeF}" ;  _IfELFMvAsOrn
+# Fil="${cmakeF}" ; _IfNotItcpMvAsOrn
+# Fil="${cmakeF}" ; _IfIntcptUnlnk
+# Fil="${cmakeF}" ; _lnk2Intcpt
+# Cmd="cmake"     ; _echoLnk
+# echo ""
 
-declare -r makeF="/usr/bin/make"
-Fil="${makeF}" ;  _IfELFMvAsOrn
-Fil="${makeF}" ; _IfNotItcpMvAsOrn
-Fil="${makeF}" ; _IfIntcptUnlnk
-Fil="${makeF}" ; _lnk2Intcpt
-Cmd="make"     ; _echoLnk
-echo ""
+# declare -r makeF="/usr/bin/make"
+# Fil="${makeF}" ;  _IfELFMvAsOrn
+# Fil="${makeF}" ; _IfNotItcpMvAsOrn
+# Fil="${makeF}" ; _IfIntcptUnlnk
+# Fil="${makeF}" ; _lnk2Intcpt
+# Cmd="make"     ; _echoLnk
+# echo ""
 
 echo "显示目前的入口者们"
 ls -lh /usr/bin/{gcc,g++,c++,cmake,make}
