@@ -2,7 +2,19 @@
 举例  使用 本编译器拦截器  编译pytorch-v1.0.0 ， http://giteaz:3000/wiki/github-gitee-GITEA/src/commit/935b9ddbc3674c4375e7c7af983b05536261464c/torch-v1.0.0-build.md
 
 
+#### 建议docker下使用，否则可能破坏宿主机编译环境
+```shell
+sudo docker pull ubuntu:22.04
 
+docker run --interactive --tty --detach   -v /fridaAnlzAp/:/fridaAnlzAp/ --name u22   ubuntu:22.04
+docker exec -it u22  bash
+
+#或者一步到shell:
+#docker run --interactive --tty --detach   -v /fridaAnlzAp/:/fridaAnlzAp/ --name u22   ubuntu:22.04
+
+docker stop u22
+docker rm u22
+```
 
 #### 修改ninja的py包裹脚本，使得显示编译命令
 ```shell
