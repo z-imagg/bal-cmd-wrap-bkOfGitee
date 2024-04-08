@@ -13,13 +13,13 @@
             // "terminalKind": "integrated", #此行可有可无
         },
         ////// python调试
-        //     interceptor_cxx.py --__develop_mode  --__help
+        //     interceptor_xx.py --__develop_mode  --__help
 
         {
             "name": "interceptor_cxx 【固定参数】【废弃，因为不能直接运行拦截器】",
             "type": "debugpy",
             "request": "launch",
-            "program": "interceptor_cxx.py",
+            "program": "interceptor_xx.py",
             "console": "integratedTerminal",
             "args": [  
 ],

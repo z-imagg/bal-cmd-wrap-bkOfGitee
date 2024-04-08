@@ -24,7 +24,7 @@ source /app/cmd-wrap/.venv/bin/activate
 # set -x
 
 #拦截器
-declare -r interceptorx="/app/cmd-wrap/bin/interceptor_cxx.py"
+declare -r interceptorx="/app/cmd-wrap/bin/interceptor_xx.py"
 chmod +x $interceptorx
 
 # 拦截器 中用到这些原始命令

@@ -44,7 +44,7 @@ bash -x /app/cmd-wrap/script/cmd_setup.sh
 
 which c++ #/usr/bin/c++
 
-readlink -f $(which c++) #/app/cmd-wrap/bin/interceptor_cxx.py
+readlink -f $(which c++) #/app/cmd-wrap/bin/interceptor_xx.py
 
 which python #/app/cmd-wrap/.venv/bin/python
 
