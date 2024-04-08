@@ -24,106 +24,82 @@ source /app/cmd-wrap/.venv/bin/activate
 # set -x
 
 #拦截器
-declare -r interceptor_cxx="/app/cmd-wrap/bin/interceptor_cxx.py"
-chmod +x $interceptor_cxx
+declare -r interceptorx="/app/cmd-wrap/bin/interceptor_cxx.py"
+chmod +x $interceptorx
 
-function _1echoWhich() {
- _F=$( which ${_C} ) &&  echo -n " ${_C} ---> ${_F} " 
-}
+# 拦截器 中用到这些原始命令
 
-function _2echoReadlinkF_Ln() {
- echo  "  ---> $( readlink -f ${_F} ) ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) "  
-}
+#  根据事先观察到的链接关系 编写 原始命令、入口命令， 难以 恢复到原样
 
-function _echoReadlinkF_Ln() {
-  echo  " ${_F} ---> $( readlink -f ${_F} )  ==>  $( queryBuszByFakeCmd.py --fake_prog ${_F} ) "
-}
-#若是ELF文件，则备份
-function _IfELFMvAsOrn() {
-[[ "$( file --brief --mime-type ${Fil} )" == "application/x-pie-executable" ]] && { sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "是ELF文件 备份为$_"  ;}
-}
-#若不是拦截入口者，则备份
-function _IfNotItcpMvAsOrn() {
-[[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] || { [[ -f ${Fil} ]] && sudo mv  "${Fil}" "${Fil}.origin.$(date +%s)"  && echo "非拦截入口 备份为$_" ;}
-}
-#销毁现有入口者
-function _IfIntcptUnlnk() {
-{ echo -n "销毁现有入口者" &&  _F=${Fil} &&  _echoReadlinkF_Ln  ;} ; {  [[ $( readlink -f ${Fil} ) == "${interceptor_cxx}" ]] && sudo unlink "${Fil}"  ;} 
-}
-#重新生成入口者
-function _lnk2Intcpt() {
-sudo ln -s "${interceptor_cxx}" "${Fil}" && echo -n "重新生成入口者  "  &&  _F=${Fil} &&  _echoReadlinkF_Ln
-}
-#显示拦截器
-function _echoLnk() {
-_C="${Cmd}" && echo -n "显示拦截器" &&  _1echoWhich  && _2echoReadlinkF_Ln  
-}
-
-declare -r gccF="/usr/bin/gcc"
-Fil="${gccF}" ;  _IfELFMvAsOrn #备份
-Fil="${gccF}" ; _IfNotItcpMvAsOrn #备份
-Fil="${gccF}" ; _IfIntcptUnlnk #销毁现有入口者
-Fil="${gccF}" ; _lnk2Intcpt #重新生成入口者
-Cmd="gcc"     ; _echoLnk #显示拦截器
-echo ""
-
+#构造原始g++命令 "/usr/bin/g++.origin"
+declare -r gxxFO="/usr/bin/g++.origin"
+unlink ${gxxFO}
+ln -s /usr/bin/x86_64-linux-gnu-g++-11 ${gxxFO}
+#使入口命令g++指向拦截器
 declare -r gxxF="/usr/bin/g++"
-Fil="${gxxF}" ;  _IfELFMvAsOrn #备份
-Fil="${gxxF}" ; _IfNotItcpMvAsOrn
-Fil="${gxxF}" ; _IfIntcptUnlnk
-Fil="${gxxF}" ; _lnk2Intcpt
-Cmd="g++"     ; _echoLnk
-echo ""
+unlink ${gxxF}
+ln -s ${interceptorx} ${gxxF}  
 
+#构造原始c++命令 "/usr/bin/c++.origin"
+declare -r cxxFO="/usr/bin/c++.origin"
+unlink ${cxxFO}
+ln -s /usr/bin/x86_64-linux-gnu-g++-11 ${cxxFO}
+#使入口命令c++指向拦截器
 declare -r cxxF="/usr/bin/c++"
-Fil="${cxxF}" ;  _IfELFMvAsOrn #备份
-Fil="${cxxF}" ; _IfNotItcpMvAsOrn
-Fil="${cxxF}" ; _IfIntcptUnlnk
-Fil="${cxxF}" ; _lnk2Intcpt
-Cmd="c++"     ; _echoLnk
-echo ""
+unlink ${cxxF}
+ln -s   ${interceptorx} ${cxxF} 
 
+#构造原始gcc命令 "/usr/bin/gcc.origin"
+declare -r gccFO="/usr/bin/gcc.origin"
+unlink ${gccFO}
+ln -s /usr/bin/x86_64-linux-gnu-gcc-11 ${gccFO}
+#使入口命令gcc指向拦截器
+declare -r gccF="/usr/bin/gcc"
+unlink ${gccF}
+ln -s ${interceptorx} ${gccF}  
+
+#不拦截cmake
+#构造原始cmake命令 /usr/bin/cmake.origin
+# declare -r cmakeFO="/usr/bin/cmake.origin"
+# unlink ${cmakeFO}
+# ln -s /usr/bin/cmake  ${cmakeFO}
+#使入口命令cmake指向拦截器
+# declare -r cmakeF="/usr/bin/cmake"
+# ln -s ${interceptorx} ${cmakeF}   
+
+#不拦截make
+#构造原始make命令 /usr/bin/make.origin
+# declare -r cmakeFO="/usr/bin/make.origin"
+# ln -s /usr/bin/make  ${cmakeFO}
+#使入口命令make指向拦截器
+# declare -r makeF="/usr/bin/make"
+# ln -s ${interceptorx} ${makeF} 
+
+#构造原始clang命令  
+file /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang
+#使入口命令clang指向拦截器
 declare -r clangF="/usr/bin/clang"
-Fil="${clangF}" ;  _IfELFMvAsOrn #备份
-Fil="${clangF}" ; _IfNotItcpMvAsOrn
-Fil="${clangF}" ; _IfIntcptUnlnk
-Fil="${clangF}" ; _lnk2Intcpt
-Cmd="clang"     ; _echoLnk
-echo ""
+unlink ${clangF}
+ln -s ${interceptorx} ${clangF}  
 
+#构造原始clang++命令  
+file /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang++
+#使入口命令clang++指向拦截器
 declare -r clangxxF="/usr/bin/clang++"
-Fil="${clangxxF}" ;  _IfELFMvAsOrn #备份
-Fil="${clangxxF}" ; _IfNotItcpMvAsOrn
-Fil="${clangxxF}" ; _IfIntcptUnlnk
-Fil="${clangxxF}" ; _lnk2Intcpt
-Cmd="clang++"     ; _echoLnk
-echo ""
+unlink ${clangxxF}
+ln -s ${interceptorx} ${clangxxF}  
 
-declare -r cmakeF="/usr/bin/cmake"
-Fil="${cmakeF}" ;  _IfELFMvAsOrn
-Fil="${cmakeF}" ; _IfNotItcpMvAsOrn
-Fil="${cmakeF}" ; _IfIntcptUnlnk
-Fil="${cmakeF}" ; _lnk2Intcpt
-Cmd="cmake"     ; _echoLnk
-echo ""
-
-declare -r makeF="/usr/bin/make"
-Fil="${makeF}" ;  _IfELFMvAsOrn
-Fil="${makeF}" ; _IfNotItcpMvAsOrn
-Fil="${makeF}" ; _IfIntcptUnlnk
-Fil="${makeF}" ; _lnk2Intcpt
-Cmd="make"     ; _echoLnk
-echo ""
 
 echo "显示目前的入口者们"
-ls -lh /usr/bin/{gcc,g++,c++,cmake,make}
+ls -lh /usr/bin/{gcc,g++,c++,cmake,make,clang,clang++}
 
-echo "显示目前的备份们"
+echo "显示目前的原始命令们"
 ls -lh /usr/bin/*origin*
 
 echo "测试拦截器化身(入口者)"
 cd /tmp/
 
+#PYTHONPATH是必不可少的，否则拦截器无法运行
 export PYTHONPATH=/app/cmd-wrap/:/app/cmd-wrap/bin/:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/
 
 
