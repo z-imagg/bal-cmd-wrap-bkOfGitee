@@ -172,7 +172,7 @@ readelf --symbols ./qemu-system-x86_64 | egrep -w 'translator_loop|translate_ins
 
 #### qemu使用
 ```shell
-~/build/qemu-system-x86_64 --help
+/app/qemu/build/qemu-system-x86_64 --help
 ```
 
 
