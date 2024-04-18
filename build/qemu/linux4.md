@@ -55,6 +55,25 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 
 ```
 
+
+用自编译的qemu-system-x86_64 6.2.0 启动无界面出来
+```shell
+/app/qemu/build-v6.2.0/qemu-system-x86_64 --version
+#QEMU emulator version 6.2.0 (v6.2.0)
+
+
+
+# 末尾加 '  -monitor stdio ' 可获得qemu控制台
+/app/qemu/build-v6.2.0/qemu-system-x86_64  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
+#无界面出来
+
+/app/qemu/build-v6.2.0/qemu-system-x86_64   -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
+#无界面出来
+
+```
+
+
+
 用系统自带的qemu-system-x86_64 6.2.0  则正常启动
 ```shell
 sudo apt install qemu-system-x86
