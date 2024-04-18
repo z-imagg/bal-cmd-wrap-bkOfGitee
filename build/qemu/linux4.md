@@ -88,3 +88,13 @@ qemu-system-x86_64  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
 qemu-system-x86_64   -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
 #有图形化界面出来，正常启动到linux终端
 ```
+
+##### qemu下的linux4终端使用
+
+```shell
+/busybox-i686 ls /proc
+#正常显示了各种进程id目录
+
+/busybox-i686 ps auxf
+#正常显示进程列表
+```
