@@ -10,7 +10,7 @@ http://giteaz:3000/bal/bal/src/branch/bal/dev/bldLinux4RunOnBochs/bochs2.7boot-s
 
 
 ```shell
-git clone  -b bal/dev   http://giteaz:3000/bal/bal.git /
+git clone  -b bal/dev   http://giteaz:3000/bal/bal.git /bal
 cd /bal
 git submodule    update --recursive --init
 
