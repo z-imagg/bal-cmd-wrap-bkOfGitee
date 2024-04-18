@@ -17,7 +17,7 @@ git clone  -b fridaAnlzAp/app/qemu-linux4   http://giteaz:3000/bal/bal.git /bal
 cd /bal
 git submodule    update --recursive --init
 
-apt install -y xxd
+apt install -y xxd build-essential
 
 cd /bal/bldLinux4RunOnBochs/
 
