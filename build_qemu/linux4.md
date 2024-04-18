@@ -6,6 +6,8 @@ docker run -v /bal/:/bal/ -v /app/:/app/ --privileged=true  --name u22  -itd bas
 docker exec -it u22 bash
 ```
 
+
+##### 编译linux4
 http://giteaz:3000/bal/bal/src/branch/bal/dev/bldLinux4RunOnBochs/bochs2.7boot-syslinux-linux4.15.y.sh
 
 
@@ -29,10 +31,16 @@ bash -x  bochs2.7boot-syslinux-linux4.15.y.sh
 
 ```
 
-编译出的linux产物
+##### 编译出的linux产物
 ```shell
 ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img 
 # -rw-r--r-- 1 root root  50M Apr 18 14:36 /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
 # -rw-r--r-- 1 root root 6.2M Apr 18 14:30 /bal/linux-stable/arch/x86/boot/bzImage
 
+```
+
+##### qemu运行linux
+```shell
+qemu-system-x86_64 -curses  -m 16M -boot a -fda Image -hda hdc-0.11.img  -monitor stdio
+qemu-system-x86_64 -curses  -m 16M -boot a -fda Image -hda hdc-0.11.img
 ```
