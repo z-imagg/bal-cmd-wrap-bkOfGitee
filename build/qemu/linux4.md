@@ -42,15 +42,15 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 ##### qemu运行linux
 用自编译的qemu-system-x86_64 8.2.2 启动无界面出来
 ```shell
-/app/qemu/build/qemu-system-x86_64 --version
+/app/qemu/build-v8.2.2/qemu-system-x86_64 --version
 #QEMU emulator version 8.2.2 (v8.2.2)
 
 
 # 末尾加 '  -monitor stdio ' 可获得qemu控制台
-/app/qemu/build/qemu-system-x86_64  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
+/app/qemu/build-v8.2.2/qemu-system-x86_64  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
 #无界面出来
 
-/app/qemu/build/qemu-system-x86_64   -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
+/app/qemu/build-v8.2.2/qemu-system-x86_64   -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
 #无界面出来
 
 ```
