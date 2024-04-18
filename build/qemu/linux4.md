@@ -57,41 +57,11 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 
 ```
 
-
-###### 自编译的qemu-system-x86_64 6.2.0 正常启动字符界面
-```shell
-/app/qemu/build-v6.2.0/qemu-system-x86_64 --version
-#QEMU emulator version 6.2.0 (v6.2.0)
+ 
 
 
-
-# 末尾加 '  -monitor stdio ' 可获得qemu控制台
-/app/qemu/build-v6.2.0/qemu-system-x86_64  -nographic  -append "console=ttyS0" /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
-#字符界面，正常启动到linux终端
-
-/app/qemu/build-v6.2.0/qemu-system-x86_64  -nographic  -append "console=ttyS0"  -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
-#字符界面，正常启动到linux终端
-
-```
-
-
-
-###### 系统自带的qemu-system-x86_64 6.2.0  图形界面正常启动
-```shell
-sudo apt install qemu-system-x86
-
-qemu-system-x86_64 --version
-#QEMU emulator version 6.2.0 (Debian 1:6.2+dfsg-2ubuntu6.18)
-
-qemu-system-x86_64  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
-#有图形化界面出来，正常启动到linux终端
-
-
-qemu-system-x86_64   -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
-#有图形化界面出来，正常启动到linux终端
-```
-
-##### qemu下的linux4终端使用
+ 
+##### qemu下的linux4终端 正常关机 
 
 ```shell
 /busybox-i686 ls /proc
@@ -99,4 +69,9 @@ qemu-system-x86_64   -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /b
 
 /busybox-i686 ps auxf
 #正常显示进程列表
+```
+
+```shell
+/busybox-i686 poweroff -f 
+#正常关机了
 ```
