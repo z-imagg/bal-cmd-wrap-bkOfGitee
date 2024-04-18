@@ -20,6 +20,10 @@ git submodule    update --recursive --init
 apt install -y xxd
 
 cd /bal/bldLinux4RunOnBochs/
+
+#编译 linux4
+bash -x build-linux4.15.y-on-x64_u22.04.3LTS.sh
+#制作 启动盘
 bash -x  bochs2.7boot-syslinux-linux4.15.y.sh
 
 ```
