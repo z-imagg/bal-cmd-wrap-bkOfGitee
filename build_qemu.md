@@ -41,23 +41,25 @@ make -j4
 
 #### 编译产物
 ```shell
-find ~/qemu--qemu/build/ -type f -executable -and \( ! -path '*/tests/*' \) -and  \( ! -path '*/pyvenv/*' \) -and \( ! -path '*/contrib/*'  \) | xargs -I@ stat --format="%n %s"     @
+find ~/qemu--qemu/build/ -type f -executable -and \( ! -path '*/tests/*' \) -and  \( ! -path '*/pyvenv/*' \) -and \( ! -path '*/contrib/*'  \) | xargs -I@ ls -sh       @
+#精确尺寸: '| xargs -I@ stat --format="%n %s"     @'
 ```
 
 ```txt
-/root/qemu--qemu/build/subprojects/libvhost-user/link-test 133528
-/root/qemu--qemu/build/storage-daemon/qemu-storage-daemon 13741144
-/root/qemu--qemu/build/qemu-edid 2645520
-/root/qemu--qemu/build/config.status 734
-/root/qemu--qemu/build/qemu-system-i386 73398592
-/root/qemu--qemu/build/qemu-io 10691832
-/root/qemu--qemu/build/meson-private/sanitycheckc.exe 15784
-/root/qemu--qemu/build/qemu-img 10905944
-/root/qemu--qemu/build/qemu-nbd 11678352
-/root/qemu--qemu/build/qemu-bridge-helper 2638512
-/root/qemu--qemu/build/qga/qemu-ga 3776184
-/root/qemu--qemu/build/qemu-system-x86_64 73597752
-/root/qemu--qemu/build/qemu-pr-helper 4100432
+132K /root/qemu--qemu/build/subprojects/libvhost-user/link-test
+14M /root/qemu--qemu/build/storage-daemon/qemu-storage-daemon
+2.6M /root/qemu--qemu/build/qemu-edid
+4.0K /root/qemu--qemu/build/config.status
+70M /root/qemu--qemu/build/qemu-system-i386
+11M /root/qemu--qemu/build/qemu-io
+16K /root/qemu--qemu/build/meson-private/sanitycheckc.exe
+11M /root/qemu--qemu/build/qemu-img
+12M /root/qemu--qemu/build/qemu-nbd
+2.6M /root/qemu--qemu/build/qemu-bridge-helper
+3.7M /root/qemu--qemu/build/qga/qemu-ga
+71M /root/qemu--qemu/build/qemu-system-x86_64
+4.0M /root/qemu--qemu/build/qemu-pr-helper
+
 
 ```
 
