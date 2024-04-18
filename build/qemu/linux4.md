@@ -40,7 +40,9 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 ```
 
 ##### qemu运行linux
-用自编译的qemu-system-x86_64 8.2.2 启动无界面出来
+
+######  自编译的qemu-system-x86_64 8.2.2 正常启动字符界面
+
 ```shell
 /app/qemu/build-v8.2.2/qemu-system-x86_64 --version
 #QEMU emulator version 8.2.2 (v8.2.2)
@@ -56,7 +58,7 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 ```
 
 
-用自编译的qemu-system-x86_64 6.2.0 启动无界面出来
+###### 自编译的qemu-system-x86_64 6.2.0 正常启动字符界面
 ```shell
 /app/qemu/build-v6.2.0/qemu-system-x86_64 --version
 #QEMU emulator version 6.2.0 (v6.2.0)
@@ -74,7 +76,7 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 
 
 
-用系统自带的qemu-system-x86_64 6.2.0  则正常启动
+###### 系统自带的qemu-system-x86_64 6.2.0  图形界面正常启动
 ```shell
 sudo apt install qemu-system-x86
 
