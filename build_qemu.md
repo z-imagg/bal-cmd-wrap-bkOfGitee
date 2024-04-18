@@ -24,7 +24,9 @@ apt-file search --regexp  "/ninja$"
 
 ```shell
 apt install -y python3-venv python3-pip  ninja-build pkg-config libglib2.0-dev
-pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/web/simple
+
 
 git clone -b v8.2.2 https://gitee.com/imagg/qemu--qemu.git
 
