@@ -3,7 +3,7 @@
 http://g:3000/frida_analyze_app_src/main/src/branch/main/docker/base_ubuntu_22_Dockerfile
 
 ```shell
-docker run --name u22  -itd base_ubuntu_22.04:0.1
+docker run -itd --name u22 --hostname u22_dk base_ubuntu_22.04:0.1
 docker exec -it u22 bash
 ```
 #### 依赖搜索记录
