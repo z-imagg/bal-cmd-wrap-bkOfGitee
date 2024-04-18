@@ -41,6 +41,6 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 
 ##### qemu运行linux
 ```shell
-qemu-system-x86_64 -curses  -m 16M -boot a -fda Image -hda hdc-0.11.img  -monitor stdio
-qemu-system-x86_64 -curses  -m 16M -boot a -fda Image -hda hdc-0.11.img
+qemu-system-x86_64 -curses  -m 128M -boot a -fda Image -hda /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
+# 末尾加 '  -monitor stdio ' 可获得qemu控制台
 ```
