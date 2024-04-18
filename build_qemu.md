@@ -28,12 +28,12 @@ apt install -y python3-venv python3-pip  ninja-build pkg-config libglib2.0-dev
 pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/web/simple
 
 
-git clone -b v8.2.2 https://gitee.com/imagg/qemu--qemu.git
+git clone -b v8.2.2 https://gitee.com/imagg/qemu--qemu.git ~/qemu--qemu
+#file ~/qemu--qemu/.git/config
 
-cd qemu--qemu/
-mkdir build; cd build;
-
+mkdir ~/qemu--qemu/build; cd ~/qemu--qemu/build;
 ../configure --target-list=i386-softmmu,x86_64-softmmu
+
 make -j4
 # make install
 
