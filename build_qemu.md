@@ -192,3 +192,17 @@ linux-0.11环境相关，https://gitee.com/repok/linux-0.11_yuan-xy__ctk/blob/ta
 从chatgpt-turbo-3.5得知 , linux 2.6之后才支持外部工具集 比如GNU工具集、BUSYBOX
 
 由此可知 linux-0.11 可能很难 对接 后来的busybox工具集，  而且不确定busybox中是否有关机命令， 且 即使 对接上了 即使busybox有关机命令 还是不确定 是否能正常关闭linux0.11
+
+##### linux4
+
+http://giteaz:3000/bal/bal/src/branch/bal/dev/bldLinux4RunOnBochs/bochs2.7boot-syslinux-linux4.15.y.sh
+
+```shell
+git clone  -b bal/dev   http://giteaz:3000/bal/bal.git /
+cd /bal
+git submodule    update --recursive --init
+
+apt install -y xxd
+bash -x  bochs2.7boot-syslinux-linux4.15.y.sh
+
+```
