@@ -47,11 +47,11 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 
 
 # 末尾加 '  -monitor stdio ' 可获得qemu控制台
-/app/qemu/build-v8.2.2/qemu-system-x86_64  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
-#无界面出来
+/app/qemu/build-v8.2.2/qemu-system-x86_64 -nographic  -append "console=ttyS0"   /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
+#字符界面，正常启动到linux终端
 
-/app/qemu/build-v8.2.2/qemu-system-x86_64   -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
-#无界面出来
+/app/qemu/build-v8.2.2/qemu-system-x86_64 -nographic  -append "console=ttyS0"  -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
+#字符界面，正常启动到linux终端
 
 ```
 
@@ -64,11 +64,11 @@ ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB2
 
 
 # 末尾加 '  -monitor stdio ' 可获得qemu控制台
-/app/qemu/build-v6.2.0/qemu-system-x86_64  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
-#无界面出来
+/app/qemu/build-v6.2.0/qemu-system-x86_64  -nographic  -append "console=ttyS0" /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
+#字符界面，正常启动到linux终端
 
-/app/qemu/build-v6.2.0/qemu-system-x86_64   -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
-#无界面出来
+/app/qemu/build-v6.2.0/qemu-system-x86_64  -nographic  -append "console=ttyS0"  -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz 
+#字符界面，正常启动到linux终端
 
 ```
 
