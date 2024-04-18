@@ -13,7 +13,11 @@ apt-file update
 ```
 ```shell
 apt-file search --regexp  "/pkg-config$"
+#pkg-config: /usr/bin/pkg-config
+
 apt-file search --regexp  "/ninja$"
+#ninja-build: /usr/bin/ninja               
+
 ```
 #### 编译qemu
 参考, https://hlyani.github.io/notes/openstack/qemu_make.html
