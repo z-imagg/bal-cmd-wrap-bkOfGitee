@@ -32,8 +32,8 @@ git clone -b v8.2.2 https://gitee.com/imagg/qemu--qemu.git ~/qemu--qemu
 #file ~/qemu--qemu/.git/config
 
 mkdir ~/qemu--qemu/build; cd ~/qemu--qemu/build;
+#以下三行为编译步骤
 ../configure --target-list=i386-softmmu,x86_64-softmmu
-
 make -j4
 # make install
 
