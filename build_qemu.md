@@ -8,6 +8,10 @@ docker exec -it u22 bash
 ```
 #### 依赖搜索记录
 ```shell
+apt install apt-file
+apt-file update
+```
+```shell
 apt-file search --regexp  "/pkg-config$"
 apt-file search --regexp  "/ninja$"
 ```
