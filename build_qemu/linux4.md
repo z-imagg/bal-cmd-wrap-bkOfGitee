@@ -18,6 +18,8 @@ cd /bal
 git submodule    update --recursive --init
 
 apt install -y xxd
+
+cd /bal/bldLinux4RunOnBochs/
 bash -x  bochs2.7boot-syslinux-linux4.15.y.sh
 
 ```
