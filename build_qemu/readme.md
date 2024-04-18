@@ -28,10 +28,10 @@ apt install -y python3-venv python3-pip  ninja-build pkg-config libglib2.0-dev
 pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/web/simple
 
 
-git clone -b v8.2.2 https://gitee.com/imagg/qemu--qemu.git ~/qemu--qemu
-#file ~/qemu--qemu/.git/config
+git clone -b v8.2.2 https://gitee.com/imagg/qemu--qemu.git /app/qemu
+#file /app/qemu--qemu/.git/config
 
-mkdir ~/qemu--qemu/build; cd ~/qemu--qemu/build;
+mkdir /app/qemu/build; cd /app/qemu/build;
 #以下三行为编译步骤
 ../configure --target-list=i386-softmmu,x86_64-softmmu
 make -j4
@@ -43,24 +43,24 @@ make -j4
 
 ##### 产物
 ```shell
-find ~/qemu--qemu/build/ -type f -executable -and \( ! -path '*/tests/*' \) -and  \( ! -path '*/pyvenv/*' \) -and \( ! -path '*/contrib/*'  \) | xargs -I@ ls -sh       @
+find /app/qemu/build/ -type f -executable -and \( ! -path '*/tests/*' \) -and  \( ! -path '*/pyvenv/*' \) -and \( ! -path '*/contrib/*'  \) | xargs -I@ ls -sh       @
 #精确尺寸: '| xargs -I@ stat --format="%n %s"     @'
 ```
 
 ```txt
-132K /root/qemu--qemu/build/subprojects/libvhost-user/link-test
-14M /root/qemu--qemu/build/storage-daemon/qemu-storage-daemon
-2.6M /root/qemu--qemu/build/qemu-edid
-4.0K /root/qemu--qemu/build/config.status
-70M /root/qemu--qemu/build/qemu-system-i386
-11M /root/qemu--qemu/build/qemu-io
-16K /root/qemu--qemu/build/meson-private/sanitycheckc.exe
-11M /root/qemu--qemu/build/qemu-img
-12M /root/qemu--qemu/build/qemu-nbd
-2.6M /root/qemu--qemu/build/qemu-bridge-helper
-3.7M /root/qemu--qemu/build/qga/qemu-ga
-71M /root/qemu--qemu/build/qemu-system-x86_64
-4.0M /root/qemu--qemu/build/qemu-pr-helper
+132K /app/qemu/build/subprojects/libvhost-user/link-test
+14M /app/qemu/build/storage-daemon/qemu-storage-daemon
+2.6M /app/qemu/build/qemu-edid
+4.0K /app/qemu/build/config.status
+70M /app/qemu/build/qemu-system-i386
+11M /app/qemu/build/qemu-io
+16K /app/qemu/build/meson-private/sanitycheckc.exe
+11M /app/qemu/build/qemu-img
+12M /app/qemu/build/qemu-nbd
+2.6M /app/qemu/build/qemu-bridge-helper
+3.7M /app/qemu/build/qga/qemu-ga
+71M /app/qemu/build/qemu-system-x86_64
+4.0M /app/qemu/build/qemu-pr-helper
 
 
 ```
@@ -69,7 +69,7 @@ find ~/qemu--qemu/build/ -type f -executable -and \( ! -path '*/tests/*' \) -and
 1. 【描述】 ```file ~/qemu--qemu/build/qemu-system-i386  ```
 
 ```txt
-        /root/qemu--qemu/build/qemu-system-i386: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=8e16b9741d22e249c55d6868fe63d301c535d7a1, for GNU/Linux 3.2.0, with debug_info, not stripped
+        /app/qemu/build/qemu-system-i386: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=8e16b9741d22e249c55d6868fe63d301c535d7a1, for GNU/Linux 3.2.0, with debug_info, not stripped
 ```
 
 2. 【依赖】 ```ldd ~/qemu--qemu/build/qemu-system-i386```
@@ -95,7 +95,7 @@ find ~/qemu--qemu/build/ -type f -executable -and \( ! -path '*/tests/*' \) -and
 1. 【描述】```file ~/qemu--qemu/build/qemu-system-x86_64```
 
 ```txt
-        /root/qemu--qemu/build/qemu-system-x86_64: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=2aa26203fa5bdb52a2d0dfc020235ff9775ea910, for GNU/Linux 3.2.0, with debug_info, not stripped
+        /app/qemu/build/qemu-system-x86_64: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=2aa26203fa5bdb52a2d0dfc020235ff9775ea910, for GNU/Linux 3.2.0, with debug_info, not stripped
 ```
 
 
