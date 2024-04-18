@@ -26,4 +26,13 @@ bash -x build-linux4.15.y-on-x64_u22.04.3LTS.sh
 #制作 启动盘
 bash -x  bochs2.7boot-syslinux-linux4.15.y.sh
 
+
+```
+
+编译出的linux产物
+```shell
+ls -lh /bal/linux-stable/arch/x86/boot/bzImage  /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img 
+# -rw-r--r-- 1 root root  50M Apr 18 14:36 /bal/bldLinux4RunOnBochs/HD50MB200C16H32S.img
+# -rw-r--r-- 1 root root 6.2M Apr 18 14:30 /bal/linux-stable/arch/x86/boot/bzImage
+
 ```
