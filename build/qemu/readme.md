@@ -179,8 +179,8 @@ readelf --symbols ./qemu-system-x86_64 | egrep -w 'translator_loop|translate_ins
 ##### 放弃 linux-0.11
 
 
-http://giteaz:3000/bal/cmd-wrap/src/branch/fridaAnlzAp/app/qemu/build_qemu/drop__linux-0.11.md
+http://giteaz:3000/bal/cmd-wrap/src/branch/fridaAnlzAp/app/qemu/build/qemu/drop__linux-0.11.md
 
 ##### linux4
 
-http://giteaz:3000/bal/cmd-wrap/src/branch/fridaAnlzAp/app/qemu/build_qemu/linux4.md
+http://giteaz:3000/bal/cmd-wrap/src/branch/fridaAnlzAp/app/qemu/build/qemu/linux4.md
