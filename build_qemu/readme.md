@@ -66,13 +66,13 @@ find /app/qemu/build/ -type f -executable -and \( ! -path '*/tests/*' \) -and  \
 ```
 
 ##### qemu-system-i386 
-1. 【描述】 ```file ~/qemu--qemu/build/qemu-system-i386  ```
+1. 【描述】 ```file /app/qemu/build/qemu-system-i386  ```
 
 ```txt
         /app/qemu/build/qemu-system-i386: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=8e16b9741d22e249c55d6868fe63d301c535d7a1, for GNU/Linux 3.2.0, with debug_info, not stripped
 ```
 
-2. 【依赖】 ```ldd ~/qemu--qemu/build/qemu-system-i386```
+2. 【依赖】 ```ldd /app/qemu/build/qemu-system-i386```
 ```txt
         linux-vdso.so.1 (0x00007ffd50af9000)
         libgio-2.0.so.0 => /lib/x86_64-linux-gnu/libgio-2.0.so.0 (0x00007a9f71f13000)
@@ -92,14 +92,14 @@ find /app/qemu/build/ -type f -executable -and \( ! -path '*/tests/*' \) -and  \
 ```
 
 ##### qemu-system-x86_64 
-1. 【描述】```file ~/qemu--qemu/build/qemu-system-x86_64```
+1. 【描述】```file /app/qemu/build/qemu-system-x86_64```
 
 ```txt
         /app/qemu/build/qemu-system-x86_64: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=2aa26203fa5bdb52a2d0dfc020235ff9775ea910, for GNU/Linux 3.2.0, with debug_info, not stripped
 ```
 
 
-2. 【依赖】 ```ldd ~/qemu--qemu/build/qemu-system-x86_64```
+2. 【依赖】 ```ldd /app/qemu/build/qemu-system-x86_64```
 ```txt
         linux-vdso.so.1 (0x00007ffcd77ec000)
         libgio-2.0.so.0 => /lib/x86_64-linux-gnu/libgio-2.0.so.0 (0x000073999a0d7000)
