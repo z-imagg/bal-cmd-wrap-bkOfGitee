@@ -13,7 +13,7 @@ http://giteaz:3000/bal/bal/src/branch/bal/dev/bldLinux4RunOnBochs/bochs2.7boot-s
 echo "10.0.4.9 giteaz" >> /etc/hosts
 
 
-git clone  -b bal/dev   http://giteaz:3000/bal/bal.git /bal
+git clone  -b fridaAnlzAp/app/qemu-linux4   http://giteaz:3000/bal/bal.git /bal
 cd /bal
 git submodule    update --recursive --init
 
