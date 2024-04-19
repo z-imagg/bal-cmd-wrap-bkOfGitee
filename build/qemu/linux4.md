@@ -67,7 +67,7 @@ exec /busybox-i686 ash -c "/busybox-i686 ls /proc ; /busybox-i686 ps auxf; /busy
 
 
 ```shell
-docker run --volume /bal/:/bal/    --name   frida_anlz_ap  --hostname faa_dk --interactive --tty   frida_anlz_ap:0.1_prv
+docker run --privileged=true --volume /bal/:/bal/    --name   frida_anlz_ap  --hostname faa_dk --interactive --tty   frida_anlz_ap:0.1_prv
 #exit
 
 docker start frida_anlz_ap
@@ -80,3 +80,8 @@ readelf --symbols /app/qemu/build/qemu-system-x86_64 | egrep "main$"
 # 37431: 00000000003153f0    23 FUNC    GLOBAL DEFAULT   16 main
 
 ```
+
+http://g:3000/frida_analyze_app_src/frida_js/src/branch/main/fridaJs_runApp.sh
+当提示输入main函数参数时,输入 ```/app/qemu/build-v8.2.2/qemu-system-x86_64 -nographic  -append "console=ttyS0"  -kernel  /bal/linux-stable/arch/x86/boot/bzImage -initrd /bal/bldLinux4RunOnBochs/initramfs-busybox-i686.cpio.tar.gz ``` 
+
+
