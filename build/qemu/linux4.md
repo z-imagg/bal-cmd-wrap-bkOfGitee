@@ -67,5 +67,9 @@ exec /busybox-i686 ash -c "/busybox-i686 ls /proc ; /busybox-i686 ps auxf; /busy
 
 
 ```shell
-docker run --volume /bal/:/bal/  -   --name   frida_anlz_ap  --hostname faa_dk --interactive --tty  frida_anlz_ap:0.1_prv
+docker run --volume /bal/:/bal/    --name   frida_anlz_ap  --hostname faa_dk --interactive --tty   frida_anlz_ap:0.1_prv
+#exit
+
+docker start frida_anlz_ap
+docker exec -it frida_anlz_ap  bash
 ```
