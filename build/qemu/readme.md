@@ -30,7 +30,7 @@ pip config set global.index-url https://mirrors.ustc.edu.cn/pypi/web/simple
 #qemu 6.2.0  需要的依赖，  qemu v8.2.2 不需要
 sudo apt install libpixman-1-dev  libpixman-1-0  
 
-git clone -b v6.2.0 https://gitee.com/imagg/qemu--qemu.git /app/qemu
+git clone -b v8.2.2 https://gitee.com/imagg/qemu--qemu.git /app/qemu
 #file /app/qemu--qemu/.git/config
 
 mkdir /app/qemu/build; cd /app/qemu/build;
