@@ -73,3 +73,10 @@ docker run --volume /bal/:/bal/    --name   frida_anlz_ap  --hostname faa_dk --i
 docker start frida_anlz_ap
 docker exec -it frida_anlz_ap  bash
 ```
+
+
+```shell
+readelf --symbols /app/qemu/build/qemu-system-x86_64 | egrep "main$"
+# 37431: 00000000003153f0    23 FUNC    GLOBAL DEFAULT   16 main
+
+```
