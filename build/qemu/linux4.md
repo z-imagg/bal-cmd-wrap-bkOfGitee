@@ -10,6 +10,26 @@ docker exec -it u22 bash
 ##### 编译linux4内核、制作启动盘
 http://giteaz:3000/bal/bal/src/branch/fridaAnlzAp/app/qemu-linux4/bldLinux4RunOnBochs/readme.md
 
+ 
+##### qemu下的linux4终端 人工正常关机 
+
+```shell
+/busybox-i686 ls /proc
+#正常显示了各种进程id目录
+
+/busybox-i686 ps auxf
+#正常显示进程列表
+```
+
+```shell
+/busybox-i686 poweroff -f 
+#正常关机了
+```
+
+
+
+##### qemu下的linux4  脚本正常关机 
+
 脚本关机 ```cat /bal/bldLinux4RunOnBochs/init``` : 
 ```shell
 #!/busybox-i686 ash
@@ -17,6 +37,7 @@ http://giteaz:3000/bal/bal/src/branch/fridaAnlzAp/app/qemu-linux4/bldLinux4RunOn
 /busybox-i686 mount -t sysfs none /sys
 exec /busybox-i686 ash -c "/busybox-i686 ls /proc ; /busybox-i686 ps auxf; /busybox-i686 ls /; /busybox-i686 poweroff -f;"
 ```
+
 
 
 ##### qemu运行linux
@@ -40,21 +61,7 @@ exec /busybox-i686 ash -c "/busybox-i686 ls /proc ; /busybox-i686 ps auxf; /busy
  
 
 
- 
-##### qemu下的linux4终端 正常关机 
 
-```shell
-/busybox-i686 ls /proc
-#正常显示了各种进程id目录
-
-/busybox-i686 ps auxf
-#正常显示进程列表
-```
-
-```shell
-/busybox-i686 poweroff -f 
-#正常关机了
-```
 
 ##### frida监控qemu运行linux4内核
 
