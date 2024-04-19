@@ -10,7 +10,13 @@ docker exec -it u22 bash
 ##### 编译linux4内核、制作启动盘
 http://giteaz:3000/bal/bal/src/branch/fridaAnlzAp/app/qemu-linux4/bldLinux4RunOnBochs/readme.md
 
-
+脚本关机 ```cat /bal/bldLinux4RunOnBochs/init``` : 
+```shell
+#!/busybox-i686 ash
+/busybox-i686 mount -t proc none /proc
+/busybox-i686 mount -t sysfs none /sys
+exec /busybox-i686 ash -c "/busybox-i686 ls /proc ; /busybox-i686 ps auxf; /busybox-i686 ls /; /busybox-i686 poweroff -f;"
+```
 
 
 ##### qemu运行linux
@@ -48,4 +54,11 @@ http://giteaz:3000/bal/bal/src/branch/fridaAnlzAp/app/qemu-linux4/bldLinux4RunOn
 ```shell
 /busybox-i686 poweroff -f 
 #正常关机了
+```
+
+##### frida监控qemu运行linux4内核
+
+
+```shell
+docker run --volume /bal/:/bal/  --volume /app/:/app/   --name   frida_anlz_ap  --hostname faa_dk --interactive --tty --detach  frida_anlz_ap:0.1_prv
 ```
