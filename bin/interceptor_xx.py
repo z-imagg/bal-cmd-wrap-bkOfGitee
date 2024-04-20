@@ -5,10 +5,10 @@
 
 import sys
 
-sys.path.append("/fridaAnlzAp/cmd-wrap/py_util")
-sys.path.append("/fridaAnlzAp/cmd-wrap/entity")
-sys.path.append("/fridaAnlzAp/cmd-wrap/bin")
-sys.path.append("/fridaAnlzAp/cmd-wrap")
+sys.path.append("/app/cmd-wrap/py_util")
+sys.path.append("/app/cmd-wrap/entity")
+sys.path.append("/app/cmd-wrap/bin")
+sys.path.append("/app/cmd-wrap")
 
 from basic_cmd import BasicCmd
 import os
