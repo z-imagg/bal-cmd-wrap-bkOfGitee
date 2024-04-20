@@ -100,7 +100,7 @@ ln -s ${interceptorx} ${clangxxF}
 
 
 echo "显示目前的入口者们"
-ls -lh /usr/bin/{gcc,g++,c++,cmake,make,clang,clang++}
+ls -lh /usr/bin/{gcc,g++,cc,c++,cmake,make,clang,clang++}
 
 echo "显示目前的原始命令们"
 ls -lh /usr/bin/*origin*
