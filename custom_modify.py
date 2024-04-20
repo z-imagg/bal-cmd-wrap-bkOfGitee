@@ -64,7 +64,7 @@ def customModify_CompilerArgv_gcc(  fileAtCmd:CxxCmd,argv:typing.List[str],origi
 def customModify_CompilerArgv_cc(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
     curFrm:types.FrameType=inspect.currentframe()
     # 参数Argv中-Werror替换为-Wno-error
-    # 参数Argv中-O2替换为-O1
+    # 参数Argv中-O2替换为-O0
     # 参数Argv中-g替换为-g1
     Argv=ArgvReplace_Multi(argv,cc_optModify_ls)
     return Argv

@@ -19,8 +19,8 @@ blank:OptName=""
 cc_optModify_ls:typing.List[OptModify]=[
 #如果参数中含有-Werror , 将删除之.
 OptModify(oldOpt=Werror,newOpt=blank),
-#如果参数中含有-O2 , 将其替换为 -O1
-OptModify(oldOpt=O2,newOpt=O1),
+#如果参数中含有-O2 , 将其替换为 -O0
+OptModify(oldOpt=O2,newOpt=O0),
 #如果参数中含有-g , 将其替换为 -g1
 OptModify(oldOpt=g,newOpt=g1),
 ]
