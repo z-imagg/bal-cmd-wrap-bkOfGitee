@@ -13,6 +13,7 @@ def __NoneStr2Empty__(string: str):
 def __NoneOrLenEq0__(x:Any):
     return x is None or len(x) == 0
 
+#删除列表中None元素、或""
 def __list_filter_NoneEle_emptyStrEle__(ls:List[Any])->List[Any]:
     if ls is None or len(ls) == 0 : return ls
     filter_=filter(lambda elemK: not( elemK is None or (type(elemK) == str and len(elemK) == 0) ), ls)

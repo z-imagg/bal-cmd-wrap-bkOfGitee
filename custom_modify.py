@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1, ArgvReplace
+from argv_process import ArgvRemoveWerror, ArgvReplace_Multi, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1, ArgvReplace
 from basic_cmd import BasicCmd
 from py_util.LsUtil import lsDelNone, lsStartWith
 from cxx_cmd import CxxCmd
@@ -13,6 +13,7 @@ import typing
 import types
 from global_var import getGlbVarInst
 from route_tab import Prog,fake_cc,fake_cxx,fake_gcc,fake_clangxx,fake_clang,fake_cmake,fake_make
+from config import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls
 
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
 
@@ -51,51 +52,30 @@ def customModify_MakeToolArgv(  basicCmd:BasicCmd,argv:typing.List[str],originCm
 #客户对编译器命令gcc参数向量的修改
 def customModify_CompilerArgv_gcc(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
     curFrm:types.FrameType=inspect.currentframe()
-    
-    Argv:typing.List[str]=argv
-
     # 参数Argv中-Werror替换为-Wno-error
-    Argv = ArgvRemoveWerror(argv)
-
     # 参数Argv中-O2替换为-o1
-    Argv=ArgvReplace_O2As_O1(Argv)
-
     # 参数Argv中-g替换为-g1
-    Argv=ArgvReplace_gAs_g1(Argv)
+    Argv=ArgvReplace_Multi(argv,gcc_optModify_ls)
 
 
     return Argv
 
 #客户对编译器命令cc参数向量的修改
 def customModify_CompilerArgv_cc(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
-
     curFrm:types.FrameType=inspect.currentframe()
-
     # 参数Argv中-Werror替换为-Wno-error
-    Argv = ArgvRemoveWerror(argv)
-
     # 参数Argv中-O2替换为-O1
-    Argv=ArgvReplace(Argv,old='-O2',NEW='-O1')
-
     # 参数Argv中-g替换为-g1
-    Argv=ArgvReplace(Argv,old='-g',NEW='-g1')
-    
+    Argv=ArgvReplace_Multi(argv,cc_optModify_ls)
     return Argv
 
 #客户对编译器命令c++参数向量的修改
 def customModify_CompilerArgv_cxx(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
-
     curFrm:types.FrameType=inspect.currentframe()
-
     # 参数Argv中-Werror替换为-Wno-error
-    Argv = ArgvRemoveWerror(argv)
-
     # 参数Argv中-O2替换为-o1
-    Argv=ArgvReplace_O2As_O1(Argv)
-
     # 参数Argv中-g替换为-g1
-    Argv=ArgvReplace_gAs_g1(Argv)
-    
+    Argv=ArgvReplace_Multi(argv,cxx_optModify_ls)
     return Argv
 
 #客户对编译器命令clang参数向量的修改

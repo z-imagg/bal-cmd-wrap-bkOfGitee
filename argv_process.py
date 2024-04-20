@@ -3,6 +3,8 @@
 
 from typing import List
 from MiscUtil import __list_filter_NoneEle_emptyStrEle__
+import typing
+from config_base import OptModify
 
 #如果参数中含有-Werror , 将删除之.
 def ArgvRemoveWerror(Argv:List)->List:
@@ -55,4 +57,15 @@ def ArgvReplace_gAs_g1(Argv:List)->List:
 # 比如 'old==-g , NEW==-g1' == '如果参数中含有-g , 将其替换为 -g1'
 def ArgvReplace(Argv:List,old:str,NEW:str)->List:
     Argv_Out:List[str] = [NEW if argK == old else argK      for argK in Argv]
+    #删除列表中None元素、或""
+    Argv_Out = __list_filter_NoneEle_emptyStrEle__(Argv_Out)
     return Argv_Out
+
+#根据多个 '选项修改OptModify'定义 修改 Argv
+def ArgvReplace_Multi(Argv:List,optModify_ls:typing.List[OptModify])->List:
+    Argv_Out:List=Argv
+    for optModify in optModify_ls:
+        #按照配置替换选项
+        Argv_Out=ArgvReplace(Argv, old=optModify.oldOpt, NEW=optModify.newOpt)
+    return Argv_Out
+
