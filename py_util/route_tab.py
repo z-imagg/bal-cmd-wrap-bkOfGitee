@@ -44,6 +44,10 @@ fake_gxx=pathNorm(f"/usr/bin/g++") #编译器 入口者
 busz_gxx=pathNorm(f"/usr/bin/g++.origin") #编译器 业务者
 progMap[fake_gxx]   = Prog(fake_gxx,busz_gxx,Prog.ProgKind.Compiler)
 
+fake_cc=pathNorm(f"/usr/bin/cc") #编译器 入口者
+busz_cc=pathNorm(f"/usr/bin/cc.origin") #编译器 业务者
+progMap[fake_cc]     = Prog(fake_cc,busz_cc,Prog.ProgKind.Compiler) # 入口者 --> 业务者
+
 fake_cxx="/usr/bin/c++" #编译器 入口者
 busz_cxx=pathNorm(f"/usr/bin/c++.origin") #编译器 业务者  #  $(readlink -f /usr/bin/c++.origin) ==  /usr/bin/x86_64-linux-gnu-g++-11
 progMap[fake_cxx]     = Prog(fake_cxx,busz_cxx,Prog.ProgKind.Compiler) # 入口者 --> 业务者

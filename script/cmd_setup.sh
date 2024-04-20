@@ -40,6 +40,15 @@ declare -r gxxF="/usr/bin/g++"
 unlink ${gxxF}
 ln -s ${interceptorx} ${gxxF}  
 
+#构造原始cc命令 "/usr/bin/cc.origin"
+declare -r ccFO="/usr/bin/cc.origin"
+unlink ${ccFO}
+ln -s /usr/bin/x86_64-linux-gnu-gcc-11 ${ccFO}
+#使入口命令cc指向拦截器
+declare -r ccF="/usr/bin/cc"
+unlink ${ccF}
+ln -s   ${interceptorx} ${ccF} 
+
 #构造原始c++命令 "/usr/bin/c++.origin"
 declare -r cxxFO="/usr/bin/c++.origin"
 unlink ${cxxFO}
