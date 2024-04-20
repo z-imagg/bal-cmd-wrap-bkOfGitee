@@ -40,8 +40,6 @@ class GlbVar:
         self.progAbsPath:str= _getProgAbsPath(initCurDir=self.initCurDir,sysArgv0=sys.argv[0])
         self.fackProgAbsNormPath:str=pathNorm(self.progAbsPath)
 
-        self.buszProg:Prog=calcTrueProg(self.fackProgAbsNormPath)
-
         progAbsPth:Path=Path(self.progAbsPath)
         # progAbsPth=='/app/cmd-wrap/bin/gcc'
         # progName 为 真程序名
@@ -74,6 +72,17 @@ class GlbVar:
         sys.stdout.flush()
         sys.stderr.flush()
         sys.stdin.flush()
+
+        #记录日志calcTrueProg路由表遗漏异常， 方便排查问题，并继续抛出异常
+        try:
+            self.buszProg:Prog=calcTrueProg(self.fackProgAbsNormPath)
+        except Exception as exp:
+            import traceback
+            trace_ls:typing.List[str]=traceback.format_exception(exp)
+            traceLsTxt:str="\n".join(trace_ls)
+            _INFO_LOG(_LogFile=self.gLogF,en_dev_mode=self.en_dev_mode,curFrm=curFrm,_MSG=f"calcTrueProg异常【{traceLsTxt}】; initCurDir=【{self.initCurDir}】")
+            raise exp
+            
 
         #标记 全局变量初始化完毕
         self.initComplete:bool=True
