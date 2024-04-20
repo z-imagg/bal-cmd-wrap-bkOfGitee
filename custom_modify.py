@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1
+from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1, ArgvReplace
 from basic_cmd import BasicCmd
 from py_util.LsUtil import lsDelNone, lsStartWith
 from cxx_cmd import CxxCmd
@@ -74,11 +74,11 @@ def customModify_CompilerArgv_cc(  fileAtCmd:CxxCmd,argv:typing.List[str],origin
     # 参数Argv中-Werror替换为-Wno-error
     Argv = ArgvRemoveWerror(argv)
 
-    # 参数Argv中-O2替换为-o1
-    Argv=ArgvReplace_O2As_O1(Argv)
+    # 参数Argv中-O2替换为-O1
+    Argv=ArgvReplace(Argv,old='-O2',NEW='-O1')
 
     # 参数Argv中-g替换为-g1
-    Argv=ArgvReplace_gAs_g1(Argv)
+    Argv=ArgvReplace(Argv,old='-g',NEW='-g1')
     
     return Argv
 

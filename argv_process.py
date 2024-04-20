@@ -39,7 +39,7 @@ i686-linux-gnu-gcc -Wp,-MD,arch/x86/entry/.common.o.d -nostdinc -isystem /usr/li
 
 
 
-#如果参数中含有-O2 , 将其替换为 -o1.
+#如果参数中含有-O2 , 将其替换为 -O1.
 def ArgvReplace_O2As_O1(Argv:List)->List:
     Argv_Out:List[str] = ["-O1" if argK == "-O2" else argK      for argK in Argv]
     return Argv_Out
@@ -50,3 +50,9 @@ def ArgvReplace_gAs_g1(Argv:List)->List:
     Argv_Out:List[str] = ["-g1" if argK == "-g" else argK      for argK in Argv]
     return Argv_Out
 
+#如果参数中含有src , 将其替换为 target.
+# 比如 'old==-O2 , NEW==-O1' == '如果参数中含有-O2 , 将其替换为 -o1'
+# 比如 'old==-g , NEW==-g1' == '如果参数中含有-g , 将其替换为 -g1'
+def ArgvReplace(Argv:List,old:str,NEW:str)->List:
+    Argv_Out:List[str] = [NEW if argK == old else argK      for argK in Argv]
+    return Argv_Out
