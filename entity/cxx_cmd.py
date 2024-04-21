@@ -9,7 +9,7 @@ from MiscUtil import __NoneOrLenEq0__,__NoneStr2Empty__
 from basic_cmd import BasicCmd
 
 class CxxCmd(BasicCmd):
-
+    
     def __init__(self):
         super().__init__() # super().__init__() == BasicCmd.__init__(self=FileAtCmd.self)
         #判定源文件是否为/dev/null
@@ -21,6 +21,8 @@ class CxxCmd(BasicCmd):
         # -
         self.input_is_std_in: bool  = None
         self.stdInTxt:str=None
+        
+        self.src_file:str=None
 
 
 
