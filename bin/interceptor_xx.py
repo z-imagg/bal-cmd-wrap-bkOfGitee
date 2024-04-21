@@ -36,7 +36,7 @@ from CxxCmdParser import cxxCmdParse
 from LsUtil import lsDelNone,elmRmEqu_,neibEqu,neibGet,neighborRm2_,elmExistEqu
 from custom_modify import customModify_CompilerArgv, customModify_MakeToolArgv
 from IdUtil import genApproxId
-from PathUtil import _getProgAbsPath
+from PathUtil import _getProgAbsPath, filePathAppend_fName
 
 import os
 import time
@@ -92,7 +92,11 @@ except (BaseException|TypeError)  as bexp:
         bzCmdExitCd=-100
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
-
+    
+    #重命名日志文件：日志文件名末尾追加源文件名,提升可读性
+    if fileAtCmd.src_file is not None:
+        getGlbVarInst().logFPth=filePathAppend_fName(getGlbVarInst().logFPth,fileAtCmd.src_file)
+    
     if bzCmdExitCd is not None and bzCmdExitCd != 0 :
         #如果异常退出，则以软链接指向日志文件，方便排查错误
         logFPth:str=getGlbVarInst().logFPth
