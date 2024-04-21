@@ -93,15 +93,19 @@ except (BaseException|TypeError)  as bexp:
 finally:
     #不论以上 try业务块 发生什么异常，本finally块一定要执行。
     
+    realLogFPth=getGlbVarInst().logFPth
+    link_logFPth=getGlbVarInst().logFPth
+    
     #重命名日志文件：日志文件名末尾追加源文件名,提升可读性
     if fileAtCmd.src_file is not None:
-        getGlbVarInst().logFPth=filePathAppend_fName(getGlbVarInst().logFPth,fileAtCmd.src_file)
+        link_logFPth=filePathAppend_fName(realLogFPth,fileAtCmd.src_file)
     
     if bzCmdExitCd is not None and bzCmdExitCd != 0 :
         #如果异常退出，则以软链接指向日志文件，方便排查错误
-        logFPth:str=getGlbVarInst().logFPth
-        link_logFPth:str=f"{logFPth}--errorCode_{bzCmdExitCd}"
-        Path(link_logFPth).symlink_to(logFPth)
+        link_logFPth:str=f"{link_logFPth}--errorCode_{bzCmdExitCd}"
+        
+    if link_logFPth!=realLogFPth:
+        Path(link_logFPth).symlink_to(realLogFPth)
         
     #立即 将 stdio缓存 写出 ， 关闭日志文件
     flushStdCloseLogF()
