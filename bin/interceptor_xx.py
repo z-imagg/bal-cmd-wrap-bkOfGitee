@@ -97,7 +97,7 @@ finally:
         #如果异常退出，则以软链接指向日志文件，方便排查错误
         logFPth:str=getGlbVarInst().logFPth
         link_logFPth:str=f"{logFPth}--errorCode_{bzCmdExitCd}"
-        Path(link_logFPth).hardlink_to(logFPth)
+        Path(link_logFPth).symlink_to(logFPth)
         
     #立即 将 stdio缓存 写出 ， 关闭日志文件
     flushStdCloseLogF()
