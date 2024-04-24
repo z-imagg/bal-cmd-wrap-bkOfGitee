@@ -21,8 +21,9 @@ cc_optModify_ls:typing.List[OptModify]=[
 OptModify(oldOpt=Werror,newOpt=blank),
 #如果参数中含有-O2 , 将其替换为 -O0
 OptModify(oldOpt=O2,newOpt=O0),
-#如果参数中含有-g , 将其替换为 -g1
-OptModify(oldOpt=g,newOpt=g1),
+#如果参数中含有-g , 将其替换为 -g2
+OptModify(oldOpt=g,newOpt="-g2"),
+OptModify(oldOpt="-Wall",newOpt=blank),
 ]
 
 
