@@ -23,6 +23,7 @@ OptModify(oldOpt=Werror,newOpt=blank),
 OptModify(oldOpt=O2,newOpt=O0),
 #如果参数中含有-g , 将其替换为 -g1
 OptModify(oldOpt=g,newOpt=g1),
+OptModify(oldOpt="-Wall",newOpt=blank),
 ]
 
 
