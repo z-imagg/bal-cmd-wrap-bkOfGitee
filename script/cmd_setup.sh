@@ -33,70 +33,70 @@ chmod +x $interceptorx
 
 #构造原始g++命令 "/usr/bin/g++.origin"
 declare -r gxxFO="/usr/bin/g++.origin"
-unlink ${gxxFO}
-ln -s /usr/bin/x86_64-linux-gnu-g++-11 ${gxxFO}
+sudo unlink ${gxxFO}
+sudo ln -s /usr/bin/x86_64-linux-gnu-g++-11 ${gxxFO}
 #使入口命令g++指向拦截器
 declare -r gxxF="/usr/bin/g++"
-unlink ${gxxF}
-ln -s ${interceptorx} ${gxxF}  
+sudo unlink ${gxxF}
+sudo ln -s ${interceptorx} ${gxxF}  
 
 #构造原始cc命令 "/usr/bin/cc.origin"
 declare -r ccFO="/usr/bin/cc.origin"
-unlink ${ccFO}
-ln -s /usr/bin/x86_64-linux-gnu-gcc-11 ${ccFO}
+sudo unlink ${ccFO}
+sudo ln -s /usr/bin/x86_64-linux-gnu-gcc-11 ${ccFO}
 #使入口命令cc指向拦截器
 declare -r ccF="/usr/bin/cc"
-unlink ${ccF}
-ln -s   ${interceptorx} ${ccF} 
+sudo unlink ${ccF}
+sudo ln -s   ${interceptorx} ${ccF} 
 
 #构造原始c++命令 "/usr/bin/c++.origin"
 declare -r cxxFO="/usr/bin/c++.origin"
-unlink ${cxxFO}
-ln -s /usr/bin/x86_64-linux-gnu-g++-11 ${cxxFO}
+sudo unlink ${cxxFO}
+sudo ln -s /usr/bin/x86_64-linux-gnu-g++-11 ${cxxFO}
 #使入口命令c++指向拦截器
 declare -r cxxF="/usr/bin/c++"
-unlink ${cxxF}
-ln -s   ${interceptorx} ${cxxF} 
+sudo unlink ${cxxF}
+sudo ln -s   ${interceptorx} ${cxxF} 
 
 #构造原始gcc命令 "/usr/bin/gcc.origin"
 declare -r gccFO="/usr/bin/gcc.origin"
-unlink ${gccFO}
-ln -s /usr/bin/x86_64-linux-gnu-gcc-11 ${gccFO}
+sudo unlink ${gccFO}
+sudo ln -s /usr/bin/x86_64-linux-gnu-gcc-11 ${gccFO}
 #使入口命令gcc指向拦截器
 declare -r gccF="/usr/bin/gcc"
-unlink ${gccF}
-ln -s ${interceptorx} ${gccF}  
+sudo unlink ${gccF}
+sudo ln -s ${interceptorx} ${gccF}  
 
 #不拦截cmake
 #构造原始cmake命令 /usr/bin/cmake.origin
 # declare -r cmakeFO="/usr/bin/cmake.origin"
-# unlink ${cmakeFO}
-# ln -s /usr/bin/cmake  ${cmakeFO}
+# sudo unlink ${cmakeFO}
+# sudo ln -s /usr/bin/cmake  ${cmakeFO}
 #使入口命令cmake指向拦截器
 # declare -r cmakeF="/usr/bin/cmake"
-# ln -s ${interceptorx} ${cmakeF}   
+# sudo ln -s ${interceptorx} ${cmakeF}   
 
 #不拦截make
 #构造原始make命令 /usr/bin/make.origin
 # declare -r cmakeFO="/usr/bin/make.origin"
-# ln -s /usr/bin/make  ${cmakeFO}
+# sudo ln -s /usr/bin/make  ${cmakeFO}
 #使入口命令make指向拦截器
 # declare -r makeF="/usr/bin/make"
-# ln -s ${interceptorx} ${makeF} 
+# sudo ln -s ${interceptorx} ${makeF} 
 
 #构造原始clang命令  
 file /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang
 #使入口命令clang指向拦截器
 declare -r clangF="/usr/bin/clang"
-unlink ${clangF}
-ln -s ${interceptorx} ${clangF}  
+sudo unlink ${clangF}
+sudo ln -s ${interceptorx} ${clangF}  
 
 #构造原始clang++命令  
 file /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang++
 #使入口命令clang++指向拦截器
 declare -r clangxxF="/usr/bin/clang++"
-unlink ${clangxxF}
-ln -s ${interceptorx} ${clangxxF}  
+sudo unlink ${clangxxF}
+sudo ln -s ${interceptorx} ${clangxxF}  
 
 
 echo "显示目前的入口者们"
