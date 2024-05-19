@@ -30,13 +30,14 @@
 
         
         {
-            "name": "gcc【由interceptor_cxx伪装】",
+            "name": "gcc编译【由cmd_setup.sh使g++指向interceptor_xx】",
             "type": "debugpy",
             "request": "launch",
-            "program": "bin/gcc",
+            "program": "/usr/bin/gcc",
             "console": "integratedTerminal",
             "args": [  
 "-c", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
+"-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.o",
 "--__enable_develop_mode",
 "-g1"
 ],
@@ -45,6 +46,43 @@
             },
         },
         
+        {
+            "name": "gcc链接【由cmd_setup.sh使g++指向interceptor_xx】",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/usr/bin/gcc",
+            "console": "integratedTerminal",
+            "args": [  
+"/app/cmd-wrap/test_cxx_src/TestCxx01.o",
+"-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.elf",
+"--__enable_develop_mode"
+],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
+            },
+        },
+
+
+{  "name": "g++编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy",  "request": "launch", "program": "/usr/bin/g++",  "console": "integratedTerminal",
+"args": [  
+"-c", "/app/cmd-wrap/test_cxx_src/TestC02.cpp",
+"-o", "/app/cmd-wrap/test_cxx_src/TestC02.o",
+"--__enable_develop_mode",
+"-g1"
+],
+"env": { "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"  },
+},
+        
+{  "name": "g++链接【由cmd_setup.sh使g++指向interceptor_xx】",   "type": "debugpy",   "request": "launch", "program": "/usr/bin/g++", "console": "integratedTerminal",
+"args": [  
+"/app/cmd-wrap/test_cxx_src/TestC02.o",
+"-o", "/app/cmd-wrap/test_cxx_src/TestC02.elf",
+"--__enable_develop_mode"
+],
+"env": { "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"  },
+},
+
+
         {
             "name": "修bug【拦截器化身c++】",
             "type": "debugpy",
