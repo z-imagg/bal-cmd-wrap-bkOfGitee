@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# 【术语】 _cmdEatSrcF==command Eat Source File==吃源文件的命令==编译命令
+
 #apt install file uuid-runtime
 
 import sys
@@ -65,20 +67,22 @@ try:#try业务块
     #构建工具，不管有没有源文件都是要拦截的
     basicCmd:BasicCmd=None
     if inst.buszProg.kind == Prog.ProgKind.MakeTool:
+        assert basicCmd is None,"basicCmd初始必须是空.[1]"
         basicCmd=basicCmdParse()
         inst.Argv=customModify_MakeToolArgv(basicCmd=basicCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
 
 
     #编译命令
     if inst.buszProg.kind == Prog.ProgKind.Compiler:
+        assert basicCmd is None,"basicCmd初始必须是空.[2]"
         #编译命令解析
-        fileAtCmd:CxxCmd=cxxCmdParse()
-        basicCmd=fileAtCmd
+        _cmdEatSrcF:CxxCmd=cxxCmdParse()
+        basicCmd=_cmdEatSrcF
         #编译命令，无源文件时不拦截.   
-        care_srcF:bool=fileAtCmd.src_file is  not None and  (not fileAtCmd.srcFpIsDevNull ) and (not  fileAtCmd.has_m16 )  #假设只需要忽略/dev/null和-m16
+        care_srcF:bool=_cmdEatSrcF.src_file is  not None and  (not _cmdEatSrcF.srcFpIsDevNull ) and (not  _cmdEatSrcF.has_m16 )  #假设只需要忽略/dev/null和-m16
         if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
             #客户对编译器命令参数向量的修改
-            inst.Argv=customModify_CompilerArgv( fileAtCmd=fileAtCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+            inst.Argv=customModify_CompilerArgv( fileAtCmd=_cmdEatSrcF, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
         else:
             INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
@@ -97,8 +101,8 @@ finally:
     link_logFPth=getGlbVarInst().logFPth
     
     #重命名日志文件：日志文件名末尾追加源文件名,提升可读性
-    if fileAtCmd.src_file is not None:
-        link_logFPth=filePathAppend_fName(realLogFPth,fileAtCmd.src_file)
+    if _cmdEatSrcF.src_file is not None:
+        link_logFPth=filePathAppend_fName(realLogFPth,_cmdEatSrcF.src_file)
     
     if bzCmdExitCd is not None and bzCmdExitCd != 0 :
         #如果异常退出，则以软链接指向日志文件，方便排查错误
