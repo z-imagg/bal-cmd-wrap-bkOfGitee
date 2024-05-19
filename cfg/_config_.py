@@ -4,18 +4,12 @@
 #【术语】 opt==option==选项
 #【描述】 '命令选项修改逻辑'配置， 可在使用前根据需要修改
 
+from py_util import CallStackUtil
 import typing,types
-
-#  确保只能通过 'cfg/__init__.py' 导入 本文'cfg/_config_.py'
 import inspect
 _callStack:typing.List[types.FrameType]=inspect.stack()
-#   不关心调用栈中非本项目的'*.py'
-callStack:typing.List[types.FrameType]=list(filter(lambda s:s.filename  .startswith("/app/cmd-wrap/"), _callStack))
-assert callStack.__len__() >= 2, f"断言失败， 确保只能通过 'cfg/__init__.py' 导入 本文'cfg/_config_.py' . [1] . callStack=[{callStack}]"
-caller:types.FrameType=callStack[1]
-print(f"callStack=={callStack}")
-# 确保只能通过 'cfg/__init__.py' 导入 本文'cfg/_config_.py'
-assert caller.filename=='/app/cmd-wrap/cfg/__init__.py', f"断言失败， 确保只能通过 'cfg/__init__.py' 导入 本文'cfg/_config_.py' . [2] . caller.filename=[{caller.filename}]"
+#  确保只能通过 'cfg/__init__.py' 导入 本文'cfg/_config_.py'
+CallStackUtil.assert__CallStack_k_filename__Equal(_callStack,1,'/app/cmd-wrap/cfg/__init__.py')
 
 from cfg.config_base import OptName,OptModify,optModifyLs2Dict
 
