@@ -103,6 +103,10 @@ def customModify_CompilerArgv_clang(  fileAtCmd:CxxCmd,argv:typing.List[str],ori
     newArgv=ArgvReplace_Multi(newArgv,clang_optModify_ls)
     
     argv_ls:typing.List[typing.List[str]]=[ArgvAppendTxt_AfterProgram(newArgv,clang_plugin_txt_k) for clang_plugin_txt_k in clang_plugin_ls]
+    #argv_ls==[clang_VFIRPlugin_run, clang_Var_run]
+    
+    argv_ls.append(newArgv)
+    #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
     
     argvWrap:ArgvWrap=ArgvWrap.buildMultiArgv(argv_ls)
     return argvWrap
