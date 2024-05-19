@@ -60,6 +60,47 @@
 ],
 "env": {  "PYTHONPATH": "${python_path}"  },
 },
+//  运行 interceptor_xx.py 的 软链接clang （编译）
+{ "name": "gcc编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy", "request": "launch",  "program": "/usr/bin/clang", "console": "integratedTerminal",
+"args": [  
+"-c", "/app/cmd-wrap/test_cxx_src/TestC02.c",
+"-o", "/app/cmd-wrap/test_cxx_src/TestC02.o",
+"--__enable_develop_mode",
+"-g1"
+],
+ "env": { "PYTHONPATH": "${python_path}"  },
+},
+
+//  运行 interceptor_xx.py 的 软链接clang （链接）
+{ "name": "gcc链接【由cmd_setup.sh使g++指向interceptor_xx】", "type": "debugpy", "request": "launch", "program": "/usr/bin/clang", "console": "integratedTerminal",
+"args": [  
+"/app/cmd-wrap/test_cxx_src/TestC02.o",
+"-o", "/app/cmd-wrap/test_cxx_src/TestC02.elf",
+"--__enable_develop_mode"
+],
+"env": {  "PYTHONPATH": "${python_path}"  },
+},
+
+//  运行 interceptor_xx.py 的 软链接clang++ （编译）
+{  "name": "g++编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy",  "request": "launch", "program": "/usr/bin/clang++",  "console": "integratedTerminal",
+"args": [  
+"-c", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
+"-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.o",
+"--__enable_develop_mode",
+"-g1"
+],
+"env": {  "PYTHONPATH": "${python_path}" },
+},
+
+//  运行 interceptor_xx.py 的 软链接clang++ （链接）
+{  "name": "g++链接【由cmd_setup.sh使g++指向interceptor_xx】",   "type": "debugpy",   "request": "launch", "program": "/usr/bin/clang++", "console": "integratedTerminal",
+"args": [  
+"/app/cmd-wrap/test_cxx_src/TestCxx01.o",
+"-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.elf",
+"--__enable_develop_mode"
+],
+"env": {  "PYTHONPATH": "${python_path}"  },
+},
 
 //  （修bug）运行 interceptor_xx.py 的 软链接g++ （链接、链接）
 {  "name": "修bug【拦截器化身g++】", "type": "debugpy",  "request": "launch", "program": "/usr/bin/g++", "console": "integratedTerminal",
