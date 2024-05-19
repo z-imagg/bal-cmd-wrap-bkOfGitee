@@ -14,7 +14,7 @@ import typing
 import types
 from global_var import getGlbVarInst
 from route_tab import Prog,fake_cc,fake_cxx,fake_gcc,fake_gxx,fake_clangxx,fake_clang,fake_cmake,fake_make
-from config import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls
+from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls
 from ArgvWrap import ArgvWrap
 
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"

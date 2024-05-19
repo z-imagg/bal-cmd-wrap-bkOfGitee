@@ -7,6 +7,7 @@ from MiscUtil import __list_filter_NoneEle_emptyStrEle__
 import typing
 from StrUtil import txtSplitByBlankRmEmptyElem
 from config_base import OptModify
+from cfg.config_base import OptModify
 
 #如果参数中含有-Werror , 将删除之.
 def ArgvRemoveWerror(Argv:List)->List:

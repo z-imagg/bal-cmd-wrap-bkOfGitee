@@ -4,8 +4,18 @@
 #【术语】 opt==option==选项
 #【描述】 '命令选项修改逻辑'配置， 可在使用前根据需要修改
 
-import typing
-from config_base import OptName,OptModify,optModifyLs2Dict
+import typing,types
+
+import inspect
+_callStack:typing.List[types.FrameType]=inspect.stack()
+callStack:typing.List[types.FrameType]=list(filter(lambda s:s.filename  .startswith("/app/cmd-wrap/"), _callStack))
+assert callStack.__len__() >= 2
+caller:types.FrameType=callStack[1]
+print(f"callStack=={callStack}")
+# print(f"caller=={caller}")
+assert caller.filename=='/app/cmd-wrap/cfg/__init__.py'
+
+from cfg.config_base import OptName,OptModify,optModifyLs2Dict
 
 O2:OptName="-O2"
 O1:OptName="-O1"
@@ -66,5 +76,5 @@ clangxx_optModify_ls:typing.Dict[OptName,OptModify]=[
 clang_VFIRPlugin_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin "
 # clang插件VarPlugin, 待定，占位
 clang_Var_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVar.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
-clang_plugin_ls=[clang_VFIRPlugin_run, clang_Var_run]
-clangxx_plugin_ls=[clang_VFIRPlugin_run, clang_Var_run]
+clang_plugin_ls=[ ]
+clangxx_plugin_ls=[ ]

@@ -1,7 +1,7 @@
 //// 修改PYTHONPATH， 需要 重启vscode后 生效
 {
     "version": "0.2.0",
-    "python_path":"${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:",
+    "python_path":"/app/cmd-wrap/:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:",
     "configurations": [
         ////// bash调试
 // vscode安装扩展bash-debug以调试bash脚本
