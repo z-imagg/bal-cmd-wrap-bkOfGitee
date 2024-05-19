@@ -32,7 +32,7 @@ from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__, pproc
 from cxx_cmd import CxxCmd
 from route_tab import Prog, calcTrueProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
-from interceptor_util import execute_cmd,execute_script_file
+from interceptor_util import execute_cmd, execute_cmdLs,execute_script_file
 from CxxCmdParser import cxxCmdParse
 
 from LsUtil import lsDelNone,elmRmEqu_,neibEqu,neibGet,neighborRm2_,elmExistEqu
@@ -69,7 +69,7 @@ try:#try业务块
     if inst.buszProg.kind == Prog.ProgKind.MakeTool:
         assert basicCmd is None,"basicCmd初始必须是空.[1]"
         basicCmd=basicCmdParse()
-        inst.Argv=customModify_MakeToolArgv(basicCmd=basicCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+        inst.argvWrap=customModify_MakeToolArgv(basicCmd=basicCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
 
 
     #编译命令
@@ -82,13 +82,13 @@ try:#try业务块
         care_srcF:bool=_cmdEatSrcF.src_file is  not None and  (not _cmdEatSrcF.srcFpIsDevNull ) and (not  _cmdEatSrcF.has_m16 )  #假设只需要忽略/dev/null和-m16
         if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
             #客户对编译器命令参数向量的修改
-            inst.Argv=customModify_CompilerArgv( fileAtCmd=_cmdEatSrcF, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+            inst.argvWrap=customModify_CompilerArgv( fileAtCmd=_cmdEatSrcF, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
         else:
             INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     
-    #执行业务命令
-    bzCmdExitCd:int=execute_cmd(basicCmd.input_is_std_in,basicCmd.stdInTxt)
+    #执行业务命令(支持多条命令)
+    bzCmdExitCd:int=execute_cmdLs(basicCmd.input_is_std_in,basicCmd.stdInTxt)
 except (BaseException|TypeError)  as bexp:
     EXCEPT_LOG( curFrm, f"interceptor.py的try业务块异常",bexp)
     # raise bexp

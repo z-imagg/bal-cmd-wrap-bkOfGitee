@@ -5,6 +5,8 @@ import inspect
 from io import TextIOWrapper
 import types
 import typing
+from ArgvWrap import ArgvWrap
+from BuszCmd import BuszCmd
 from IdUtil import genApproxId
 from MiscUtil import _EXCEPT_LOG, _INFO_LOG
 from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1
@@ -58,6 +60,8 @@ class GlbVar:
         
         #Argv 初始值 为 ArgvClean，后续在拦截器中 可能会因 customModify 而被修改
         self.Argv:typing.List[str]=list(self.ArgvClean)
+        #argvWrap
+        self.argvWrap:ArgvWrap=None
 
         #初始化日志文件
         approxId:str=genApproxId()
@@ -128,18 +132,28 @@ def getProgAbsPath()->str:
      progAbsPth:str= _getProgAbsPath(initCurDir=inst.initCurDir,sysArgv0=inst.sysArgv0)
      return progAbsPth
 
-def getBuszCmd()->typing.Tuple[typing.List[str],str]:
+def getBuszCmdLs()->typing.List[BuszCmd]:
     inst = getGlbVarInst()
     
-    buszArgv:typing.List[str]=list(inst.Argv)
+    buszCmdLs:typing.List[BuszCmd]=[ getBuszCmd(ArgV_k,inst.buszProg) for ArgV_k in inst.argvWrap.ArgvLs]
     
-    buszArgv[0]=inst.buszProg.trueProg
+    return buszCmdLs
+
+
+def getBuszCmd(inst_Argv:typing.List[str],buszProg:Prog)->BuszCmd:
+    # inst = getGlbVarInst()
+    
+    buszArgv:typing.List[str]=list(inst_Argv)
+    
+    # buszArgv[0]=inst.buszProg.trueProg
+    buszArgv[0]=buszProg.trueProg
 
     buszCmd:str=' '.join(buszArgv)
     
     buszArgvFrom1=subLsFrom1(buszArgv)
     
-    return (buszArgv,buszCmd,inst.buszProg.trueProg,buszArgvFrom1)
+    # return (buszArgv,buszCmd,inst.buszProg.trueProg,buszArgvFrom1)
+    return BuszCmd(buszArgv,buszCmd,buszProg,buszArgvFrom1)
 
 #测试
 if __name__=="__main__":

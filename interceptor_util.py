@@ -5,6 +5,7 @@ import subprocess,sys
 from typing import List,Tuple
 import typing
 
+from BuszCmd import BuszCmd
 from datetime_util import getCurrNanoSeconds
 from pathlib import Path
 import inspect
@@ -17,7 +18,7 @@ from plumbum.machines.local import LocalCommand
 from plumbum.commands.base import BoundCommand
 import plumbum
 from MiscUtil import __NoneOrLenEq0__
-from global_var import calcTrueProg, getBuszCmd, getGlbVarInst,INFO_LOG
+from global_var import calcTrueProg, getBuszCmd, getBuszCmdLs, getGlbVarInst,INFO_LOG
 
 def execute_script_file(scriptFile:Path)->None:
     curFrm:types.FrameType=inspect.currentframe()
@@ -29,12 +30,28 @@ def execute_script_file(scriptFile:Path)->None:
 
     return
 
-
-def execute_cmd( input_is_std_in:bool,stdInTxt:str)->int:
+#执行业务命令(支持多条命令)
+def execute_cmdLs( input_is_std_in:bool,stdInTxt:str)->int:
     if input_is_std_in :
         assert stdInTxt is not None, "断言76"
     # inst=getGlbVarInst()
-    buszArgv,buszCmd,buszProg,buszArgvFrom1=getBuszCmd()
+    buszCmdLs:typing.List[BuszCmd]=getBuszCmdLs()
+    exitCodeLs:typing.List[int]=[]
+    exitCodeEnd:int=None
+    for k in buszCmdLs:
+        exitCode_k=execute_cmd(input_is_std_in, stdInTxt, k.buszArgv, k.buszCmd, k.buszProg.trueProg, k.buszArgvFrom1)
+        exitCodeEnd=exitCode_k
+        exitCodeLs.append(exitCode_k)
+
+    return exitCodeEnd
+
+
+
+
+def execute_cmd( input_is_std_in:bool,stdInTxt:str, buszArgv,buszCmd,buszProg,buszArgvFrom1)->int:
+    if input_is_std_in :
+        assert stdInTxt is not None, "断言76"
+    # inst=getGlbVarInst()
     curFrm:types.FrameType=inspect.currentframe()
     exitCode:int=None
     # INFO_LOG( curFrm, f"真实命令（数组Argv）:【{Argv}】")
@@ -83,5 +100,4 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str)->int:
         INFO_LOG(curFrm,f"真实命令错误输出【{err_out}】")
 
     return exitCode
-
 

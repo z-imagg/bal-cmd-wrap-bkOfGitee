@@ -8,15 +8,18 @@ class ArgvWrap:
     #     assert not multi and (Argv1toN is None or len(Argv1toN)==0)
     
     def __init__(self) -> None:
+        self.ArgvLs:typing.List[typing.List[str]]=None
         return
     
     @staticmethod
-    def buildSingleArgv(Argv:typing.List[str]):
-        inst=ArgvWrap()
-        inst.ArgvLs=[Argv]
+    def buildSingleArgv(Argv:typing.List[str])->'ArgvWrap':
+        obj=ArgvWrap()
+        obj.ArgvLs=[Argv]
+        return obj
         
         
     @staticmethod
-    def buildMultiArgv(ArgvLs:typing.List[typing.List[str]]):
-        inst=ArgvWrap()
-        inst.ArgvLs=ArgvLs
+    def buildMultiArgv(ArgvLs:typing.List[typing.List[str]])->'ArgvWrap':
+        obj=ArgvWrap()
+        obj.ArgvLs=ArgvLs
+        return obj
