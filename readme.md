@@ -46,6 +46,12 @@ $clangxx_origin -I $PrjClangVar_runtime__Hm/include/ -include runtime_cpp__vars_
 #运行 interceptor_xx.py 的 软链接clang++ （链接)
 $clangxx_origin   $PrjCmdWrap_test__Hm/TestCxx01.o   $PrjClangVar_runtime__Hm/runtime_cpp__vars_fn.o -o $PrjCmdWrap_test__Hm/TestCxx01.elf   -g1
 
+
+#正常编译出产物  $PrjCmdWrap_test__Hm/TestCxx01.elf 
+
+#运行产物， 为何没有出现destroy方法中的打印?
+$PrjCmdWrap_test__Hm/TestCxx01.elf
+
 ```
 
 
