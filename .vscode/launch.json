@@ -1,68 +1,41 @@
 //// 修改PYTHONPATH， 需要 重启vscode后 生效
-{
+{ //begin
     "version": "0.2.0",
     "python_path":"/app/cmd-wrap/:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:",
     "configurations": [
         ////// bash调试
 // vscode安装扩展bash-debug以调试bash脚本
 //      https://marketplace.visualstudio.com/items?itemName=rogalmic.bash-debug
-        {
-            "type": "bashdb",
-            "request": "launch",
-            "name": "Bash调试当前脚本",
-            "program": "${file}",
+{ "type": "bashdb", "request": "launch", "name": "Bash调试当前脚本",  "program": "${file}",
             // "terminalKind": "integrated", #此行可有可无
-        },
-        ////// python调试
-        //     interceptor_xx.py --__develop_mode  --__help
+},
 
-        {
-            "name": "interceptor_cxx 【固定参数】【废弃，因为不能直接运行拦截器】",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "interceptor_xx.py",
-            "console": "integratedTerminal",
-            "args": [  
+////// python调试
+//     interceptor_xx.py --__enable_develop_mode  --__help
+{ "name": "interceptor_cxx 【固定参数】【废弃，因为不能直接运行拦截器】", "type": "debugpy", "request": "launch", "program": "interceptor_xx.py", "console": "integratedTerminal",
+"args": [  
 ],
-            "env": {
-                "PYTHONPATH": "${python_path}"
-            },
-        },
-
+"env": { "PYTHONPATH": "${python_path}" },
+},
         
-        {
-            "name": "gcc编译【由cmd_setup.sh使g++指向interceptor_xx】",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "/usr/bin/gcc",
-            "console": "integratedTerminal",
-            "args": [  
+{ "name": "gcc编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy", "request": "launch",  "program": "/usr/bin/gcc", "console": "integratedTerminal",
+"args": [  
 "-c", "/app/cmd-wrap/test_cxx_src/TestC02.c",
 "-o", "/app/cmd-wrap/test_cxx_src/TestC02.o",
 "--__enable_develop_mode",
 "-g1"
 ],
-            "env": {
-                "PYTHONPATH": "${python_path}"
-            },
-        },
+ "env": { "PYTHONPATH": "${python_path}"  },
+},
         
-        {
-            "name": "gcc链接【由cmd_setup.sh使g++指向interceptor_xx】",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "/usr/bin/gcc",
-            "console": "integratedTerminal",
-            "args": [  
+{ "name": "gcc链接【由cmd_setup.sh使g++指向interceptor_xx】", "type": "debugpy", "request": "launch", "program": "/usr/bin/gcc", "console": "integratedTerminal",
+"args": [  
 "/app/cmd-wrap/test_cxx_src/TestC02.o",
 "-o", "/app/cmd-wrap/test_cxx_src/TestC02.elf",
 "--__enable_develop_mode"
 ],
-            "env": {
-                "PYTHONPATH": "${python_path}"
-            },
-        },
-
+"env": {  "PYTHONPATH": "${python_path}"  },
+},
 
 {  "name": "g++编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy",  "request": "launch", "program": "/usr/bin/g++",  "console": "integratedTerminal",
 "args": [  
@@ -71,8 +44,7 @@
 "--__enable_develop_mode",
 "-g1"
 ],
-"env": { 
-    "PYTHONPATH": "${python_path}" },
+"env": {  "PYTHONPATH": "${python_path}" },
 },
         
 {  "name": "g++链接【由cmd_setup.sh使g++指向interceptor_xx】",   "type": "debugpy",   "request": "launch", "program": "/usr/bin/g++", "console": "integratedTerminal",
@@ -81,25 +53,16 @@
 "-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.elf",
 "--__enable_develop_mode"
 ],
-"env": { 
-    "PYTHONPATH": "${python_path}"  },
+"env": {  "PYTHONPATH": "${python_path}"  },
 },
 
-
-        {
-            "name": "修bug【拦截器化身c++】",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "/usr/bin/g++",
-            "console": "integratedTerminal",
-            "args": [  
+{  "name": "修bug【拦截器化身c++】", "type": "debugpy",  "request": "launch", "program": "/usr/bin/g++", "console": "integratedTerminal",
+"args": [  
 "-Wl,-rpath", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
 "-o", "TestCxx01.elf"
 ],
-            "env": {
-                
-                "PYTHONPATH": "${python_path}"
-            },
-        },
-    ]
-}
+"env": { "PYTHONPATH": "${python_path}" },
+},
+
+] //end_of_'configurations'
+}//end
