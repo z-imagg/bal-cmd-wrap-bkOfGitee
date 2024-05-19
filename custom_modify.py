@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from StrUtil import txtSplitByBlankRmEmptyElem
 from argv_process import ArgvRemoveWerror, ArgvReplace_Multi, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1, ArgvReplace
 from basic_cmd import BasicCmd
 from py_util.LsUtil import lsDelNone, lsStartWith
@@ -13,7 +14,7 @@ import typing
 import types
 from global_var import getGlbVarInst
 from route_tab import Prog,fake_cc,fake_cxx,fake_gcc,fake_clangxx,fake_clang,fake_cmake,fake_make
-from config import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls
+from config import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_plugin_ls
 
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
 
@@ -80,9 +81,13 @@ def customModify_CompilerArgv_cxx(  fileAtCmd:CxxCmd,argv:typing.List[str],origi
 
 #客户对编译器命令clang参数向量的修改
 def customModify_CompilerArgv_clang(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
-    newArgv:typing.List[str]=argv
-    #请根据需要，自行编写 逻辑，实现 修改 clang编译命令参数向量argv 
-    return newArgv
+#     Clang_VFIRPlugin_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin "
+# CXXFLAGS=$Clang_VFIRPlugin_run
+# CFLAGS=$Clang_VFIRPlugin_run
+
+    Argv=txtSplitByBlankRmEmptyElem(clang_plugin_ls)
+
+    return Argv
 
 #客户对编译器命令clang++参数向量的修改
 def customModify_CompilerArgv_clangxx(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->typing.List[str]:
