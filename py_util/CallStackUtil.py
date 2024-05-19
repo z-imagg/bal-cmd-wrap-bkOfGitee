@@ -16,7 +16,7 @@ def assert__CallStack_k_filename__Equal(_callStack:typing.List[types.FrameType],
     callStack:typing.List[types.FrameType]=list(filter(lambda s:s.filename  .startswith("/app/cmd-wrap/"), _callStack))
     assert callStack.__len__() >= k+1, f"{errMsg} . [1] . callStack=[{callStack}]"
     caller:types.FrameType=callStack[k]
-    print(f"callStack=={callStack}")
+    # print(f"callStack=={callStack}")
     # 确保只能通过 'cfg/__init__.py' 导入 本文'cfg/_config_.py'
     assert caller.filename==filename, f"{errMsg} . [2] . caller.filename=[{caller.filename}]"
     #      '/app/cmd-wrap/cfg/__init__.py'
