@@ -1,5 +1,5 @@
-int main(char** argv, int argc){
+int main(int argc,char** argv){
     int num;
-    int ptr1=&num;
+    int * ptr1=&num;
     return 0;
 }
