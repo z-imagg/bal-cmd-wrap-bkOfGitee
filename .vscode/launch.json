@@ -20,7 +20,7 @@
 },
 
 //  运行 interceptor_xx.py 的 软链接gcc （编译）
-{ "name": "gcc编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy", "request": "launch",  "program": "/usr/bin/gcc", "console": "integratedTerminal",
+{ "name": "gcc编译【由cmd_setup.sh使gcc指向interceptor_xx】",  "type": "debugpy", "request": "launch",  "program": "/usr/bin/gcc", "console": "integratedTerminal",
 "args": [  
 "-c", "/app/cmd-wrap/test_cxx_src/TestC02.c",
 "-o", "/app/cmd-wrap/test_cxx_src/TestC02.o",
@@ -31,7 +31,7 @@
 },
 
 //  运行 interceptor_xx.py 的 软链接gcc （链接）
-{ "name": "gcc链接【由cmd_setup.sh使g++指向interceptor_xx】", "type": "debugpy", "request": "launch", "program": "/usr/bin/gcc", "console": "integratedTerminal",
+{ "name": "gcc链接【由cmd_setup.sh使gcc指向interceptor_xx】", "type": "debugpy", "request": "launch", "program": "/usr/bin/gcc", "console": "integratedTerminal",
 "args": [  
 "/app/cmd-wrap/test_cxx_src/TestC02.o",
 "-o", "/app/cmd-wrap/test_cxx_src/TestC02.elf",
@@ -61,7 +61,7 @@
 "env": {  "PYTHONPATH": "${python_path}"  },
 },
 //  运行 interceptor_xx.py 的 软链接clang （编译）
-{ "name": "gcc编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy", "request": "launch",  "program": "/usr/bin/clang", "console": "integratedTerminal",
+{ "name": "clang编译【由cmd_setup.sh使clang指向interceptor_xx】",  "type": "debugpy", "request": "launch",  "program": "/usr/bin/clang", "console": "integratedTerminal",
 "args": [  
 "-c", "/app/cmd-wrap/test_cxx_src/TestC02.c",
 "-o", "/app/cmd-wrap/test_cxx_src/TestC02.o",
@@ -72,7 +72,7 @@
 },
 
 //  运行 interceptor_xx.py 的 软链接clang （链接）
-{ "name": "gcc链接【由cmd_setup.sh使g++指向interceptor_xx】", "type": "debugpy", "request": "launch", "program": "/usr/bin/clang", "console": "integratedTerminal",
+{ "name": "clang链接【由cmd_setup.sh使clang指向interceptor_xx】", "type": "debugpy", "request": "launch", "program": "/usr/bin/clang", "console": "integratedTerminal",
 "args": [  
 "/app/cmd-wrap/test_cxx_src/TestC02.o",
 "-o", "/app/cmd-wrap/test_cxx_src/TestC02.elf",
@@ -82,7 +82,7 @@
 },
 
 //  运行 interceptor_xx.py 的 软链接clang++ （编译）
-{  "name": "g++编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy",  "request": "launch", "program": "/usr/bin/clang++",  "console": "integratedTerminal",
+{  "name": "clang++编译【由cmd_setup.sh使clang++指向interceptor_xx】",  "type": "debugpy",  "request": "launch", "program": "/usr/bin/clang++",  "console": "integratedTerminal",
 "args": [  
 "-c", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
 "-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.o",
@@ -93,7 +93,7 @@
 },
 
 //  运行 interceptor_xx.py 的 软链接clang++ （链接）
-{  "name": "g++链接【由cmd_setup.sh使g++指向interceptor_xx】",   "type": "debugpy",   "request": "launch", "program": "/usr/bin/clang++", "console": "integratedTerminal",
+{  "name": "clang++链接【由cmd_setup.sh使clang++指向interceptor_xx】",   "type": "debugpy",   "request": "launch", "program": "/usr/bin/clang++", "console": "integratedTerminal",
 "args": [  
 "/app/cmd-wrap/test_cxx_src/TestCxx01.o",
 "-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.elf",
