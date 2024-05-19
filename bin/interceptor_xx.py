@@ -91,7 +91,7 @@ try:#try业务块
     
     #执行业务命令(支持多条命令)
     bzCmdExitCd:int=execute_cmdLs(basicCmd.input_is_std_in,basicCmd.stdInTxt)
-except (BaseException|TypeError)  as bexp:
+except (BaseException,TypeError)  as bexp:
     EXCEPT_LOG( curFrm, f"interceptor.py的try业务块异常",bexp)
     # raise bexp
     if bzCmdExitCd is None:
