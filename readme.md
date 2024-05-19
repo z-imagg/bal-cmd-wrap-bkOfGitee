@@ -32,24 +32,19 @@ echo "clangxx_plugin_ls=[clang_VFIRPlugin_run, clang_Var_run]" | tee -a /app/cmd
 ```shell
 PrjClangVar__Hm=/fridaAnlzAp/clang-var/
 PrjClangVar_runtime__Hm=$PrjClangVar__Hm/runtime_cpp__vars_fn
+clangxx_origin=/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang++
+export PYTHONPATH="/app/cmd-wrap/:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
+PrjCmdWrap_test__Hm=/app/cmd-wrap/test_cxx_src
 
-export clangxx_origin=/app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang++
-
-#原始编译
+# 编译runtime
 $clangxx_origin -I $PrjClangVar_runtime__Hm/include/ -include runtime_cpp__vars_fn.h -c $PrjClangVar_runtime__Hm/runtime_cpp__vars_fn.cpp -o $PrjClangVar_runtime__Hm/runtime_cpp__vars_fn.o
 
-```
-
-```shell
-PrjClangVar_Hm=/fridaAnlzAp/clang-var/
-
-export PYTHONPATH="/app/cmd-wrap/:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
-
+#编译TestCxx01.cpp
 
 #运行 interceptor_xx.py 的 软链接clang++ （编译） == [执行clang_VFIRPlugin_run, 执行clang_Var_run, 执行原始clang命令]
-/usr/bin/clang++ -c /app/cmd-wrap/test_cxx_src/TestCxx01.cpp -o /app/cmd-wrap/test_cxx_src/TestCxx01.o --__enable_develop_mode -g1
+/usr/bin/clang++ -c $PrjCmdWrap_test__Hm/TestCxx01.cpp -o $PrjCmdWrap_test__Hm/TestCxx01.o --__enable_develop_mode -g1
 #运行 interceptor_xx.py 的 软链接clang++ （链接)
-/usr/bin/clang   /app/cmd-wrap/test_cxx_src/TestCxx01.o   $PrjClangVar_runtime__Hm/runtime_cpp__vars_fn.o -o /app/cmd-wrap/test_cxx_src/TestCxx01.elf --__enable_develop_mode -g1
+$clangxx_origin   $PrjCmdWrap_test__Hm/TestCxx01.o   $PrjClangVar_runtime__Hm/runtime_cpp__vars_fn.o -o $PrjCmdWrap_test__Hm/TestCxx01.elf   -g1
 
 ```
 
