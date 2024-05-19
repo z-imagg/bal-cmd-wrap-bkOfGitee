@@ -13,7 +13,7 @@ import inspect
 import typing
 import types
 from global_var import getGlbVarInst
-from route_tab import Prog,fake_cc,fake_cxx,fake_gcc,fake_clangxx,fake_clang,fake_cmake,fake_make
+from route_tab import Prog,fake_cc,fake_cxx,fake_gcc,fake_gxx,fake_clangxx,fake_clang,fake_cmake,fake_make
 from config import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls
 from ArgvWrap import ArgvWrap
 
@@ -26,6 +26,8 @@ def customModify_CompilerArgv(  fileAtCmd:CxxCmd,argv:typing.List[str], originCm
     fakeProg:str=prog.fakeProg
     if fakeProg==fake_gcc:
         return customModify_CompilerArgv_gcc(fileAtCmd=fileAtCmd, argv=argv,originCmdHuman=originCmdHuman)
+    if fakeProg==fake_gxx:
+        return customModify_CompilerArgv_gxx(fileAtCmd=fileAtCmd, argv=argv,originCmdHuman=originCmdHuman)
     if fakeProg==fake_cc:
         return customModify_CompilerArgv_cc(fileAtCmd=fileAtCmd, argv=argv,originCmdHuman=originCmdHuman)
     if fakeProg==fake_cxx:
@@ -61,6 +63,17 @@ def customModify_CompilerArgv_gcc(  fileAtCmd:CxxCmd,argv:typing.List[str],origi
     
     argvWrap:ArgvWrap=ArgvWrap.buildSingleArgv(Argv)
 
+    return argvWrap
+
+
+#客户对编译器命令g++参数向量的修改
+def customModify_CompilerArgv_gxx(  fileAtCmd:CxxCmd,argv:typing.List[str],originCmdHuman:str )->ArgvWrap:
+    curFrm:types.FrameType=inspect.currentframe()
+    # 参数Argv中-Werror替换为-Wno-error
+    # 参数Argv中-O2替换为-o1
+    # 参数Argv中-g替换为-g1
+    Argv=ArgvReplace_Multi(argv,cxx_optModify_ls)
+    argvWrap:ArgvWrap=ArgvWrap.buildSingleArgv(Argv)
     return argvWrap
 
 #客户对编译器命令cc参数向量的修改
