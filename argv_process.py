@@ -74,8 +74,8 @@ def ArgvReplace_Multi(Argv:List,optModify_ls:typing.List[OptModify])->List:
 
 #Argv中紧挨程序名后插入一段文本
 def ArgvAppendTxt_AfterProgram(Argv:List,txt:str)->List:
-    Argv_Out:List=Argv
+    Argv_Out:List[str]=Argv
     args_append:List[str]=txtSplitByBlankRmEmptyElem(txt)
     assert Argv_Out is not None and Argv_Out.__len__() >= 1 ,"Argv至少有1个元素，才能在下标1后插入新元素"
-    Argv_Out.insert(1,args_append)
-    return Argv_Out
+    new_Argv_Out:List[str]=[*Argv_Out[:1],*args_append,*Argv_Out[1:]]
+    return new_Argv_Out
