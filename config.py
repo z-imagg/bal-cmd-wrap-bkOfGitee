@@ -56,12 +56,15 @@ OptModify(oldOpt=g,newOpt=g1),
 #如果参数中含有-Werror , 将删除之.
 ]
 
+clang_optModify_ls:typing.Dict[OptName,OptModify]=[
+]
+
+clangxx_optModify_ls:typing.Dict[OptName,OptModify]=[
+]
+
 #clang插件VFIRPlugin
 clang_VFIRPlugin_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin "
 # clang插件VarPlugin, 待定，占位
 clang_Var_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVar.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
-clang_plugin_ls=[
-clang_VFIRPlugin_run
-, clang_Var_run
-]
-
+clang_plugin_ls=[clang_VFIRPlugin_run, clang_Var_run]
+clangxx_plugin_ls=[clang_VFIRPlugin_run, clang_Var_run]
