@@ -5,4 +5,8 @@
 from cfg._config_ import *
 
 
-import cfg.my_config
+try:
+    import cfg.my_config
+except (Exception) as e:
+    print("无自定义配置(my_config.py)，可忽略")
+    pass

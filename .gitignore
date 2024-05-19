@@ -20,3 +20,5 @@ bin/clang++
 bin/cmake
 bin/make
 TestCxx01.o
+
+cfg/my_config.py
