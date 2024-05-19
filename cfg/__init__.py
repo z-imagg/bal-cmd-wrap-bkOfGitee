@@ -6,7 +6,7 @@ from cfg._config_ import *
 
 
 try:
-    import cfg.my_config
+    from cfg.my_config import *
 except (Exception) as e:
     print("无自定义配置(my_config.py)，可忽略")
     pass

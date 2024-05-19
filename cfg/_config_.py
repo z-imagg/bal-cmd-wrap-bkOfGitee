@@ -73,5 +73,3 @@ clangxx_optModify_ls:typing.Dict[OptName,OptModify]=[
 clang_VFIRPlugin_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin "
 # clang插件VarPlugin, 待定，占位
 clang_Var_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVar.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
-clang_plugin_ls=[ ]
-clangxx_plugin_ls=[ ]
