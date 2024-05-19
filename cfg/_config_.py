@@ -9,7 +9,8 @@ import typing,types
 import inspect
 _callStack:typing.List[types.FrameType]=inspect.stack()
 #  确保只能通过 'cfg/__init__.py' 导入 本文'cfg/_config_.py'
-CallStackUtil.assert__CallStack_k_filename__Equal(_callStack,1,'/app/cmd-wrap/cfg/__init__.py')
+errMsg="断言失败， 确保只能通过 'cfg/__init__.py' 导入 本文'cfg/_config_.py'"
+CallStackUtil.assert__CallStack_k_filename__Equal(_callStack,1,'/app/cmd-wrap/cfg/__init__.py',errMsg)
 
 from cfg.config_base import OptName,OptModify,optModifyLs2Dict
 
