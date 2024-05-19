@@ -37,7 +37,7 @@ def customModify_CompilerArgv(  fileAtCmd:CxxCmd,argv:typing.List[str], originCm
     if fakeProg==fake_clangxx:
         return customModify_CompilerArgv_clangxx(fileAtCmd=fileAtCmd, argv=argv,originCmdHuman=originCmdHuman)
     
-    raise f"异常，不可识别的prog{fakeProg}"
+    raise Exception(f"异常，不可识别的prog{fakeProg}")
 
 #客户对构建工具命令参数向量的修改
 def customModify_MakeToolArgv(  basicCmd:BasicCmd,argv:typing.List[str],originCmdHuman:str, prog:Prog)->typing.List[str]:
@@ -49,7 +49,7 @@ def customModify_MakeToolArgv(  basicCmd:BasicCmd,argv:typing.List[str],originCm
     if fakeProg==fake_make:
         return customModify_MakeToolArgv_make(basicCmd=basicCmd,argv=argv,originCmdHuman=originCmdHuman)
     
-    raise f"异常，不可识别的prog{fakeProg}"
+    raise Exception(f"异常，不可识别的prog{fakeProg}")
     
 ##############以下是可以自由修改的拦截器逻辑
     
