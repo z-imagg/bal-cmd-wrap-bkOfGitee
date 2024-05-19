@@ -1,6 +1,7 @@
 //// 修改PYTHONPATH， 需要 重启vscode后 生效
 {
     "version": "0.2.0",
+    "python_path":"${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:",
     "configurations": [
         ////// bash调试
 // vscode安装扩展bash-debug以调试bash脚本
@@ -24,7 +25,7 @@
             "args": [  
 ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
+                "PYTHONPATH": "${python_path}"
             },
         },
 
@@ -36,13 +37,13 @@
             "program": "/usr/bin/gcc",
             "console": "integratedTerminal",
             "args": [  
-"-c", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
-"-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.o",
+"-c", "/app/cmd-wrap/test_cxx_src/TestC02.c",
+"-o", "/app/cmd-wrap/test_cxx_src/TestC02.o",
 "--__enable_develop_mode",
 "-g1"
 ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
+                "PYTHONPATH": "${python_path}"
             },
         },
         
@@ -53,33 +54,35 @@
             "program": "/usr/bin/gcc",
             "console": "integratedTerminal",
             "args": [  
-"/app/cmd-wrap/test_cxx_src/TestCxx01.o",
-"-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.elf",
+"/app/cmd-wrap/test_cxx_src/TestC02.o",
+"-o", "/app/cmd-wrap/test_cxx_src/TestC02.elf",
 "--__enable_develop_mode"
 ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
+                "PYTHONPATH": "${python_path}"
             },
         },
 
 
 {  "name": "g++编译【由cmd_setup.sh使g++指向interceptor_xx】",  "type": "debugpy",  "request": "launch", "program": "/usr/bin/g++",  "console": "integratedTerminal",
 "args": [  
-"-c", "/app/cmd-wrap/test_cxx_src/TestC02.cpp",
-"-o", "/app/cmd-wrap/test_cxx_src/TestC02.o",
+"-c", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
+"-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.o",
 "--__enable_develop_mode",
 "-g1"
 ],
-"env": { "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"  },
+"env": { 
+    "PYTHONPATH": "${python_path}" },
 },
         
 {  "name": "g++链接【由cmd_setup.sh使g++指向interceptor_xx】",   "type": "debugpy",   "request": "launch", "program": "/usr/bin/g++", "console": "integratedTerminal",
 "args": [  
-"/app/cmd-wrap/test_cxx_src/TestC02.o",
-"-o", "/app/cmd-wrap/test_cxx_src/TestC02.elf",
+"/app/cmd-wrap/test_cxx_src/TestCxx01.o",
+"-o", "/app/cmd-wrap/test_cxx_src/TestCxx01.elf",
 "--__enable_develop_mode"
 ],
-"env": { "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"  },
+"env": { 
+    "PYTHONPATH": "${python_path}"  },
 },
 
 
@@ -87,14 +90,15 @@
             "name": "修bug【拦截器化身c++】",
             "type": "debugpy",
             "request": "launch",
-            "program": "bin/gcc",
+            "program": "/usr/bin/g++",
             "console": "integratedTerminal",
             "args": [  
 "-Wl,-rpath", "/app/cmd-wrap/test_cxx_src/TestCxx01.cpp",
-"-o", "TestCxx01.0"
+"-o", "TestCxx01.elf"
 ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}:/app/cmd-wrap/py_util/:/app/cmd-wrap/entity/:"
+                
+                "PYTHONPATH": "${python_path}"
             },
         },
     ]
