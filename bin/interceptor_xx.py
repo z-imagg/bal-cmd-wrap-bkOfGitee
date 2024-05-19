@@ -12,6 +12,7 @@ sys.path.append("/app/cmd-wrap/entity")
 sys.path.append("/app/cmd-wrap/bin")
 sys.path.append("/app/cmd-wrap")
 
+from ArgvWrap import ArgvWrap
 from basic_cmd import BasicCmd
 import os
 import errno
@@ -84,6 +85,7 @@ try:#try业务块
             #客户对编译器命令参数向量的修改
             inst.argvWrap=customModify_CompilerArgv( fileAtCmd=_cmdEatSrcF, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
         else:
+            inst.argvWrap=ArgvWrap.buildSingleArgv(inst.Argv)
             INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     
