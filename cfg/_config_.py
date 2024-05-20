@@ -80,5 +80,6 @@ runtime__clang_Var__include="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/includ
 runtime__clang_Var__staticLib="/fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
 
 # clang++插件VarPlugin 运行时
-runtime__clangxx_Var__include="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.h"
+runtime__clangxx_Var__include="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.hpp"
 runtime__clangxx_Var__staticLib="/fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a"
+#   TODO 对于 '/app/dillo-browser--dillo' 来说  libclangPlgVar_runtime_cxx.a 中的函数是 c++的abi样式, 但 runtime_cpp__vars_fn.h 中的函数 被当成了 c语言样式, 因此对不上
