@@ -30,9 +30,21 @@ def cxxCmdParse()->CxxCmd:
     srcFp1:str=neibGet(inst.AArgvClean,"-c")
     #   'gcc  x.c y.c z.c'  ， 有'x.c中含有main函数, 输出为可执行文件a.out',  这里srcFp2=='x.c'
     srcFp2:str=elmEndWithAny(inst.AArgvClean,suffixLs=[".c",".cpp",".cxx"])
-    srcFp:str=elm1stNotNone([srcFp1,srcFp2])
-    if srcFp1 is None and srcFp2 is not None:
+    
+    # 获得源文件路径 判定 
+    srcFp:str=None
+    #   -c 后面跟的若是 *.类c ，则拿到源文件名
+    if  srcFp1 is not None and elmEndWithAny( [srcFp1],suffixLs=[".c",".cpp",".cxx"]) is not None:
+        srcFp=srcFp1
+    elif srcFp2 is not None:
+    #   否则 若整个编译命令中 的 *.类c 作为 源文件名
+        srcFp=srcFp2
+        
+    #   源文件名 srcFp 可能为None
+        
+    
     #编译命令中无'-c' 但又有源文件， 即 该命令是 编译+链接
+    if ( not elmExistEqu(inst.AArgvClean,"-c") ) and   srcFp2 is not None:
         INFO_LOG( curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
         
     if srcFp2 in ["conftest.c","conftest.cpp"]:
