@@ -14,7 +14,7 @@ import typing
 import types
 from global_var import getGlbVarInst
 from route_tab import Prog,fake_cc,fake_cxx,fake_gcc,fake_gxx,fake_clangxx,fake_clang,fake_cmake,fake_make
-from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls
+from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,runtime__clang_Var
 from ArgvWrap import ArgvWrap
 
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
@@ -102,9 +102,10 @@ def customModify_CompilerArgv_clang(  fileAtCmd:CxxCmd,argv:typing.List[str],ori
     
     newArgv=ArgvReplace_Multi(newArgv,clang_optModify_ls)
     
-    argv_ls:typing.List[typing.List[str]]=[ArgvAppendTxt_AfterProgram(newArgv,clang_plugin_txt_k) for clang_plugin_txt_k in clang_plugin_ls]
+    argv_ls:typing.List[typing.List[str]]=[ArgvAppendTxt_AfterProgram(newArgv,plgK) for plgK in clang_plugin_ls]
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run]
-    
+    # 添加 clang插件VarPlugin 运行时
+    newArgv=ArgvAppendTxt_AfterProgram(newArgv,runtime__clang_Var)
     argv_ls.append(newArgv)
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
     
@@ -117,7 +118,13 @@ def customModify_CompilerArgv_clangxx(  fileAtCmd:CxxCmd,argv:typing.List[str],o
     #请根据需要，自行编写 逻辑，实现 修改 clang++编译命令参数向量argv 
         
     newArgv=ArgvReplace_Multi(newArgv,clangxx_optModify_ls)
-    argv_ls:typing.List[typing.List[str]]=[ArgvAppendTxt_AfterProgram(newArgv,clang_plugin_txt_k) for clang_plugin_txt_k in clangxx_plugin_ls]
+    
+    argv_ls:typing.List[typing.List[str]]=[ArgvAppendTxt_AfterProgram(newArgv,plgK) for plgK in clangxx_plugin_ls]
+    #argv_ls==[clang_VFIRPlugin_run, clang_Var_run]
+    # 添加 clang插件VarPlugin 运行时
+    newArgv=ArgvAppendTxt_AfterProgram(newArgv,runtime__clang_Var)
+    argv_ls.append(newArgv)
+    #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
     
     argvWrap:ArgvWrap=ArgvWrap.buildMultiArgv(argv_ls)
     return argvWrap
