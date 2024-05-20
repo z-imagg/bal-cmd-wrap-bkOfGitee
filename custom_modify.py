@@ -6,7 +6,7 @@ from argv_process import ArgvAppendTxt_AfterProgram, ArgvRemoveWerror, ArgvRepla
 from basic_cmd import BasicCmd
 from py_util.LsUtil import lsDelNone, lsStartWith
 from cxx_cmd import CxxCmd
-from interceptor_util import execute_cmd
+from interceptor_util import execute_BCmd
 from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__
 from global_var import INFO_LOG,EXCEPT_LOG
 import inspect

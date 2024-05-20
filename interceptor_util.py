@@ -5,7 +5,7 @@ import subprocess,sys
 from typing import List,Tuple
 import typing
 
-from BuszCmd import BuszCmd
+from BuszCmd import BCmd
 from datetime_util import getCurrNanoSeconds
 from pathlib import Path
 import inspect
@@ -31,15 +31,15 @@ def execute_script_file(scriptFile:Path)->None:
     return
 
 #执目命令(支持多条命令)
-def execute_cmdLs( input_is_std_in:bool,stdInTxt:str)->int:
+def execute_BCmdLs( input_is_std_in:bool,stdInTxt:str)->int:
     if input_is_std_in :
         assert stdInTxt is not None, "断言76"
     # inst=getGlbVarInst()
-    BCmdLs:typing.List[BuszCmd]=getBCmdLs()
+    BCmdLs:typing.List[BCmd]=getBCmdLs()
     exitCodeLs:typing.List[int]=[]
     exitCodeEnd:int=None
     for k in BCmdLs:
-        exitCode_k=execute_cmd(input_is_std_in, stdInTxt, k.BArgv, k.BCmd, k.BProg.BProg, k.BArgvFrom1)
+        exitCode_k=execute_BCmd(input_is_std_in, stdInTxt, k.BArgv, k.BCmd, k.BProg.BProg, k.BArgvFrom1)
         exitCodeEnd=exitCode_k
         exitCodeLs.append(exitCode_k)
 
@@ -48,7 +48,7 @@ def execute_cmdLs( input_is_std_in:bool,stdInTxt:str)->int:
 
 
 
-def execute_cmd( input_is_std_in:bool,stdInTxt:str, BArgv,BCmd,BProgName,BArgvFrom1)->int:
+def execute_BCmd( input_is_std_in:bool,stdInTxt:str, BArgv,BCmd,BProgName,BArgvFrom1)->int:
     if input_is_std_in :
         assert stdInTxt is not None, "断言76"
     # inst=getGlbVarInst()

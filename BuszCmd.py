@@ -1,7 +1,8 @@
 import typing
 
+#【术语】 trueProg == 真程序 == buszProg == 业务程序 == 目的程序 == 目程序 == 目命令, true_==真_==业务_==busz_==目的_==目_==B_
 from route_tab import Prog
-class BuszCmd:
+class BCmd:
     def __init__(self,BArgv:typing.List[str], BCmd:str,BProg:Prog,BArgvFrom1:typing.List[str]) -> None:
         
         self.BArgv:typing.List[str]=BArgv

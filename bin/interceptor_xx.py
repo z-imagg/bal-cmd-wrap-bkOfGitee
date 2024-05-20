@@ -33,7 +33,7 @@ from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__, pproc
 from cxx_cmd import CxxCmd
 from route_tab import Prog, calcBProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
-from interceptor_util import execute_cmd, execute_cmdLs,execute_script_file
+from interceptor_util import execute_BCmd, execute_BCmdLs,execute_script_file
 from CxxCmdParser import cxxCmdParse
 
 from LsUtil import lsDelNone,elmRmEqu_,neibEqu,neibGet,neighborRm2_,elmExistEqu
@@ -62,13 +62,14 @@ curFrm:types.FrameType=inspect.currentframe()
 
 
 exitCodePlg:int = None
-bzCmdExitCd:int = None
+bCmdExitCd:int = None
 try:#try目块
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】, 父进程完成命令行【{pprocess_cmd()}】")
     #构建工具，不管有没有源文件都是要拦截的
     basicCmd:BasicCmd=None
     if inst.BProg.kind == Prog.ProgKind.MakeTool:
         assert basicCmd is None,"basicCmd初始必须是空.[1]"
+        #基本命令解析
         basicCmd=basicCmdParse()
         inst.BArgvWrap=modifyAArgv_MakeTool(basicCmd=basicCmd, argv=inst.AArgv, originCmdHuman=inst.originCmdHuman, prog=inst.BProg)
 
@@ -89,13 +90,13 @@ try:#try目块
             INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     
-    #执行目命令(支持多条命令)
-    bzCmdExitCd:int=execute_cmdLs(basicCmd.input_is_std_in,basicCmd.stdInTxt)
+    #BArgvWrap转为BCmdLs， 并执行BCmdLs
+    bCmdExitCd:int=execute_BCmdLs(basicCmd.input_is_std_in,basicCmd.stdInTxt)
 except (BaseException,TypeError)  as bexp:
     EXCEPT_LOG( curFrm, f"interceptor.py的try目块异常",bexp)
     # raise bexp
-    if bzCmdExitCd is None:
-        bzCmdExitCd=-100
+    if bCmdExitCd is None:
+        bCmdExitCd=-100
 finally:
     #不论以上 try目块 发生什么异常，本finally块一定要执行。
     
@@ -106,9 +107,9 @@ finally:
     if _cmdEatSrcF.src_file is not None:
         link_logFPth=filePathAppend_fName(realLogFPth,_cmdEatSrcF.src_file)
     
-    if bzCmdExitCd is not None and bzCmdExitCd != 0 :
+    if bCmdExitCd is not None and bCmdExitCd != 0 :
         #如果异常退出，则以软链接指向日志文件，方便排查错误
-        link_logFPth:str=f"{link_logFPth}--errorCode_{bzCmdExitCd}"
+        link_logFPth:str=f"{link_logFPth}--errorCode_{bCmdExitCd}"
         
     if link_logFPth!=realLogFPth:
         Path(link_logFPth).symlink_to(realLogFPth)
@@ -117,7 +118,7 @@ finally:
     flushStdCloseLogF()
 
     #以目命令的退出代码退出
-    exit(bzCmdExitCd)
+    exit(bCmdExitCd)
 
 #拦截过程 结束}
 
