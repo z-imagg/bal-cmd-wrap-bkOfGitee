@@ -18,16 +18,16 @@ import time
 def cxxCmdParse()->CxxCmd:
     inst=getGlbVarInst()
     curFrm:types.FrameType=inspect.currentframe()
-    gccCmdHum:str=" ".join(inst.ArgvClean)
+    gccCmdHum:str=" ".join(inst.AArgvClean)
 
     fac:CxxCmd=CxxCmd()
 
     #判定源文件是否为/dev/null
-    fac.srcFpIsDevNull=neibEqu(inst.ArgvClean, "-c", "/dev/null")
+    fac.srcFpIsDevNull=neibEqu(inst.AArgvClean, "-c", "/dev/null")
     
     #获得源文件路径
-    srcFp1:str=neibGet(inst.ArgvClean,"-c")
-    srcFp2:str=elmEndWithAny(inst.ArgvClean,suffixLs=[".c",".cpp",".cxx"])
+    srcFp1:str=neibGet(inst.AArgvClean,"-c")
+    srcFp2:str=elmEndWithAny(inst.AArgvClean,suffixLs=[".c",".cpp",".cxx"])
     srcFp:str=elm1stNotNone([srcFp1,srcFp2])
     if srcFp1 is None and srcFp2 is not None:
         INFO_LOG( curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
@@ -38,7 +38,7 @@ def cxxCmdParse()->CxxCmd:
     fac.src_file = srcFp
 
     #是否有选项 -m16
-    fac.has_m16=elmExistEqu(inst.ArgvClean, "-m16")
+    fac.has_m16=elmExistEqu(inst.AArgvClean, "-m16")
 
     INFO_LOG(curFrm,f"'简易'即将解析文本singleGccCmd：【{gccCmdHum}】")
     INFO_LOG(curFrm,f"命令中的源文件相关字段为:{fac.__str__()}")

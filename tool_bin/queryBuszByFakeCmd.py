@@ -23,7 +23,7 @@ def main_cmd():
 
     buszProgName= None
     if  prog is not None :
-        trueProgAbsPth:str=prog.trueProg
+        trueProgAbsPth:str=prog.BProg
         existed= Path(trueProgAbsPth).exists()
         existedMsg="『存』" if existed else "『无』"
         buszProgName=f"【{trueProgAbsPth}{existedMsg}】"

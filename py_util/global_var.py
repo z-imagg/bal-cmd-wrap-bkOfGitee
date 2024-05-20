@@ -5,7 +5,7 @@ import inspect
 from io import TextIOWrapper
 import types
 import typing
-from ArgvWrap import ArgvWrap
+from ArgvWrap import BArgvWrapT
 from BuszCmd import BuszCmd
 from IdUtil import genApproxId
 from MiscUtil import _EXCEPT_LOG, _INFO_LOG
@@ -16,7 +16,7 @@ from pathlib import Path
 import sys
 from LsUtil import elmExistEqu, elmRmEqu_, lsDelNone, neighborRm2_, subLsFrom1
 from PathUtil import pathNorm
-from route_tab import Prog, calcTrueProg
+from route_tab import Prog, calcBProg
 import os
 from pathlib import Path
 
@@ -39,15 +39,15 @@ class GlbVar:
         self.ArgvOriginCopy:typing.List[str]=list(sys.argv)
 
         #构造 路径相关变量
-        self.progAbsPath:str= _getProgAbsPath(initCurDir=self.initCurDir,sysArgv0=sys.argv[0])
-        self.fackProgAbsNormPath:str=pathNorm(self.progAbsPath)
+        self.AProgAbsPath:str= _getProgAbsPath(initCurDir=self.initCurDir,sysArgv0=sys.argv[0])
+        self.AProgAbsNormPath:str=pathNorm(self.AProgAbsPath)
 
-        progAbsPth:Path=Path(self.progAbsPath)
+        AProgAbsPth:Path=Path(self.AProgAbsPath)
         # progAbsPth=='/app/cmd-wrap/bin/gcc'
-        # progName 为 真程序名
-        self.progName:str=progAbsPth.name
+        # progName 为 源命令名
+        self.AProgName:str=AProgAbsPth.name
         # progName=='gcc'
-        self.scriptDir:Path=progAbsPth.parent
+        self.scriptDir:Path=AProgAbsPth.parent
         # scriptDir==/app/cmd-wrap/bin
         self.prjDir:str="/app/cmd-wrap"
         # prjDir==/app/cmd-wrap/
@@ -55,17 +55,17 @@ class GlbVar:
 
 
         #ArgvClean ==  原始参数向量 - 传递给本拦截器 的参数  
-        self.ArgvClean:typing.List[str]=lsDelNone(list(sys.argv))
-        self.en_dev_mode:bool=elmRmEqu_(self.ArgvClean,"--__enable_develop_mode")
+        self.AArgvClean:typing.List[str]=lsDelNone(list(sys.argv))
+        self.en_dev_mode:bool=elmRmEqu_(self.AArgvClean,"--__enable_develop_mode")
         
         #Argv 初始值 为 ArgvClean，后续在拦截器中 可能会因 customModify 而被修改
-        self.Argv:typing.List[str]=list(self.ArgvClean)
+        self.AArgv:typing.List[str]=list(self.AArgvClean)
         #argvWrap
-        self.argvWrap:ArgvWrap=None
+        self.BArgvWrap:BArgvWrapT=None
 
         #初始化日志文件
         approxId:str=genApproxId()
-        self.logFPth=f"/tmp/{self.progName}-{approxId}.log"
+        self.logFPth=f"/tmp/{self.AProgName}-{approxId}.log"
         assert not Path(self.logFPth).exists(), f"断言1, 本进程独享的日志文件 必须没人用过. {self.logFPth}"
         self.gLogF:TextIOWrapper = open(self.logFPth, "a") #append(追加地写入)模式打开文件
 
@@ -79,7 +79,7 @@ class GlbVar:
 
         #记录日志calcTrueProg路由表遗漏异常， 方便排查问题，并继续抛出异常
         try:
-            self.buszProg:Prog=calcTrueProg(self.fackProgAbsNormPath)
+            self.BProg:Prog=calcBProg(self.AProgAbsNormPath)
         except Exception as exp:
             import traceback
             trace_ls:typing.List[str]=traceback.format_exception(exp)
@@ -132,28 +132,28 @@ def getProgAbsPath()->str:
      progAbsPth:str= _getProgAbsPath(initCurDir=inst.initCurDir,sysArgv0=inst.sysArgv0)
      return progAbsPth
 
-def getBuszCmdLs()->typing.List[BuszCmd]:
+def getBCmdLs()->typing.List[BuszCmd]:
     inst = getGlbVarInst()
     
-    buszCmdLs:typing.List[BuszCmd]=[ getBuszCmd(ArgV_k,inst.buszProg) for ArgV_k in inst.argvWrap.ArgvLs]
+    buszCmdLs:typing.List[BuszCmd]=[ getBCmd(ArgV_k,inst.BProg) for ArgV_k in inst.BArgvWrap.ArgvLs]
     
     return buszCmdLs
 
 
-def getBuszCmd(inst_Argv:typing.List[str],buszProg:Prog)->BuszCmd:
+def getBCmd(AArgv:typing.List[str],BProg:Prog)->BuszCmd:
     # inst = getGlbVarInst()
     
-    buszArgv:typing.List[str]=list(inst_Argv)
+    BArgv:typing.List[str]=list(AArgv)
     
     # buszArgv[0]=inst.buszProg.trueProg
-    buszArgv[0]=buszProg.trueProg
+    BArgv[0]=BProg.BProg
 
-    buszCmd:str=' '.join(buszArgv)
+    BCmd:str=' '.join(BArgv)
     
-    buszArgvFrom1=subLsFrom1(buszArgv)
+    BArgvFrom1=subLsFrom1(BArgv)
     
     # return (buszArgv,buszCmd,inst.buszProg.trueProg,buszArgvFrom1)
-    return BuszCmd(buszArgv,buszCmd,buszProg,buszArgvFrom1)
+    return BuszCmd(BArgv,BCmd,BProg,BArgvFrom1)
 
 #测试
 if __name__=="__main__":

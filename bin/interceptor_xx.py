@@ -12,7 +12,7 @@ sys.path.append("/app/cmd-wrap/entity")
 sys.path.append("/app/cmd-wrap/bin")
 sys.path.append("/app/cmd-wrap")
 
-from ArgvWrap import ArgvWrap
+from ArgvWrap import BArgvWrapT
 from basic_cmd import BasicCmd
 import os
 import errno
@@ -31,13 +31,13 @@ from pathlib import Path
 
 from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__, pprocess_cmd
 from cxx_cmd import CxxCmd
-from route_tab import Prog, calcTrueProg
+from route_tab import Prog, calcBProg
 from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_cmd, execute_cmdLs,execute_script_file
 from CxxCmdParser import cxxCmdParse
 
 from LsUtil import lsDelNone,elmRmEqu_,neibEqu,neibGet,neighborRm2_,elmExistEqu
-from custom_modify import customModify_CompilerArgv, customModify_MakeToolArgv
+from custom_modify import modifyAArgv_Compiler, modifyAArgv_MakeTool
 from IdUtil import genApproxId
 from PathUtil import _getProgAbsPath, filePathAppend_fName
 
@@ -67,14 +67,14 @@ try:#try目块
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】, 父进程完成命令行【{pprocess_cmd()}】")
     #构建工具，不管有没有源文件都是要拦截的
     basicCmd:BasicCmd=None
-    if inst.buszProg.kind == Prog.ProgKind.MakeTool:
+    if inst.BProg.kind == Prog.ProgKind.MakeTool:
         assert basicCmd is None,"basicCmd初始必须是空.[1]"
         basicCmd=basicCmdParse()
-        inst.argvWrap=customModify_MakeToolArgv(basicCmd=basicCmd, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+        inst.BArgvWrap=modifyAArgv_MakeTool(basicCmd=basicCmd, argv=inst.AArgv, originCmdHuman=inst.originCmdHuman, prog=inst.BProg)
 
 
     #编译命令
-    if inst.buszProg.kind == Prog.ProgKind.Compiler:
+    if inst.BProg.kind == Prog.ProgKind.Compiler:
         assert basicCmd is None,"basicCmd初始必须是空.[2]"
         #编译命令解析
         _cmdEatSrcF:CxxCmd=cxxCmdParse()
@@ -83,9 +83,9 @@ try:#try目块
         care_srcF:bool=_cmdEatSrcF.src_file is  not None and  (not _cmdEatSrcF.srcFpIsDevNull ) and (not  _cmdEatSrcF.has_m16 )  #假设只需要忽略/dev/null和-m16
         if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
             #客户对编译器命令参数向量的修改
-            inst.argvWrap=customModify_CompilerArgv( fileAtCmd=_cmdEatSrcF, argv=inst.Argv, originCmdHuman=inst.originCmdHuman, prog=inst.buszProg)
+            inst.BArgvWrap=modifyAArgv_Compiler( cmdEatF=_cmdEatSrcF, argv=inst.AArgv, originCmdHuman=inst.originCmdHuman, prog=inst.BProg)
         else:
-            inst.argvWrap=ArgvWrap.buildSingleArgv(inst.Argv)
+            inst.BArgvWrap=BArgvWrapT.buildSingleArgv(inst.AArgv)
             INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     

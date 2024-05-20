@@ -18,7 +18,7 @@ from plumbum.machines.local import LocalCommand
 from plumbum.commands.base import BoundCommand
 import plumbum
 from MiscUtil import __NoneOrLenEq0__
-from global_var import calcTrueProg, getBuszCmd, getBuszCmdLs, getGlbVarInst,INFO_LOG
+from global_var import calcBProg, getBCmd, getBCmdLs, getGlbVarInst,INFO_LOG
 
 def execute_script_file(scriptFile:Path)->None:
     curFrm:types.FrameType=inspect.currentframe()
@@ -35,11 +35,11 @@ def execute_cmdLs( input_is_std_in:bool,stdInTxt:str)->int:
     if input_is_std_in :
         assert stdInTxt is not None, "断言76"
     # inst=getGlbVarInst()
-    buszCmdLs:typing.List[BuszCmd]=getBuszCmdLs()
+    BCmdLs:typing.List[BuszCmd]=getBCmdLs()
     exitCodeLs:typing.List[int]=[]
     exitCodeEnd:int=None
-    for k in buszCmdLs:
-        exitCode_k=execute_cmd(input_is_std_in, stdInTxt, k.buszArgv, k.buszCmd, k.buszProg.trueProg, k.buszArgvFrom1)
+    for k in BCmdLs:
+        exitCode_k=execute_cmd(input_is_std_in, stdInTxt, k.BArgv, k.BCmd, k.BProg.BProg, k.BArgvFrom1)
         exitCodeEnd=exitCode_k
         exitCodeLs.append(exitCode_k)
 
@@ -48,7 +48,7 @@ def execute_cmdLs( input_is_std_in:bool,stdInTxt:str)->int:
 
 
 
-def execute_cmd( input_is_std_in:bool,stdInTxt:str, buszArgv,buszCmd,buszProg,buszArgvFrom1)->int:
+def execute_cmd( input_is_std_in:bool,stdInTxt:str, BArgv,BCmd,BProgName,BArgvFrom1)->int:
     if input_is_std_in :
         assert stdInTxt is not None, "断言76"
     # inst=getGlbVarInst()
@@ -57,14 +57,14 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str, buszArgv,buszCmd,buszProg,bu
     # INFO_LOG( curFrm, f"真实命令（数组Argv）:【{Argv}】")
     #命令内容写入文件，方便问题查找.
     # _cmdReceived:str=' '.join(Argv)
-    INFO_LOG( curFrm, f"构造出目命令:【{buszCmd}】")
+    INFO_LOG( curFrm, f"构造出目命令:【{BCmd}】")
 
     #TODO 环境变量实验 执行命令时，带入 当前进程的环境变量 到 被执行的命令中？
     # 调用真实命令，
     retCode: int; std_out: str; err_out: str
     if input_is_std_in:
         #本python进程的标准输入 给到 真实命令进程 的 标准输入
-        p:subprocess.Popen = subprocess.Popen(buszArgv,
+        p:subprocess.Popen = subprocess.Popen(BArgv,
           stdin=subprocess.PIPE,  #这里的stdin填写PIPE， 则进程p的标准输入 通过p.communicate的入参input传入
           stdout=subprocess.PIPE, #若这里的stdout不填，  则进程p的标准输出 直接打印到 控制台
                                   #若这里的stdout填PIPE，则进程p的标准输出 通过 p.communicate 返回
@@ -79,10 +79,10 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str, buszArgv,buszCmd,buszProg,bu
         exitCode=p.returncode
         INFO_LOG(curFrm,f"标准输入为:【{stdin_str}】")
     else:
-        real_prog:LocalCommand=local[buszProg]
+        BProg:LocalCommand=local[BProgName]
         # argLs=Argv[1:] if len(Argv) > 1 else []
-        real_cmd:BoundCommand=real_prog[buszArgvFrom1]
-        exitCode, std_out, err_out = real_cmd.run(retcode=None)
+        BCmd:BoundCommand=BProg[BArgvFrom1]
+        exitCode, std_out, err_out = BCmd.run(retcode=None)
 
     # import ipdb; ipdb.set_trace()
 
