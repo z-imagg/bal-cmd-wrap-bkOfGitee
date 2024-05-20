@@ -33,6 +33,9 @@ def cxxCmdParse()->CxxCmd:
     srcFp:str=elm1stNotNone([srcFp1,srcFp2])
     if srcFp1 is None and srcFp2 is not None:
         INFO_LOG( curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
+        if srcFp2=="conftest.c":
+            srcFp2_txt:str=Path(srcFp2).read_text()
+            INFO_LOG( curFrm, f"疑似编译器测试，gccCmdHum=【{gccCmdHum}】, srcFp2=【{srcFp2}], srcFp2文件内容=【{srcFp2_txt}】")
 
     if fac.input_is_std_in:
         assert srcFp is None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？gccCmdHum=【{gccCmdHum}】，ArgvOriginCopy=【{inst.ArgvOriginCopy}】,srcFp1=【{srcFp1}】，srcFp2=【{srcFp2}】，srcFp=【{srcFp}】,stdInTxt=『{fac.stdInTxt}』"
