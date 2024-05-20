@@ -5,7 +5,7 @@ import subprocess,sys
 from typing import List,Tuple
 import typing
 
-from BuszCmd import BCmd
+from BuszCmd import BCmdT
 from datetime_util import getCurrNanoSeconds
 from pathlib import Path
 import inspect
@@ -35,7 +35,7 @@ def execute_BCmdLs( input_is_std_in:bool,stdInTxt:str)->int:
     if input_is_std_in :
         assert stdInTxt is not None, "断言76"
     # inst=getGlbVarInst()
-    BCmdLs:typing.List[BCmd]=getBCmdLs()
+    BCmdLs:typing.List[BCmdT]=getBCmdLs()
     exitCodeLs:typing.List[int]=[]
     exitCodeEnd:int=None
     for k in BCmdLs:

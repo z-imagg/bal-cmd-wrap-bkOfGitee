@@ -6,7 +6,7 @@ from io import TextIOWrapper
 import types
 import typing
 from ArgvWrap import BArgvWrapT
-from BuszCmd import BCmd
+from BuszCmd import BCmdT
 from IdUtil import genApproxId
 from MiscUtil import _EXCEPT_LOG, _INFO_LOG
 from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1
@@ -132,15 +132,15 @@ def getProgAbsPath()->str:
      progAbsPth:str= _getProgAbsPath(initCurDir=inst.initCurDir,sysArgv0=inst.sysArgv0)
      return progAbsPth
 
-def getBCmdLs()->typing.List[BCmd]:
+def getBCmdLs()->typing.List[BCmdT]:
     inst = getGlbVarInst()
     
-    bCmdLs:typing.List[BCmd]=[ getBCmd(ArgV_k,inst.BProg) for ArgV_k in inst.BArgvWrap.ArgvLs]
+    bCmdLs:typing.List[BCmdT]=[ getBCmd(ArgV_k,inst.BProg) for ArgV_k in inst.BArgvWrap.ArgvLs]
     
     return bCmdLs
 
 
-def getBCmd(AArgv:typing.List[str],BProg:Prog)->BCmd:
+def getBCmd(AArgv:typing.List[str],BProg:Prog)->BCmdT:
     # inst = getGlbVarInst()
     
     BArgv:typing.List[str]=list(AArgv)
@@ -153,7 +153,7 @@ def getBCmd(AArgv:typing.List[str],BProg:Prog)->BCmd:
     BArgvFrom1=subLsFrom1(BArgv)
     
     # return (buszArgv,buszCmd,inst.buszProg.trueProg,buszArgvFrom1)
-    return BCmd(BArgv,BCmd,BProg,BArgvFrom1)
+    return BCmdT(BArgv,BCmd,BProg,BArgvFrom1)
 
 #测试
 if __name__=="__main__":
