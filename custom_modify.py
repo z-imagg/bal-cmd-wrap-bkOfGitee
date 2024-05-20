@@ -14,7 +14,7 @@ import typing
 import types
 from global_var import getGlbVarInst
 from route_tab import Prog,A_cc,A_cxx,A_gcc,A_gxx,A_clangxx,A_clang,A_cmake,A_make
-from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,runtime__clang_Var__include,runtime__clang_Var__staticLib,runtime__clangxx_Var
+from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,runtime__clang_Var__include,runtime__clang_Var__staticLib,runtime__clangxx_Var__include,runtime__clangxx_Var__staticLib
 from ArgvWrap import BArgvWrapT
 
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
@@ -125,7 +125,11 @@ def modifyAArgv_Compiler_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCm
     argv_ls:typing.List[typing.List[str]]=[ArgvAppendTxt_AfterProgram(newArgv,plgK) for plgK in clangxx_plugin_ls]
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run]
     # 添加 clang插件VarPlugin 运行时
-    newArgv=ArgvAppendTxt_AfterProgram(newArgv,runtime__clangxx_Var)
+    #   clangPlgVar的c运行时头文件
+    newArgv=ArgvAppendTxt_AfterProgram(newArgv,runtime__clangxx_Var__include)
+    #   clangPlgVar的c++运行时静态库. 
+    #      不需要, 因为 这里是 编译 x.cpp 时, 提供头文件即可， 不用提供函数实现 runtime__clangxx_Var__staticLib. (链接时才需要提供函数实现, 这里不是链接)
+    # newArgv=ArgvAppendTxt(newArgv,runtime__clangxx_Var__staticLib) . 这句. 
     argv_ls.append(newArgv)
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
     

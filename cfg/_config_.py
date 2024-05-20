@@ -80,4 +80,5 @@ runtime__clang_Var__include="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/includ
 runtime__clang_Var__staticLib="/fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
 
 # clang++插件VarPlugin 运行时
-runtime__clangxx_Var="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.h"
+runtime__clangxx_Var__include="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.h"
+runtime__clangxx_Var__staticLib="/fridaAnlzAp/clang-var/runtime_cpp__vars_fn/build/libclangPlgVar_runtime_cxx.a"

@@ -31,8 +31,8 @@ from pathlib import Path
 
 from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__, pprocess_cmd
 from cxx_cmd import CxxCmd
-from route_tab import Prog, calcBProg
-from argv_process import ArgvRemoveWerror,ArgvReplace_O2As_O1
+from route_tab import A_clang, A_clangxx, Prog, calcBProg
+from argv_process import ArgvAppendTxt, ArgvRemoveWerror,ArgvReplace_O2As_O1
 from interceptor_util import execute_BCmd, execute_BCmdLs,execute_script_file
 from CxxCmdParser import cxxCmdParse
 
@@ -45,6 +45,7 @@ import os
 import time
 import shutil
 from BasicCmdParser import basicCmdParse
+from cfg import runtime__clang_Var__staticLib,runtime__clangxx_Var__staticLib
 
 
 
@@ -86,6 +87,17 @@ try:#try目块
             #客户对编译器命令参数向量的修改
             inst.BArgvWrap=modifyAArgv_Compiler( cmdEatF=_cmdEatSrcF, argv=inst.AArgv, originCmdHuman=inst.originCmdHuman, prog=inst.BProg)
         else:
+            if _cmdEatSrcF.hasLink():
+            #当为链接时，需要提供clang插件用到的运行时静态库
+                fakeProg:str=inst.BProg.AProg
+                if fakeProg==A_clang:
+                    #   clangPlgVar的c运行时静态库
+                    inst.AArgv=ArgvAppendTxt(inst.AArgv,runtime__clang_Var__staticLib)
+                if fakeProg==A_clangxx:
+                    #   clangPlgVar的c++运行时静态库. 
+                    inst.AArgv=ArgvAppendTxt(inst.AArgv,runtime__clangxx_Var__staticLib)
+
+            #构建单命令
             inst.BArgvWrap=BArgvWrapT.buildSingleArgv(inst.AArgv)
             INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
