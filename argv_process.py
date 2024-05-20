@@ -79,3 +79,11 @@ def ArgvAppendTxt_AfterProgram(Argv:List,txt:str)->List:
     assert Argv_Out is not None and Argv_Out.__len__() >= 1 ,"Argv至少有1个元素，才能在下标1后插入新元素"
     new_Argv_Out:List[str]=[*Argv_Out[:1],*args_append,*Argv_Out[1:]]
     return new_Argv_Out
+
+
+#Argv末尾插入一段文本
+def ArgvAppendTxt(Argv:List,txt:str)->List:
+    Argv_Out:List[str]=Argv
+    args_append:List[str]=txtSplitByBlankRmEmptyElem(txt)
+    new_Argv_Out:List[str]=[*Argv_Out,*args_append]
+    return new_Argv_Out

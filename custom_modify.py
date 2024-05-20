@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from StrUtil import txtSplitByBlankRmEmptyElem
-from argv_process import ArgvAppendTxt_AfterProgram, ArgvRemoveWerror, ArgvReplace_Multi, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1, ArgvReplace
+from argv_process import ArgvAppendTxt_AfterProgram,ArgvAppendTxt, ArgvRemoveWerror, ArgvReplace_Multi, ArgvReplace_O2As_O1, ArgvReplace_gAs_g1, ArgvReplace
 from basic_cmd import BasicCmd
 from py_util.LsUtil import lsDelNone, lsStartWith
 from cxx_cmd import CxxCmd
@@ -14,7 +14,7 @@ import typing
 import types
 from global_var import getGlbVarInst
 from route_tab import Prog,A_cc,A_cxx,A_gcc,A_gxx,A_clangxx,A_clang,A_cmake,A_make
-from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,runtime__clang_Var,runtime__clangxx_Var
+from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,runtime__clang_Var__include,runtime__clang_Var__staticLib,runtime__clangxx_Var
 from ArgvWrap import BArgvWrapT
 
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
@@ -105,7 +105,10 @@ def modifyAArgv_Compiler_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],originCmd
     argv_ls:typing.List[typing.List[str]]=[ArgvAppendTxt_AfterProgram(newArgv,plgK) for plgK in clang_plugin_ls]
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run]
     # 添加 clang插件VarPlugin 运行时
-    newArgv=ArgvAppendTxt_AfterProgram(newArgv,runtime__clang_Var)
+    #   clangPlgVar的c运行时头文件
+    newArgv=ArgvAppendTxt_AfterProgram(newArgv,runtime__clang_Var__include)
+    #   clangPlgVar的c运行时静态库
+    newArgv=ArgvAppendTxt(newArgv,runtime__clang_Var__staticLib)
     argv_ls.append(newArgv)
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
     
