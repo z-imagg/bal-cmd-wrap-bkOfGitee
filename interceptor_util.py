@@ -30,7 +30,7 @@ def execute_script_file(scriptFile:Path)->None:
 
     return
 
-#执行业务命令(支持多条命令)
+#执目命令(支持多条命令)
 def execute_cmdLs( input_is_std_in:bool,stdInTxt:str)->int:
     if input_is_std_in :
         assert stdInTxt is not None, "断言76"
@@ -57,7 +57,7 @@ def execute_cmd( input_is_std_in:bool,stdInTxt:str, buszArgv,buszCmd,buszProg,bu
     # INFO_LOG( curFrm, f"真实命令（数组Argv）:【{Argv}】")
     #命令内容写入文件，方便问题查找.
     # _cmdReceived:str=' '.join(Argv)
-    INFO_LOG( curFrm, f"构造出业务命令:【{buszCmd}】")
+    INFO_LOG( curFrm, f"构造出目命令:【{buszCmd}】")
 
     #TODO 环境变量实验 执行命令时，带入 当前进程的环境变量 到 被执行的命令中？
     # 调用真实命令，

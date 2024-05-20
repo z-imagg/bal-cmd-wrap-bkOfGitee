@@ -1,4 +1,4 @@
-**根据入口者查询业务者**
+**根据源命令查询目命令**
 
 
 ###  使用说明
@@ -18,7 +18,7 @@ pip install -r /app/bash-simplify/bash-complete-gen-from-help/requirements.txt
 
 将以下这段代码 放入 ```~/.bash_profile``` 或 ```~/.bashrc``` 或 ```~/.profile``` 等 登录时 执行的脚本中 
 ```shell
-#【编译命令拦截器】根据入口者查询业务者
+#【编译命令拦截器】根据源命令查询目命令
 export PATH=$PATH:/app/cmd-wrap/tool_bin
 source /app/cmd-wrap/tool_bin/bash-complete--queryBuszByFakeCmd.sh
 #以自安装miniconda环境中的python运行 此脚本，不影响系统自带python

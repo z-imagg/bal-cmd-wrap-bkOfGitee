@@ -63,7 +63,7 @@ curFrm:types.FrameType=inspect.currentframe()
 
 exitCodePlg:int = None
 bzCmdExitCd:int = None
-try:#try业务块
+try:#try目块
     INFO_LOG( curFrm, f"收到命令及参数:【{getGlbVarInst().originCmdHuman}】, 父进程完成命令行【{pprocess_cmd()}】")
     #构建工具，不管有没有源文件都是要拦截的
     basicCmd:BasicCmd=None
@@ -89,15 +89,15 @@ try:#try业务块
             INFO_LOG(curFrm, f"因为此命令中无源文件名，故而不拦截此命令")
 
     
-    #执行业务命令(支持多条命令)
+    #执行目命令(支持多条命令)
     bzCmdExitCd:int=execute_cmdLs(basicCmd.input_is_std_in,basicCmd.stdInTxt)
 except (BaseException,TypeError)  as bexp:
-    EXCEPT_LOG( curFrm, f"interceptor.py的try业务块异常",bexp)
+    EXCEPT_LOG( curFrm, f"interceptor.py的try目块异常",bexp)
     # raise bexp
     if bzCmdExitCd is None:
         bzCmdExitCd=-100
 finally:
-    #不论以上 try业务块 发生什么异常，本finally块一定要执行。
+    #不论以上 try目块 发生什么异常，本finally块一定要执行。
     
     realLogFPth=getGlbVarInst().logFPth
     link_logFPth=getGlbVarInst().logFPth
@@ -116,7 +116,7 @@ finally:
     #立即 将 stdio缓存 写出 ， 关闭日志文件
     flushStdCloseLogF()
 
-    #以业务命令的退出代码退出
+    #以目命令的退出代码退出
     exit(bzCmdExitCd)
 
 #拦截过程 结束}

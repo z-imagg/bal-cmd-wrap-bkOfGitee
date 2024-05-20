@@ -101,7 +101,7 @@ def getGlbVarInst()->GlbVar:
     return inst
 
 def flushStdCloseLogF():
-         #不论以上 try业务块 发生什么异常，本finally块一定要执行。
+         #不论以上 try目块 发生什么异常，本finally块一定要执行。
     try:
         #  立即 将 stdio缓存 写出
         sys.stdout.flush()

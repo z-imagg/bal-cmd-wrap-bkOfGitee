@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#【文件作用】【辅助工具】根据入口者查询业务者
+#【文件作用】【辅助工具】根据源命令查询目命令
 
 import argparse
 
@@ -13,9 +13,9 @@ from pathlib import Path
 def main_cmd():
     parser = argparse.ArgumentParser(
     prog=f'queryBuszByFackCmd.py',
-    description='【根据入口者查询业务者】')
+    description='【根据源命令查询目命令】')
 
-    parser.add_argument('-f', '--fake_prog',required=True,type=str,help="【入口者】",metavar='')
+    parser.add_argument('-f', '--fake_prog',required=True,type=str,help="【源命令】",metavar='')
     args=parser.parse_args()
     args.fake_prog
 
@@ -28,7 +28,7 @@ def main_cmd():
         existedMsg="『存』" if existed else "『无』"
         buszProgName=f"【{trueProgAbsPth}{existedMsg}】"
     else:
-        buszProgName="查无该入口者"
+        buszProgName="查无该源命令"
 
     print(buszProgName)
 

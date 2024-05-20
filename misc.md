@@ -18,7 +18,7 @@ if __name__ == '__main__':
 ```
 
 
-####  根据入口者查询业务者
+####  根据入口者查询目者
 
 
 http://giteaz:3000/bal/cmd-wrap/src/tag/v2.1.simpl/tool_bin/readme.md
