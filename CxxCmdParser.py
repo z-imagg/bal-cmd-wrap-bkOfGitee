@@ -44,6 +44,8 @@ def cxxCmdParse()->CxxCmd:
         
     #没有选项'-c'么？
     fac.no_option_c= (not elmExistEqu(inst.AArgvClean,"-c") )
+    #有选项'-o'么？
+    fac.has_option_o= elmExistEqu(inst.AArgvClean,"-o")
     
     #编译命令中无'-c' 但又有源文件， 即 该命令是 编译+链接
     if fac.no_option_c and   srcFp2 is not None:

@@ -24,6 +24,8 @@ class CxxCmd(BasicCmd):
     
         #没有选项'-c'么？(即含有 '链接'   即 '编译+链接' 或 '链接' )
         self.no_option_c:bool=None
+        #有选项'-o'么？
+        self.has_option_o:bool=None
     
         # -
         self.input_is_std_in: bool  = None
@@ -31,10 +33,11 @@ class CxxCmd(BasicCmd):
         
         self.src_file:str=None
 
-    #含有 '链接' 么?
-    #  没有选项'-c'么？(即含有 '链接'   即 '编译+链接' 或 '链接' )
+    #含有 '-o'形式 '链接' 么? 
+    #  没有选项'-c' 且 有选项'-o'
+    #     【不重要的遗漏】 这里遗漏了  没有选项'-c' 也没有'-o' 但是有其他输入文件(比如静态库x.a、目标文件y.o) ， 这也是链接 ，输出为默认的a.out.
     def hasLink(self)->bool:
-        return self.no_option_c
+        return self.no_option_c and self.has_option_o
 
 
     def __str__(self):
