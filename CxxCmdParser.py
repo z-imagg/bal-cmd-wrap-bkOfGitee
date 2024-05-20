@@ -26,7 +26,9 @@ def cxxCmdParse()->CxxCmd:
     fac.srcFpIsDevNull=neibEqu(inst.AArgvClean, "-c", "/dev/null")
     
     #获得源文件路径
+    #  'gcc -c u.c', 这里srcFp1=='u.c'
     srcFp1:str=neibGet(inst.AArgvClean,"-c")
+    #   'gcc  x.c y.c z.c'  ， 有'x.c中含有main函数, 输出为可执行文件a.out',  这里srcFp2=='x.c'
     srcFp2:str=elmEndWithAny(inst.AArgvClean,suffixLs=[".c",".cpp",".cxx"])
     srcFp:str=elm1stNotNone([srcFp1,srcFp2])
     if srcFp1 is None and srcFp2 is not None:
