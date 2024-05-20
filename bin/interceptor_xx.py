@@ -81,7 +81,7 @@ try:#try目块
         _cmdEatSrcF:CxxCmd=cxxCmdParse()
         basicCmd=_cmdEatSrcF
         #编译命令，无源文件时不拦截.   
-        care_srcF:bool=_cmdEatSrcF.src_file is  not None and  (not _cmdEatSrcF.srcFpIsDevNull ) and (not  _cmdEatSrcF.has_m16 )  #假设只需要忽略/dev/null和-m16
+        care_srcF:bool=_cmdEatSrcF.src_file is  not None and  (not _cmdEatSrcF.srcFpIsDevNull ) and (not  _cmdEatSrcF.has_m16 ) and (not  _cmdEatSrcF.isCompilerTestCmd )   #假设只需要忽略/dev/null、-m16、编译器测试命令
         if care_srcF: #当 命令中 有源文件名，才截此命令; 忽略-m16
             #客户对编译器命令参数向量的修改
             inst.BArgvWrap=modifyAArgv_Compiler( cmdEatF=_cmdEatSrcF, argv=inst.AArgv, originCmdHuman=inst.originCmdHuman, prog=inst.BProg)
