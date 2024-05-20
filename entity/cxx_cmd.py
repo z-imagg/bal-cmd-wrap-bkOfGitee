@@ -16,7 +16,7 @@ class CxxCmd(BasicCmd):
         self.srcFpIsDevNull:bool = None
         
         #判定为编译器测试命令
-        #  若 编译命令中无'-c' 但又有源文件  且 源文件名为"conftest.c" 且 源文件内容中含有"#define PACKAGE_" 判定为编译器测试
+        #  若  源文件名在["conftest.c","conftest.cpp"]中 且 源文件内容中含有"#define PACKAGE_" 判定为编译器测试
         self.isCompilerTestCmd:bool = None
 
         #是否有选项 -m16
