@@ -27,18 +27,19 @@ def cxxCmdParse()->CxxCmd:
     
     #获得源文件路径
     #  'gcc -c u.c', 这里srcFp1=='u.c'
-    srcFp1:str=neibGet(inst.AArgvClean,"-c")
+    srcFp1:str=neibGet(inst.AArgvClean,"-c",["-g","-O2"])
     #   'gcc  x.c y.c z.c'  ， 有'x.c中含有main函数, 输出为可执行文件a.out',  这里srcFp2=='x.c'
     srcFp2:str=elmEndWithAny(inst.AArgvClean,suffixLs=[".c",".cpp",".cxx"])
     srcFp:str=elm1stNotNone([srcFp1,srcFp2])
     if srcFp1 is None and srcFp2 is not None:
     #编译命令中无'-c' 但又有源文件， 即 该命令是 编译+链接
         INFO_LOG( curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
-        if srcFp2=="conftest.c":
-            srcFp2_txt:str=Path(srcFp2).read_text()
-            INFO_LOG( curFrm, f"疑似编译器测试，gccCmdHum=【{gccCmdHum}】, srcFp2=【{srcFp2}], srcFp2文件内容=【{srcFp2_txt}】")
-            #若 编译命令中无'-c' 但又有源文件  且 源文件名为"conftest.c" 且 源文件内容中含有"#define PACKAGE_" 判定为编译器测试
-            fac.isCompilerTestCmd=srcFp2_txt.__contains__("#define PACKAGE_")
+    
+    if srcFp in ["conftest.c","conftest.cpp"]:
+        srcFp2_txt:str=Path(srcFp2).read_text()
+        INFO_LOG( curFrm, f"疑似编译器测试，gccCmdHum=【{gccCmdHum}】, srcFp2=【{srcFp2}], srcFp2文件内容=【{srcFp2_txt}】")
+        #若 编译命令中无'-c' 但又有源文件  且 源文件名为"conftest.c" 且 源文件内容中含有"#define PACKAGE_" 判定为编译器测试
+        fac.isCompilerTestCmd=srcFp2_txt.__contains__("#define PACKAGE_")
 
     if fac.input_is_std_in:
         assert srcFp is None, f"断言失败，不可能即从stdin读取、又指定被编译源文件，难道从stdin读取的内容不是作为源文件内容？gccCmdHum=【{gccCmdHum}】，ArgvOriginCopy=【{inst.ArgvOriginCopy}】,srcFp1=【{srcFp1}】，srcFp2=【{srcFp2}】，srcFp=【{srcFp}】,stdInTxt=『{fac.stdInTxt}』"

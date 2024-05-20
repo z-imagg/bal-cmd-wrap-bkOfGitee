@@ -64,8 +64,8 @@ def neibEqu(ls:typing.List[EmT],x:EmT,neibFit:EmT)->bool:
     return equ
 
 
-#给定数组ls, 获得元素which的邻居
-def neibGet(ls:typing.List[EmT],x:EmT)->EmT:
+#给定数组ls, 获得元素x的邻居, 且跳过给定元素们exclude_elem_ls
+def neibGet(ls:typing.List[EmT],x:EmT,exclude_elem_ls:typing.List[str])->EmT:
     Negative = None
     
     #若空，则否定
@@ -84,7 +84,21 @@ def neibGet(ls:typing.List[EmT],x:EmT)->EmT:
     #走到这里, 有邻居
 
     #获取邻居
-    neib:EmT=ls[i+1]
+    #  若未指定排除列表，则直接取邻居
+    if isEmptyLs(exclude_elem_ls):
+        neib:EmT=ls[i+1]
+    else:
+        _neib:EmT=None
+        found:bool=False
+        k=i+1
+        while k<=ls.__len__()-1:
+            _neib:EmT=ls[k]
+            #若 当前元素 不在 排除列表 中, 则找到了
+            if _neib not  in exclude_elem_ls:   
+                found=True
+                break
+            #否则 没找到，继续到下一个位置
+            else: k=k+1
 
     return neib
 
