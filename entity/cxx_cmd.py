@@ -21,13 +21,20 @@ class CxxCmd(BasicCmd):
 
         #是否有选项 -m16
         self.has_m16:bool = None
-
+    
+        #没有选项'-c'么？(即含有 '链接'   即 '编译+链接' 或 '链接' )
+        self.no_option_c:bool=None
+    
         # -
         self.input_is_std_in: bool  = None
         self.stdInTxt:str=None
         
         self.src_file:str=None
 
+    #含有 '链接' 么?
+    #  没有选项'-c'么？(即含有 '链接'   即 '编译+链接' 或 '链接' )
+    def hasLink(self)->bool:
+        return self.no_option_c
 
 
     def __str__(self):

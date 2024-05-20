@@ -42,9 +42,11 @@ def cxxCmdParse()->CxxCmd:
         
     #   源文件名 srcFp 可能为None
         
+    #没有选项'-c'么？
+    fac.no_option_c= (not elmExistEqu(inst.AArgvClean,"-c") )
     
     #编译命令中无'-c' 但又有源文件， 即 该命令是 编译+链接
-    if ( not elmExistEqu(inst.AArgvClean,"-c") ) and   srcFp2 is not None:
+    if fac.no_option_c and   srcFp2 is not None:
         INFO_LOG( curFrm, f"警告，发现直接从源文件到可执行文件的编译命令【{gccCmdHum}】")
         
     if srcFp2 in ["conftest.c","conftest.cpp"]:
