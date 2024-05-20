@@ -25,17 +25,17 @@ clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/
 def modifyAArgv_Compiler(  cmdEatF:CxxCmd,argv:typing.List[str], originCmdHuman:str, prog:Prog)->BArgvWrapT:
     fakeProg:str=prog.AProg
     if fakeProg==A_gcc:
-        return customModify_CompilerArgv_gcc(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
+        return modifyAArgv_Compiler_gcc(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
     if fakeProg==A_gxx:
-        return customModify_CompilerArgv_gxx(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
+        return modifyAArgv_Compiler_gxx(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
     if fakeProg==A_cc:
-        return customModify_CompilerArgv_cc(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
+        return modifyAArgv_Compiler_cc(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
     if fakeProg==A_cxx:
-        return customModify_CompilerArgv_cxx(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
+        return modifyAArgv_Compiler_cxx(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
     if fakeProg==A_clang:
-        return customModify_CompilerArgv_clang(cmdEatF=cmdEatF, AArgv=argv,originCmdHuman=originCmdHuman)
+        return modifyAArgv_Compiler_clang(cmdEatF=cmdEatF, AArgv=argv,originCmdHuman=originCmdHuman)
     if fakeProg==A_clangxx:
-        return customModify_CompilerArgv_clangxx(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
+        return modifyAArgv_Compiler_clangxx(cmdEatF=cmdEatF, argv=argv,originCmdHuman=originCmdHuman)
     
     raise Exception(f"异常，不可识别的prog{fakeProg}")
 
@@ -44,60 +44,60 @@ def modifyAArgv_MakeTool(  basicCmd:BasicCmd,argv:typing.List[str],originCmdHuma
     fakeProg:str=prog.AProg
 
     if fakeProg==A_cmake:
-        return customModify_MakeToolArgv_cmake(basicCmd=basicCmd,argv=argv,originCmdHuman=originCmdHuman)
+        return modifyAArgv_MakeTool_cmake(basicCmd=basicCmd,argv=argv,originCmdHuman=originCmdHuman)
     
     if fakeProg==A_make:
-        return customModify_MakeToolArgv_make(basicCmd=basicCmd,argv=argv,originCmdHuman=originCmdHuman)
+        return modifyAArgv_MakeTool_make(basicCmd=basicCmd,argv=argv,originCmdHuman=originCmdHuman)
     
     raise Exception(f"异常，不可识别的prog{fakeProg}")
     
 ##############以下是可以自由修改的拦截器逻辑
     
 #客户对编译器命令gcc参数向量的修改
-def customModify_CompilerArgv_gcc(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
+def modifyAArgv_Compiler_gcc(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
     curFrm:types.FrameType=inspect.currentframe()
     # 参数Argv中-Werror替换为-Wno-error
     # 参数Argv中-O2替换为-o1
     # 参数Argv中-g替换为-g1
     Argv=ArgvReplace_Multi(argv,gcc_optModify_ls)
     
-    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleBArgv(Argv)
+    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleArgv(Argv)
 
     return argvWrap
 
 
 #客户对编译器命令g++参数向量的修改
-def customModify_CompilerArgv_gxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
+def modifyAArgv_Compiler_gxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
     curFrm:types.FrameType=inspect.currentframe()
     # 参数Argv中-Werror替换为-Wno-error
     # 参数Argv中-O2替换为-o1
     # 参数Argv中-g替换为-g1
     Argv=ArgvReplace_Multi(argv,cxx_optModify_ls)
-    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleBArgv(Argv)
+    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleArgv(Argv)
     return argvWrap
 
 #客户对编译器命令cc参数向量的修改
-def customModify_CompilerArgv_cc(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
+def modifyAArgv_Compiler_cc(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
     curFrm:types.FrameType=inspect.currentframe()
     # 参数Argv中-Werror替换为-Wno-error
     # 参数Argv中-O2替换为-O0
     # 参数Argv中-g替换为-g1
     Argv=ArgvReplace_Multi(argv,cc_optModify_ls)
-    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleBArgv(Argv)
+    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleArgv(Argv)
     return argvWrap
 
 #客户对编译器命令c++参数向量的修改
-def customModify_CompilerArgv_cxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
+def modifyAArgv_Compiler_cxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
     curFrm:types.FrameType=inspect.currentframe()
     # 参数Argv中-Werror替换为-Wno-error
     # 参数Argv中-O2替换为-o1
     # 参数Argv中-g替换为-g1
     Argv=ArgvReplace_Multi(argv,cxx_optModify_ls)
-    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleBArgv(Argv)
+    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleArgv(Argv)
     return argvWrap
 
 #客户对编译器命令clang参数向量的修改
-def customModify_CompilerArgv_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
+def modifyAArgv_Compiler_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
     newArgv:typing.List[str]=AArgv
     
     newArgv=ArgvReplace_Multi(newArgv,clang_optModify_ls)
@@ -113,7 +113,7 @@ def customModify_CompilerArgv_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],orig
     return bArgvWrap
 
 #客户对编译器命令clang++参数向量的修改
-def customModify_CompilerArgv_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
+def modifyAArgv_Compiler_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
     newArgv:typing.List[str]=argv
     #请根据需要，自行编写 逻辑，实现 修改 clang++编译命令参数向量argv 
         
@@ -131,19 +131,19 @@ def customModify_CompilerArgv_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],ori
 
 
 #客户对构建工具命令cmake参数向量的修改
-def customModify_MakeToolArgv_cmake(   basicCmd:BasicCmd,argv:typing.List[str], originCmdHuman:str)->BArgvWrapT:
+def modifyAArgv_MakeTool_cmake(   basicCmd:BasicCmd,argv:typing.List[str], originCmdHuman:str)->BArgvWrapT:
     newArgv:typing.List[str]=argv
     VerboseOpt="-DCMAKE_VERBOSE_MAKEFILE=True"
     if VerboseOpt not in newArgv and "-E" not in newArgv and len(newArgv) > 1:
         newArgv.insert(1,VerboseOpt)
     
     
-    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleBArgv(newArgv)
+    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleArgv(newArgv)
     return argvWrap
 
 #客户对构建工具命令make参数向量的修改
-def customModify_MakeToolArgv_make(   basicCmd:BasicCmd,argv:typing.List[str], originCmdHuman:str)->BArgvWrapT:
+def modifyAArgv_MakeTool_make(   basicCmd:BasicCmd,argv:typing.List[str], originCmdHuman:str)->BArgvWrapT:
     newArgv:typing.List[str]=argv
     #请根据需要，自行编写 逻辑，实现 修改 clang++编译命令参数向量argv 
-    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleBArgv(newArgv)
+    argvWrap:BArgvWrapT=BArgvWrapT.buildSingleArgv(newArgv)
     return argvWrap
