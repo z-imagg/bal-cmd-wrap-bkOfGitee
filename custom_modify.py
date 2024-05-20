@@ -14,7 +14,7 @@ import typing
 import types
 from global_var import getGlbVarInst
 from route_tab import Prog,A_cc,A_cxx,A_gcc,A_gxx,A_clangxx,A_clang,A_cmake,A_make
-from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,runtime__clang_Var
+from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,runtime__clang_Var,runtime__clangxx_Var
 from ArgvWrap import BArgvWrapT
 
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
@@ -122,7 +122,7 @@ def modifyAArgv_Compiler_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCm
     argv_ls:typing.List[typing.List[str]]=[ArgvAppendTxt_AfterProgram(newArgv,plgK) for plgK in clangxx_plugin_ls]
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run]
     # 添加 clang插件VarPlugin 运行时
-    newArgv=ArgvAppendTxt_AfterProgram(newArgv,runtime__clang_Var)
+    newArgv=ArgvAppendTxt_AfterProgram(newArgv,runtime__clangxx_Var)
     argv_ls.append(newArgv)
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
     
