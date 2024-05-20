@@ -75,7 +75,7 @@ clang_VFIRPlugin_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInser
 clang_Var_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVarPlugin.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
 
 # clang插件VarPlugin 运行时
-runtime__clang_Var="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h"
+runtime__clang_Var="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/"
 
 # clang++插件VarPlugin 运行时
 runtime__clangxx_Var="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.h"
