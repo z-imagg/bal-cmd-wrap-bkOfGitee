@@ -33,10 +33,11 @@ class CxxCmd(BasicCmd):
         
         self.src_file:str=None
 
+    #非编译只是单纯链接么？
     #含有 '-o'形式 '链接' 么? 
     #  没有选项'-c' 且 有选项'-o'
     #     【不重要的遗漏】 这里遗漏了  没有选项'-c' 也没有'-o' 但是有其他输入文件(比如静态库x.a、目标文件y.o) ， 这也是链接 ，输出为默认的a.out.
-    def hasLink(self)->bool:
+    def isOnlyLink(self)->bool:
         return self.no_option_c and self.has_option_o
 
 

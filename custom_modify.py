@@ -108,7 +108,7 @@ def modifyAArgv_Compiler_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],originCmd
     #   clangPlgVar的c运行时头文件
     newArgv=ArgvAppendTxt_AfterProgram(newArgv,include_clPlgVarRuntime__clang)
     # 添加  clangPlgVar的c运行时静态库， 当是链接命令时
-    if cmdEatF.hasLink():
+    if cmdEatF.isOnlyLink():
         newArgv=ArgvAppendTxt(newArgv,aLib_clPlgVarRuntime__clang)
     
     argv_ls.append(newArgv)
@@ -130,7 +130,7 @@ def modifyAArgv_Compiler_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCm
     #   clangPlgVar的c运行时头文件
     newArgv=ArgvAppendTxt_AfterProgram(newArgv,include_clPlgVarRuntime__clangxx)
     # 添加  clangPlgVar的c++运行时静态库， 当是链接命令时
-    if cmdEatF.hasLink():
+    if cmdEatF.isOnlyLink():
         newArgv=ArgvAppendTxt(newArgv,aLib_clPlgVarRuntime__clangxx)
     
     argv_ls.append(newArgv)

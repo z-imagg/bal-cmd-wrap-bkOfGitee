@@ -87,7 +87,7 @@ try:#try目块
             #客户对编译器命令参数向量的修改
             inst.BArgvWrap=modifyAArgv_Compiler( cmdEatF=_cmdEatSrcF, argv=inst.AArgv, originCmdHuman=inst.originCmdHuman, prog=inst.BProg)
         else:
-            if _cmdEatSrcF.hasLink():
+            if _cmdEatSrcF.isOnlyLink():
             #当为链接时，需要提供clang插件用到的运行时静态库
                 fakeProg:str=inst.BProg.AProg
                 if fakeProg==A_clang:
