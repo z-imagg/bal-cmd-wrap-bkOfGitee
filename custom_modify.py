@@ -107,8 +107,10 @@ def modifyAArgv_Compiler_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],originCmd
     # 添加 clang插件VarPlugin 运行时
     #   clangPlgVar的c运行时头文件
     newArgv=ArgvAppendTxt_AfterProgram(newArgv,include_clPlgVarRuntime__clang)
-    #   clangPlgVar的c运行时静态库
-    newArgv=ArgvAppendTxt(newArgv,aLib_clPlgVarRuntime__clang)
+    # 添加  clangPlgVar的c运行时静态库， 当是链接命令时
+    if cmdEatF.hasLink():
+        newArgv=ArgvAppendTxt(newArgv,aLib_clPlgVarRuntime__clang)
+    
     argv_ls.append(newArgv)
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
     
@@ -127,9 +129,10 @@ def modifyAArgv_Compiler_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCm
     # 添加 clang插件VarPlugin 运行时
     #   clangPlgVar的c运行时头文件
     newArgv=ArgvAppendTxt_AfterProgram(newArgv,include_clPlgVarRuntime__clangxx)
-    #   clangPlgVar的c++运行时静态库. 
-    #      不需要, 因为 这里是 编译 x.cpp 时, 提供头文件即可， 不用提供函数实现 runtime__clangxx_Var__staticLib. (链接时才需要提供函数实现, 这里不是链接)
-    # newArgv=ArgvAppendTxt(newArgv,runtime__clangxx_Var__staticLib) . 这句. 
+    # 添加  clangPlgVar的c++运行时静态库， 当是链接命令时
+    if cmdEatF.hasLink():
+        newArgv=ArgvAppendTxt(newArgv,aLib_clPlgVarRuntime__clangxx)
+    
     argv_ls.append(newArgv)
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
     
