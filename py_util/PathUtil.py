@@ -30,3 +30,15 @@ def filePathAppend_fName(fPthA:str,fPathB:str)->str:
      fileNameB:str=Path(fPathB).name
      new_fPthA:str=f"{fPthA}--{fileNameB}"
      return new_fPthA
+
+#复制文件（给定pathlib类型的路径）
+def fileCopyByPathLib(src:Path,dst:Path)->bool:
+     #如果有一个路径为None, 则返回失败
+     if src is None or dst is None: return False
+     #如果原文件不存在， 则返回失败
+     if (not src.exists())   : return False
+     import shutil
+     #复制文件
+     shutil.copyfile(src.as_posix(), dst.as_posix())
+     #无异常，则返回成功
+     return True

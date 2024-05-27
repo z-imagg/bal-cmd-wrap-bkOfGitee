@@ -119,9 +119,14 @@ finally:
     if _cmdEatSrcF.src_file is not None:
         link_logFPth=filePathAppend_fName(realLogFPth,_cmdEatSrcF.src_file)
     
+    #如果异常退出，则 以软链接指向日志文件、复制被编译的源文件,方便排查错误
     if bCmdExitCd is not None and bCmdExitCd != 0 :
-        #如果异常退出，则以软链接指向日志文件，方便排查错误
+        # 以软链接指向日志文件，方便排查错误
         link_logFPth:str=f"{link_logFPth}--errorCode_{bCmdExitCd}"
+        # 复制被编译的源文件,方便排查错误
+        from PathUtil import fileCopyByPathLib
+        src_file__dup:str=filePathAppend_fName(realLogFPth,f"{_cmdEatSrcF.src_file}__duplication")
+        fileCopyByPathLib(Path(_cmdEatSrcF.src_file),Path(src_file__dup))
         
     if link_logFPth!=realLogFPth:
         Path(link_logFPth).symlink_to(realLogFPth)
