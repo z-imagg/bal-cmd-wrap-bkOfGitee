@@ -69,19 +69,31 @@ clang_optModify_ls:typing.Dict[OptName,OptModify]=[
 clangxx_optModify_ls:typing.Dict[OptName,OptModify]=[
 ]
 
-#clang插件VFIRPlugin
+#1. clang插件clPlgVFIR
+#  1.1. 插件参数
 clPlgVFIR_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin "
-# clang插件VarPlugin, 待定，占位
+#  1.2  无运行时
+
+#2. clang插件clPlgVar
+#  2.1. 插件参数
 clPlgVar_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVarPlugin.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
 
+#      共用变量
 _aLib__clPlgVarRuntime_C00="/fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
 _aLib__clPlgVarRuntime_CXX="/fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a"
 
-# clang插件VarPlugin 运行时
-#  编译、链接一把走完例子  /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang -I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/     /fridaAnlzAp/clang-voidFnEndInsertRet/test_in/test_main.c  /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a  && ./a.out
+#  2.2.1. 插件运行时(clang)
+#    2.2.1.2. 插件运行时头文件 (用于clang编译命令)
 include_clPlgVarRuntime__clang="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/"
+#    2.2.1.3. 插件运行时静态库 (用于clang链接命令)
 aLib_clPlgVarRuntime__clang=f"{_aLib__clPlgVarRuntime_C00} {_aLib__clPlgVarRuntime_CXX}"
 
-# clang++插件VarPlugin 运行时
+#  2.2.2. 插件运行时(clang++)
+#    2.2.2.1. 插件运行时头文件 (用于clang++编译命令)
 include_clPlgVarRuntime__clangxx="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.h"
+#    2.2.2.1. 插件运行时静态库 (用于clang++链接命令)
 aLib_clPlgVarRuntime__clangxx=f"{_aLib__clPlgVarRuntime_C00} {_aLib__clPlgVarRuntime_CXX}"
+
+
+#其他
+#  编译、链接一把走完例子  /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang -I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/     /fridaAnlzAp/clang-voidFnEndInsertRet/test_in/test_main.c  /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a  && ./a.out
