@@ -14,7 +14,7 @@ import typing
 import types
 from global_var import getGlbVarInst
 from route_tab import Prog,A_cc,A_cxx,A_gcc,A_gxx,A_clangxx,A_clang,A_cmake,A_make
-from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,include_clPlgVarRuntime__clang,aLib_clPlgVarRuntime__clang,include_clPlgVarRuntime__clangxx,aLib_clPlgVarRuntime__clangxx
+from cfg import cc_optModify_ls,cxx_optModify_ls,gcc_optModify_ls,optModify_ls_usual,clang_optModify_ls,clangxx_optModify_ls,clang_plugin_ls,clangxx_plugin_ls,include_clPlgVarRuntime__clang,aLib_clPlgVarRuntime__clang,include_clPlgVarRuntime__clangxx,aLib_clPlgVarRuntime__clangxx
 from ArgvWrap import BArgvWrapT
 
 clang_plugin_params: str = f"-Xclang -load -Xclang /app_spy/clang-funcSpy/build/lib/libClnFuncSpy.so -Xclang -add-plugin -Xclang ClFnSpy -fsyntax-only"
@@ -99,6 +99,8 @@ def modifyAArgv_Compiler_cxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHum
 #客户对编译器命令clang参数向量的修改
 def modifyAArgv_Compiler_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
     newArgv:typing.List[str]=AArgv
+    # 对参数Argv做常用修改
+    newArgv=ArgvReplace_Multi(newArgv,optModify_ls_usual)
     
     newArgv=ArgvReplace_Multi(newArgv,clang_optModify_ls)
     
@@ -120,7 +122,8 @@ def modifyAArgv_Compiler_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],originCmd
 #客户对编译器命令clang++参数向量的修改
 def modifyAArgv_Compiler_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCmdHuman:str )->BArgvWrapT:
     newArgv:typing.List[str]=argv
-    #请根据需要，自行编写 逻辑，实现 修改 clang++编译命令参数向量argv 
+    # 对参数Argv做常用修改
+    newArgv=ArgvReplace_Multi(newArgv,optModify_ls_usual)
         
     newArgv=ArgvReplace_Multi(newArgv,clangxx_optModify_ls)
     

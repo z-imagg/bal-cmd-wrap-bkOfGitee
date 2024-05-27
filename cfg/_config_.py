@@ -63,6 +63,17 @@ OptModify(oldOpt=g,newOpt=g1),
 #如果参数中含有-Werror , 将删除之.
 ]
 
+# 参数Argv的常用修改
+optModify_ls_usual:typing.Dict[OptName,OptModify]=[
+OptModify(oldOpt=Werror,newOpt=blank),
+#如果参数中含有-O2 , 将其替换为 -O0
+OptModify(oldOpt=O2,newOpt=O0),
+#如果参数中含有-g , 将其替换为 -g1
+OptModify(oldOpt=g,newOpt=g1),
+#如果参数中含有-Werror , 将删除之.
+]
+
+
 clang_optModify_ls:typing.Dict[OptName,OptModify]=[
 ]
 
