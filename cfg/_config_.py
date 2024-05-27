@@ -70,18 +70,18 @@ clangxx_optModify_ls:typing.Dict[OptName,OptModify]=[
 ]
 
 #clang插件VFIRPlugin
-clang_VFIRPlugin_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin "
+clPlgVFIR_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin "
 # clang插件VarPlugin, 待定，占位
-clang_Var_run=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVarPlugin.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
+clPlgVar_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVarPlugin.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
 
-_runtime_C00__PlgVar__staticLib="/fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
-_runtime_CXX__PlgVar__staticLib="/fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a"
+_aLib__clPlgVarRuntime_C00="/fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
+_aLib__clPlgVarRuntime_CXX="/fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a"
 
 # clang插件VarPlugin 运行时
 #  编译、链接一把走完例子  /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang -I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/     /fridaAnlzAp/clang-voidFnEndInsertRet/test_in/test_main.c  /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a  && ./a.out
-runtime__clang_Var__include="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/"
-runtime__clang_Var__staticLib=f"{_runtime_C00__PlgVar__staticLib} {_runtime_CXX__PlgVar__staticLib}"
+include_clPlgVarRuntime__clang="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/"
+aLib_clPlgVarRuntime__clang=f"{_aLib__clPlgVarRuntime_C00} {_aLib__clPlgVarRuntime_CXX}"
 
 # clang++插件VarPlugin 运行时
-runtime__clangxx_Var__include="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.h"
-runtime__clangxx_Var__staticLib=f"{_runtime_C00__PlgVar__staticLib} {_runtime_CXX__PlgVar__staticLib}"
+include_clPlgVarRuntime__clangxx="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.h"
+aLib_clPlgVarRuntime__clangxx=f"{_aLib__clPlgVarRuntime_C00} {_aLib__clPlgVarRuntime_CXX}"

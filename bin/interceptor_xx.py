@@ -45,7 +45,7 @@ import os
 import time
 import shutil
 from BasicCmdParser import basicCmdParse
-from cfg import runtime__clang_Var__staticLib,runtime__clangxx_Var__staticLib
+from cfg import aLib_clPlgVarRuntime__clang,aLib_clPlgVarRuntime__clangxx
 
 
 
@@ -92,10 +92,10 @@ try:#try目块
                 fakeProg:str=inst.BProg.AProg
                 if fakeProg==A_clang:
                     #   clangPlgVar的c运行时静态库
-                    inst.AArgv=ArgvAppendTxt(inst.AArgv,runtime__clang_Var__staticLib)
+                    inst.AArgv=ArgvAppendTxt(inst.AArgv,aLib_clPlgVarRuntime__clang)
                 if fakeProg==A_clangxx:
                     #   clangPlgVar的c++运行时静态库. 
-                    inst.AArgv=ArgvAppendTxt(inst.AArgv,runtime__clangxx_Var__staticLib)
+                    inst.AArgv=ArgvAppendTxt(inst.AArgv,aLib_clPlgVarRuntime__clangxx)
 
             #构建单命令
             inst.BArgvWrap=BArgvWrapT.buildSingleArgv(inst.AArgv)
