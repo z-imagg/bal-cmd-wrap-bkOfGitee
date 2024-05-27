@@ -56,7 +56,7 @@ def ArgvReplace_Multi(Argv:List,optModify_ls:typing.List[OptModify])->List:
     Argv_Out:List=Argv
     for optModify in optModify_ls:
         #按照配置替换选项
-        Argv_Out=ArgvReplace(Argv, old=optModify.oldOpt, NEW=optModify.newOpt)
+        Argv_Out=ArgvReplace(Argv_Out, old=optModify.oldOpt, NEW=optModify.newOpt)
     return Argv_Out
 
 #Argv中紧挨程序名后插入一段文本
