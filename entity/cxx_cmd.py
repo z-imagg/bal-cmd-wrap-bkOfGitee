@@ -40,6 +40,12 @@ class CxxCmd(BasicCmd):
     def isOnlyLink(self)->bool:
         return self.no_option_c and self.has_option_o
 
+    """编译+链接么？
+    有选项'-c' 且 有选项'-o'
+    此函数暂未使用过
+    """
+    def isCompileAndLink(self)->bool:
+        return (not self.no_option_c) and self.has_option_o
 
     def __str__(self):
         txt= f" srcFpIsDevNull {self.srcFpIsDevNull} ,  has_m16 {self.has_m16} , input_is_std_in {self.input_is_std_in}  "
