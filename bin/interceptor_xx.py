@@ -32,7 +32,7 @@ from pathlib import Path
 from MiscUtil import __NoneOrLenEq0__,__list_filter_NoneEle_emptyStrEle__, pprocess_cmd
 from cxx_cmd import CxxCmd
 from route_tab import A_clang, A_clangxx, Prog, calcBProg
-from argv_process import ArgvAppendTxt, ArgvRemoveWerror,ArgvReplace_O2As_O1
+from argv_process import ArgvAppendTxt, ArgvReplace_O2As_O1
 from interceptor_util import execute_BCmd, execute_BCmdLs,execute_script_file
 from CxxCmdParser import cxxCmdParse
 

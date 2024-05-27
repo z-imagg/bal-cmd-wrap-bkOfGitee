@@ -9,7 +9,7 @@ from ArgvWrap import BArgvWrapT
 from BuszCmd import BCmdT
 from IdUtil import genApproxId
 from MiscUtil import _EXCEPT_LOG, _INFO_LOG
-from argv_process import ArgvRemoveWerror, ArgvReplace_O2As_O1
+from argv_process import  ArgvReplace_O2As_O1
 from singleton_annt import funcSngltAnnt
 from PathUtil import _getProgAbsPath
 from pathlib import Path
