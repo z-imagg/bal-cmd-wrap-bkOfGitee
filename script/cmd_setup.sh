@@ -119,3 +119,13 @@ clang
 clang++
 cmake 2&>1 >/dev/null
 make  2&>1 >/dev/null
+
+
+#断言存在配置文件
+CFG_Pattern="/app/cmd-wrap/cfg/my_config.*.py"
+CFG_Demo="/app/cmd-wrap/cfg/my_config.demo.py"
+CFG="/app/cmd-wrap/cfg/my_config.py"
+
+echo -n "可供选择的配置文件:" ; ls $CFG_Pattern | grep -v $CFG_Demo
+
+[[ ! -f $CFG ]] && { echo "请确保存在 配置文件 $CFG, 异常退出代码5" ; exit 5 ;} 
