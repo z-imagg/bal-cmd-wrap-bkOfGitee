@@ -63,7 +63,10 @@
 //  运行 interceptor_xx.py 的 软链接clang （编译）
 { "name": "clang编译【由cmd_setup.sh使clang指向interceptor_xx】",  "type": "debugpy", "request": "launch",  "program": "/usr/bin/clang", "console": "integratedTerminal",
 "args": [  
-"-m64", "-mcx16", "-Isubprojects/dtc/libfdt/libfdt.a.p", "-Isubprojects/dtc/libfdt", "-I../subprojects/dtc/libfdt", "-fcolor-diagnostics", "-Wall", "-Winvalid-pch", "-Werror", "-std=gnu11", "-O2", "-g", "-Wpointer-arith", "-Wcast-qual", "-Wnested-externs", "-Wstrict-prototypes", "-Wmissing-prototypes", "-Wredundant-decls", "-Wshadow", "-DFDT_ASSUME_MASK=0", "-DNO_YAML", "-DNO_VALGRIND", "-D_GNU_SOURCE", "-D_FILE_OFFSET_BITS=64", "-D_LARGEFILE_SOURCE", "-fno-strict-aliasing", "-fno-common", "-fwrapv", "-fPIE", "-MD", "-MQ", "subprojects/dtc/libfdt/libfdt.a.p/fdt.c.o", "-MF", "subprojects/dtc/libfdt/libfdt.a.p/fdt.c.o.d", "-o", "subprojects/dtc/libfdt/libfdt.a.p/fdt.c.o", "-c", "../subprojects/dtc/libfdt/fdt.c"
+"-c", "/app/cmd-wrap/test_cxx_src/TestC02.c",
+"-o", "/app/cmd-wrap/test_cxx_src/TestC02.o",
+"--__enable_develop_mode",
+"-g1"
 ],
  "env": { "PYTHONPATH": "${python_path}"  },
 },
