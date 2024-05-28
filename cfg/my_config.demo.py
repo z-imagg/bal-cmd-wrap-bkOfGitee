@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#【描述】   自定义配置样例(my_config.demo.py)
+#【描述】   自定义配置样例(请以本配置文件覆盖my_config.py)
 #【依赖】   
 #【术语】 
 #【备注】  正式文件名为 cfg/my_config.py , 此文件名被git忽略，因此可以根据实际需要在运行时修改此配置而不影响git仓库状态

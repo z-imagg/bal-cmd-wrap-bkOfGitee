@@ -82,7 +82,7 @@ clangxx_optModify_ls:typing.Dict[OptName,OptModify]=[
 
 #1. clang插件clPlgVFIR
 #  1.1. 插件参数
-clPlgVFIR_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin "
+clPlgVFIR_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin " 
 #  1.2  无运行时
 
 #2. clang插件clPlgVar
