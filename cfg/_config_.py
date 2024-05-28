@@ -82,12 +82,12 @@ clangxx_optModify_ls:typing.Dict[OptName,OptModify]=[
 
 #1. clang插件clPlgVFIR
 #  1.1. 插件参数
-clPlgVFIR_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin " # TODO 应对已经被var插件修改的源码 再次被编译， 当clang时 加入 include_clPlgVarRuntime__clang, 当clang++时加入 include_clPlgVarRuntime__clangxx
+clPlgVFIR_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/build/lib/libVFIRPlugin.so  -Xclang   -add-plugin -Xclang  VFIRPlugin " 
 #  1.2  无运行时
 
 #2. clang插件clPlgVar
 #  2.1. 插件参数
-clPlgVar_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVarPlugin.so  -Xclang   -add-plugin -Xclang  VarPlugin " # TODO 应对已经被var插件修改的源码 再次被编译，当clang时 加入 include_clPlgVarRuntime__clang, 当clang++时加入 include_clPlgVarRuntime__clangxx
+clPlgVar_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVarPlugin.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
 
 #      共用变量
 _aLib__clPlgVarRuntime_C00="/fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
