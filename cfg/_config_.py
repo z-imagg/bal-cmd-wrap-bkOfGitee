@@ -90,8 +90,9 @@ clPlgVFIR_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-voidFnEndInsertRet/bu
 clPlgVar_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVarPlugin.so  -Xclang   -add-plugin -Xclang  VarPlugin " 
 
 #      共用变量
-_aLib__clPlgVarRuntime_C00="/fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
-_aLib__clPlgVarRuntime_CXX="/fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a"
+_aLib__clPlgVarRuntime_c_TmPnt_ThrLcl="/fridaAnlzAp/clang-var/runtime_c__TmPnt_ThreadLocal/build/libclangPlgVar_runtime_c_TmPnt_ThrLcl.a"
+_aLib__clPlgVarRuntime_C00=f"{_aLib__clPlgVarRuntime_c_TmPnt_ThrLcl} /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
+_aLib__clPlgVarRuntime_CXX=f"{_aLib__clPlgVarRuntime_c_TmPnt_ThrLcl} /fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a"
 
 #  2.2.1. 插件运行时(clang)
 #    2.2.1.2. 插件运行时头文件 (用于clang编译命令)
