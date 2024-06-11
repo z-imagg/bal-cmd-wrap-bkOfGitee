@@ -91,8 +91,9 @@ clPlgVar_Arg=" -Xclang   -load -Xclang /fridaAnlzAp/clang-var/build/lib/libVarPl
 
 #      共用变量
 _aLib__clPlgVarRuntime_c_TmPnt_ThrLcl="/fridaAnlzAp/clang-var/runtime_c__TmPnt_ThreadLocal/build/libclangPlgVar_runtime_c_TmPnt_ThrLcl.a"
-_aLib__clPlgVarRuntime_C00=f"{_aLib__clPlgVarRuntime_c_TmPnt_ThrLcl} /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a"
-_aLib__clPlgVarRuntime_CXX=f"{_aLib__clPlgVarRuntime_c_TmPnt_ThrLcl} /fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a"
+#         c_TmPnt_ThrLcl.a被runtime_c*.a调用  需要确认链接命令中是否c_TmPnt_ThrLcl.a放在runtime_c*.a后面
+_aLib__clPlgVarRuntime_C00=f" /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a {_aLib__clPlgVarRuntime_c_TmPnt_ThrLcl} /app/clibs--list/build/libclibs_list.a"
+_aLib__clPlgVarRuntime_CXX=f" /fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/libclangPlgVar_runtime_cxx.a {_aLib__clPlgVarRuntime_c_TmPnt_ThrLcl}"
 
 #  2.2.1. 插件运行时(clang)
 #    2.2.1.2. 插件运行时头文件 (用于clang编译命令)
