@@ -111,7 +111,8 @@ def modifyAArgv_Compiler_clang(  cmdEatF:CxxCmd,AArgv:typing.List[str],originCmd
     newArgv=ArgvAppendTxt_AfterProgram(newArgv,include_clPlgVarRuntime__clang)
     # 添加  clangPlgVar的c运行时静态库， 当是链接命令时
     if cmdEatF.isOnlyLink():
-        newArgv=ArgvAppendTxt(newArgv,aLib_clPlgVarRuntime__clang)
+        #   clangPlgVar的c运行时静态库  (interceptor_xx.py 已有此逻辑)
+        pass
     
     argv_ls.append(newArgv)
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]
@@ -134,7 +135,8 @@ def modifyAArgv_Compiler_clangxx(  cmdEatF:CxxCmd,argv:typing.List[str],originCm
     newArgv=ArgvAppendTxt_AfterProgram(newArgv,include_clPlgVarRuntime__clangxx)
     # 添加  clangPlgVar的c++运行时静态库， 当是链接命令时
     if cmdEatF.isOnlyLink():
-        newArgv=ArgvAppendTxt(newArgv,aLib_clPlgVarRuntime__clangxx)
+        #   clangPlgVar的c++运行时静态库. (interceptor_xx.py 已有此逻辑)
+        pass
     
     argv_ls.append(newArgv)
     #argv_ls==[clang_VFIRPlugin_run, clang_Var_run,newArgv]

@@ -91,7 +91,8 @@ try:#try目块
             #当为链接时，需要提供clang插件用到的运行时静态库
                 fakeProg:str=inst.BProg.AProg
                 if fakeProg==A_clang:
-                    #   clangPlgVar的c运行时静态库
+                    #   clangPlgVar的c运行时静态库. 
+                    #     其余地方不要再添加x.a ,因为 链接命令中只能添加一个 x.a, 否则报错, 
                     inst.AArgv=ArgvAppendTxt(inst.AArgv,aLib_clPlgVarRuntime__clang)
                 if fakeProg==A_clangxx:
                     #   clangPlgVar的c++运行时静态库. 
