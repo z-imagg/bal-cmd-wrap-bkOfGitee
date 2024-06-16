@@ -38,6 +38,7 @@ PrjCmdWrap_test__Hm=/app/cmd-wrap/test_cxx_src
 
 # 编译runtime
 $clangxx_origin -I $PrjClangVar_runtime__Hm/include/ -include runtime_cpp__vars_fn.h -c $PrjClangVar_runtime__Hm/runtime_cpp__vars_fn.cpp -o $PrjClangVar_runtime__Hm/runtime_cpp__vars_fn.o
+# `-include runtime_cpp__vars_fn.h` 遮盖了默认的`-include sys/mman.h`, 因此建议在 runtime_cpp__vars_fn.cpp 中直白地 #include "runtime_cpp__vars_fn.h"
 
 #编译TestCxx01.cpp
 

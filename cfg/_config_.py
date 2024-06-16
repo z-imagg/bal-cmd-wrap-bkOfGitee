@@ -97,16 +97,16 @@ _aLib__clPlgVarRuntime_CXX=f" /fridaAnlzAp/clang-var/build/runtime_cpp__vars_fn/
 
 #  2.2.1. 插件运行时(clang)
 #    2.2.1.2. 插件运行时头文件 (用于clang编译命令)
-include_clPlgVarRuntime__clang="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/"
+include_clPlgVarRuntime__clang="-I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/  -I /app/clibs--list/src/ -I /app/antirez--sds/"
 #    2.2.1.3. 插件运行时静态库 (用于clang链接命令)
 aLib_clPlgVarRuntime__clang=f"{_aLib__clPlgVarRuntime_C00} {_aLib__clPlgVarRuntime_CXX}"
 
 #  2.2.2. 插件运行时(clang++)
 #    2.2.2.1. 插件运行时头文件 (用于clang++编译命令)
-include_clPlgVarRuntime__clangxx="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ -include runtime_cpp__vars_fn.h"
+include_clPlgVarRuntime__clangxx="-I /fridaAnlzAp/clang-var/runtime_cpp__vars_fn/include/ "
 #    2.2.2.1. 插件运行时静态库 (用于clang++链接命令)
 aLib_clPlgVarRuntime__clangxx=f"{_aLib__clPlgVarRuntime_C00} {_aLib__clPlgVarRuntime_CXX}"
 
 
 #其他
-#  编译、链接一把走完例子  /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang -I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/ -include runtime_c__vars_fn.h -I /app/clibs--list/src/ -I /app/antirez--sds/     /fridaAnlzAp/clang-voidFnEndInsertRet/test_in/test_main.c  /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a  && ./a.out
+#  编译、链接一把走完例子  /app/llvm_release_home/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4/bin/clang -I /fridaAnlzAp/clang-var/runtime_c__vars_fn/include/  -I /app/clibs--list/src/ -I /app/antirez--sds/     /fridaAnlzAp/clang-voidFnEndInsertRet/test_in/test_main.c  /fridaAnlzAp/clang-var/runtime_c__vars_fn/build/libclangPlgVar_runtime_c.a  /app/clibs--list/build/libclibs_list.a  && ./a.out
