@@ -20,14 +20,23 @@ D=${d}
 cd ${D}
 Hm=$(realpath -s "${D}/../") # == /app/cmd-wrap/
 
+python3_x=$(basename $(readlink -f $(which python3)))
+#比如 python3_x==python3.10
+
+#安装 python3.10-venv
+${python3_x} -m venv --help 1>/dev/null || sudo apt install -y ${python3_x}-venv
+
+#当前目录下 创建.venv
 VENV_HOME=${Hm}/.venv
 ActivVenv=$VENV_HOME/bin/activate
-test -f $ActivVenv || python3 -m venv $VENV_HOME
+test -f $ActivVenv || ${python3_x} -m venv $VENV_HOME
 
+#激活.venv
 # set +x
 source $ActivVenv
 # set -x
 
 touch ${Hm}/.ignore_env_name_list.txt
 
+#安装依赖
 pip install -r ${Hm}/requirements.txt
