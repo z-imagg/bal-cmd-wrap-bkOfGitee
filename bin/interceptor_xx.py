@@ -116,9 +116,22 @@ finally:
     realLogFPth=getGlbVarInst().logFPth
     link_logFPth=getGlbVarInst().logFPth
     
+    #修改日志文件名,提升可读性
     #重命名日志文件：日志文件名末尾追加源文件名,提升可读性
     if _cmdEatSrcF.src_file is not None:
         link_logFPth=filePathAppend_fName(realLogFPth,_cmdEatSrcF.src_file)
+    #重命名日志文件：日志文件名末尾追加 isOnlyLink ,提升可读性
+    if _cmdEatSrcF.isOnlyLink() :
+        link_logFPth=filePathAppend_fName(realLogFPth,"_isOnlyLink_")
+    #重命名日志文件：日志文件名末尾追加 isCompileAndLink ,提升可读性
+    if _cmdEatSrcF.isCompileAndLink()  :
+        link_logFPth=filePathAppend_fName(realLogFPth,"_isCompileAndLink_")
+    #重命名日志文件：日志文件名末尾追加 isCompilerTestCmd ,提升可读性
+    if _cmdEatSrcF.isCompilerTestCmd is not None and _cmdEatSrcF.isCompilerTestCmd:
+        link_logFPth=filePathAppend_fName(realLogFPth,"_isCompilerTestCmd_")
+    #重命名日志文件：日志文件名末尾追加 srcFpIsDevNull ,提升可读性
+    if _cmdEatSrcF.srcFpIsDevNull is not None and  _cmdEatSrcF.srcFpIsDevNull :
+        link_logFPth=filePathAppend_fName(realLogFPth,"_srcFpIsDevNull_")
     
     #如果异常退出，则 以软链接指向日志文件、复制被编译的源文件,方便排查错误
     if bCmdExitCd is not None and bCmdExitCd != 0 :
