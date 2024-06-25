@@ -2,6 +2,9 @@
 
 [readme.old.md](http://giteaz:3000/bal/cmd-wrap/src/branch/brch_release/readme.old.md)
 
+[被 cmd-wrap+clang-var 正常编译、运行 的作品们](http://giteaz:3000/bal/cmd-wrap/src/tag/tag_release/work_list.md)
+
+
 **拦截 编译命令(gcc、g++、c++、clang、clang++)、拦截 构建命令(make 、cmake)**
 
 
